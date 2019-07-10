@@ -11,7 +11,7 @@ export default (props)=>{
         <div className={props.toLogin? "viewer tologin" : "viewer"}>
             <div className="logo">
                 <img src={imgUrl} alt="logo"></img>
-                <h2 style={{textAlign : 'center'}}>OxAuth</h2>
+                <h2 style={{textAlign : 'center'}}>0xAuth</h2>
             </div>
 
             {
