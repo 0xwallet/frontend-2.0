@@ -1,26 +1,72 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import axios from 'axios'
 
+import Viewer from './Viewer';
+import './Login.scss'
+
+// axios.interceptors.request.use((config)=>{
+//     config.url = 'http://owaf.io/v2api' + config.url
+//     return config;
+// })
 
 class Login extends Component {
   constructor(){
     super();
-    this.login = this.login.bind(this);
+    this.state = {
+      toLogin : false
+    }
+    this.register = this.register.bind(this);
   }
-
-  async login(){
-    await this.props.changeInfo();
-    if(this.props.info){
-      this.props.history.push('/dashboard')
+  register(e){
+    e.preventDefault()
+    const that = this;
+    var form=document.querySelector('#login');
+    const formdata = new FormData(form);
+    if(this.state.toLogin === false){
+      axios.get('https://owaf.io/v2api/get_auth_code', {   
+        params : {
+          email : formdata.get('email'),  
+        }
+      })
+      .then(function (response) {
+        if(response.status === 200){
+          that.setState({
+            toLogin : true
+          })
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }else{
-       console.log('xxxxxx')
+      axios.get('https://owaf.io/v2api/verify_auth_code', {   
+        params : {
+          email : formdata.get('email'),  
+          code : '12345'
+        }
+      })
+      .then(function (response) {
+        if(response.status === 200){
+          that.props.changeInfo();
+          that.props.history.push('/dashboard')
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   }
 
   render() {
+    const props = {
+      register : this.register,
+      toLogin : this.state.toLogin
+    }
+
     return (
       <div className="login">
-        <h1 onClick={this.login}>{this.props.info}xxxxxxxxx</h1>
+        <Viewer {...props}/>
       </div>
     );
   }

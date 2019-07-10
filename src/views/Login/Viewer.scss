@@ -1,0 +1,22 @@
+.viewer{
+    height: 20rem;
+    width: 20rem;
+    background: #fff;
+    border-radius: .3rem;
+    box-shadow: 2px 2px 10px #909090;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding : 2rem;
+    .logo{
+       text-align: center;
+       img{
+           height: 4rem;
+           width : 4rem;
+       }
+    }
+}
+
+.tologin{
+    height : 26rem;
+}

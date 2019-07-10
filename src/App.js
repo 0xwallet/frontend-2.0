@@ -17,23 +17,19 @@ const Login = Loadable({
   loading
 });
 
+const Page404 = Loadable({
+  loader: () => import('./views/Pages/Page404'),
+  loading
+});
 
-
-const requireAuth = (nextState, replace) => {
-  console.log('just test')
-  if (true) {
-      replace({ pathname: '/' }) // 路由转发
-  }else{
-      // ...
-  }
-}
 
 class App extends Component {
   render() {
     return (   
       <Router>
         <Switch>
-          <Route path="/login" name="Login" component={Login} onEnter={requireAuth}/>
+          <Route path="/login" name="Login" component={Login}/>
+          <Route exact path="/404" name="Page 404" component={Page404} />
           <Route path="/" name="Home" component={DefaultLayout} />
         </Switch>
         </Router>

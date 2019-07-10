@@ -1,6 +1,7 @@
 import React, { Component, Suspense } from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
+import { connect } from 'react-redux';
 
 import {
   AppAside,
@@ -25,6 +26,14 @@ const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayout extends Component {
   loading = () => <div className="animated fadeIn pt-1 text-center"><div className="sk-spinner sk-spinner-pulse"></div></div>;
+
+  componentDidMount(){
+    if(!this.props.info){
+      this.props.history.push('/login')
+    }else{
+      this.props.history.push('/dashboard')
+    }
+  }
 
   render() {
     return (
@@ -62,7 +71,7 @@ class DefaultLayout extends Component {
                     ) : (null);
                   })}
                   {/* <Redirect from="/" to="/dashboard" /> */}
-                  <Redirect from="/" to="/login" />
+                  {/* <Redirect from="/" to="/login" /> */}
                 </Switch>
               </Suspense>
             </Container>
@@ -83,4 +92,12 @@ class DefaultLayout extends Component {
   }
 }
 
-export default DefaultLayout;
+function mapStateToProps(state){
+  return {
+    info : state.login.info
+  }
+}
+
+export default connect(
+  mapStateToProps
+)(DefaultLayout);
