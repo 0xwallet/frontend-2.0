@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import {Button,Input,Form,InputGroup,InputGroupAddon,InputGroupText} from 'reactstrap'
 
 import './Viewer.scss'
@@ -15,7 +14,11 @@ export default (props)=>{
             </div>
 
             {
-                props.toLogin ? <div style={{color : "#73818f"}}>Hello Guest!</div> : ""
+                props.sendMessage && !props.toLogin? <div style={{color : "#73818f"}}>Wrong Code!</div> : ""
+            }
+
+            {
+                props.toLogin  ? <div style={{color : "#73818f"}}>Hello Guest!</div> : ""
             }
             
             <Form row="true" onSubmit={props.register} id="login">
@@ -41,10 +44,32 @@ export default (props)=>{
                     }</Button>
                 </div> 
                 <div style={{marginTop : "1.3rem",width : "100%"}}>
-                    <Link to="/webAuthn" style={{float : 'right'}}>WebAuthn</Link>
+                     {
+                         xx(props.toLogin,props.sendAgain,props.count,props.sendMessage)
+                     }
+                    <a  style={{float : 'right'}} href="javascript:;">WebAuthn</a>
                 </div>
             </Form>
 
         </div>
     )
+}
+
+function xx(msg,fn,count,sendMessage){
+    if(msg){
+        if(count === 0){
+            return <a  style={{float : 'left',color : "#20a8d8"}} href="javascript:;" onClick={fn}>Resend</a>
+        }else{
+            return <p style={{float : 'left'}}>{`${count}s`}</p>
+        }
+    }else{
+        if(sendMessage){
+            if(count !== 0 ){
+                 return <p style={{float : 'left'}}>{`${count}s`}</p>
+            }else{
+                 return <a  style={{float : 'left',color : "#20a8d8"}} href="javascript:;" onClick={fn}>Resend</a>                 
+            }
+        }
+        return ""
+    }
 }

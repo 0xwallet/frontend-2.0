@@ -28,11 +28,12 @@ class DefaultLayout extends Component {
   loading = () => <div className="animated fadeIn pt-1 text-center"><div className="sk-spinner sk-spinner-pulse"></div></div>;
 
   componentDidMount(){
-    if(!this.props.info){
+    if(this.props.tologin === false){
       this.props.history.push('/login')
-    }else{
-      this.props.history.push('/dashboard')
     }
+    // if(this.props.tologin === true){
+    //   this.props.history.push('/dashborad')
+    // }
   }
 
   render() {
@@ -94,7 +95,7 @@ class DefaultLayout extends Component {
 
 function mapStateToProps(state){
   return {
-    info : state.login.info
+    tologin : state.login.tologin,
   }
 }
 

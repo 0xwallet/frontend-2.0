@@ -13,17 +13,19 @@ import './Login.scss'
 class Login extends Component {
   constructor(){
     super();
-    this.state = {
-      toLogin : false
-    }
     this.register = this.register.bind(this);
+    this.sendAgain = this.sendAgain.bind(this);
+    this.state = {
+      count  : 60
+    }
   }
+
   register(e){
     e.preventDefault()
     const that = this;
     var form=document.querySelector('#login');
     const formdata = new FormData(form);
-    if(this.state.toLogin === false){
+    if(this.props.info === false){
       axios.get('https://owaf.io/v2api/get_auth_code', {   
         params : {
           email : formdata.get('email'),  
@@ -31,25 +33,29 @@ class Login extends Component {
       })
       .then(function (response) {
         if(response.status === 200){
-          that.setState({
-            toLogin : true
-          })
+          that.tick();
+          that.props.changeInfo(true)// send youjian go login
         }
       })
       .catch(function (error) {
         console.log(error);
       });
-    }else{
+    }
+    if(this.props.info === true){
       axios.get('https://owaf.io/v2api/verify_auth_code', {   
         params : {
           email : formdata.get('email'),  
-          code : '12345'
+          code : formdata.get('verification')
         }
       })
-      .then(function (response) {
-        if(response.status === 200){
-          that.props.changeInfo();
-          that.props.history.push('/dashboard')
+      .then(function ({data : {r}}) {
+        if(r === 'ok'){
+          that.props.changeToLogin(true);
+          that.props.changeSendMsg(false);
+          that.props.history.push('/dashboard')// yanzheng to home
+        }else{
+          that.props.changeSendMsg(true); // send again
+          that.props.changeInfo(false);
         }
       })
       .catch(function (error) {
@@ -58,10 +64,47 @@ class Login extends Component {
     }
   }
 
+  sendAgain(){
+    var form=document.querySelector('#login');
+    const formdata = new FormData(form);
+    const that = this;
+    axios.get('https://owaf.io/v2api/get_auth_code', {   
+      params : {
+        email : formdata.get('email'),  
+      }
+    })
+    .then(function ({data : {r}}) {
+      that.props.changeInfo(true);
+      that.setState({
+        count : 60,
+      },()=>{
+        that.tick()
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  tick = ()=>{
+    this.timer = setInterval(()=>{
+      this.setState({
+        count : this.state.count - 1
+      },()=>{
+        if(this.state.count === 0){
+          clearInterval(this.timer);
+        }
+      })
+    },1000)
+  }
+
   render() {
     const props = {
       register : this.register,
-      toLogin : this.state.toLogin
+      toLogin : this.props.info,
+      sendMessage : this.props.sendMessage,
+      sendAgain : this.sendAgain,
+      count : this.state.count
     }
 
     return (
@@ -74,12 +117,16 @@ class Login extends Component {
 
 const mapStateToProps = (state)=>{
   return {
-    info : state.login.info
+    info : state.login.info,
+    sendMessage : state.login.sendAgain
   }
 }
+
 const mapDispatchToProps = (dispatch) => {
   return {
-    changeInfo : ()=> dispatch({type : "login",payload : {info : true }})
+    changeInfo : (info)=> dispatch({type : "login",payload : { info }}),
+    changeSendMsg : (info)=> dispatch({type : "sendAgain",payload : { sendAgain : info }}),
+    changeToLogin : (info)=> dispatch({type : "tologin",payload : { tologin : info }}),
   }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Login);
