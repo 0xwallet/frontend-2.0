@@ -28,12 +28,9 @@ class DefaultLayout extends Component {
   loading = () => <div className="animated fadeIn pt-1 text-center"><div className="sk-spinner sk-spinner-pulse"></div></div>;
 
   componentDidMount(){
-    if(this.props.tologin === false){
+    if(this.props.tologin === false && !sessionStorage.getItem('user')){
       this.props.history.push('/login')
     }
-    // if(this.props.tologin === true){
-    //   this.props.history.push('/dashborad')
-    // }
   }
 
   render() {

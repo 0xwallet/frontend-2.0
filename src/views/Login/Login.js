@@ -25,17 +25,25 @@ class Login extends Component {
     const that = this;
     var form=document.querySelector('#login');
     const formdata = new FormData(form);
+
     if(this.props.info === false){
+      that.props.changeInfo(true)
+      if(this.state.count === 0 ){
+        this.setState({
+          count : 60
+        },()=>{
+          this.tick();
+        })
+      }else{
+        this.tick();
+      }
       axios.get('https://owaf.io/v2api/get_auth_code', {   
         params : {
           email : formdata.get('email'),  
         }
       })
       .then(function (response) {
-        if(response.status === 200){
-          that.tick();
-          that.props.changeInfo(true)// send youjian go login
-        }
+        console.log(response)
       })
       .catch(function (error) {
         console.log(error);
@@ -49,14 +57,18 @@ class Login extends Component {
         }
       })
       .then(function ({data : {r}}) {
-        if(r === 'ok'){
-          that.props.changeToLogin(true);
-          that.props.changeSendMsg(false);
-          that.props.history.push('/dashboard')// yanzheng to home
-        }else{
-          that.props.changeSendMsg(true); // send again
-          that.props.changeInfo(false);
-        }
+        // if(r === 'ok'){
+        //   that.props.changeToLogin(true);
+        //   that.props.changeSendMsg(false);
+        //   that.props.history.push('/dashboard')// yanzheng to home
+        // }else{
+        //   that.props.changeSendMsg(true); // send again
+        //   that.props.changeInfo(false);
+        // }
+        sessionStorage.setItem('user',formdata.get('email'))
+        that.props.changeToLogin(true);// test
+        that.props.changeSendMsg(false);
+        that.props.history.push('/dashboard')// yanzheng to home
       })
       .catch(function (error) {
         console.log(error);
@@ -67,19 +79,23 @@ class Login extends Component {
   sendAgain(){
     var form=document.querySelector('#login');
     const formdata = new FormData(form);
-    const that = this;
+    if(this.props.info){
+      this.props.changeInfo(false);
+    }else{
+      this.props.changeInfo(true);
+    }
+    this.setState({
+      count : 60,
+    },()=>{
+      this.tick()
+    })
     axios.get('https://owaf.io/v2api/get_auth_code', {   
       params : {
         email : formdata.get('email'),  
       }
     })
     .then(function ({data : {r}}) {
-      that.props.changeInfo(true);
-      that.setState({
-        count : 60,
-      },()=>{
-        that.tick()
-      })
+      console.log(r)
     })
     .catch(function (error) {
       console.log(error);
@@ -87,6 +103,7 @@ class Login extends Component {
   }
 
   tick = ()=>{
+    clearInterval(this.timer)
     this.timer = setInterval(()=>{
       this.setState({
         count : this.state.count - 1
@@ -96,6 +113,10 @@ class Login extends Component {
         }
       })
     },1000)
+  }
+
+  componentWillUnmount(){
+      clearInterval(this.timer);
   }
 
   render() {
