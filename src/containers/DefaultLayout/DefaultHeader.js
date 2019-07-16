@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { DropdownMenu, DropdownToggle, Nav } from 'reactstrap';
+import { Nav, NavItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-import { AppAsideToggler, AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-
-import logo from '../../assets/img/brand/logo.svg'
+import { AppAsideToggler, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
+import DefaultHeaderDropdown  from './DefaultHeaderDropdown'
+// import logo from '../../assets/img/brand/logo.svg'
+import logo from '../../assets/logo.png'
 import sygnet from '../../assets/img/brand/sygnet.svg'
-import avatar from '../../assets/img/avatars/6.jpg'
 
 const propTypes = {
   children: PropTypes.node,
@@ -28,15 +28,25 @@ class DefaultHeader extends Component {
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'CoreUI Logo' }}
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
+        <Nav className="d-md-down-none" navbar>
+          <NavItem className="px-3">
+            <a href="https://www.owaf.org/docs/" className="nav-link" alt="documentation" >Documentation</a>
+          </NavItem>
+          <NavItem className="px-3">
+            <a href="https://www.owaf.org/blog/" alt="blog">Blog</a>
+          </NavItem>
+          <NavItem className="px-3">
+            <a href="https://help" alt="help">Help</a>
+          </NavItem>
+        </Nav>
         <Nav className="ml-auto" navbar>
-          <AppHeaderDropdown>
-            <DropdownToggle nav>
-              <img src={avatar} className="img-avatar" alt="admin@bootstrapmaster.com" />
-            </DropdownToggle>
-            <DropdownMenu right style={{ right: 'auto', height: '400px' }}>
-              AppHeaderDropdown
-            </DropdownMenu>
-          </AppHeaderDropdown>
+          <DefaultHeaderDropdown notif/>
+          {/* <DefaultHeaderDropdown tasks/>
+          <DefaultHeaderDropdown mssgs/>
+          <NavItem className="d-md-down-none">
+            <NavLink href="#"><i className="icon-location-pin"></i></NavLink>
+          </NavItem> */}
+          <DefaultHeaderDropdown onLogout={this.props.onLogout} accnt/>
         </Nav>
         <AppAsideToggler className="d-md-down-none" />
         {/*<AppAsideToggler className="d-lg-none" mobile />*/}

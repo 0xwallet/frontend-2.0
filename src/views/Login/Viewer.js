@@ -47,7 +47,7 @@ export default (props)=>{
                      {
                          xx(props.toLogin,props.sendAgain,props.count,props.sendMessage)
                      }
-                    <a  style={{float : 'right'}} href="javascript:;">WebAuthn</a>
+                    <a  style={{float : 'right'}} href="xx">WebAuthn</a>
                 </div>
             </Form>
 
@@ -58,7 +58,7 @@ export default (props)=>{
 function xx(msg,fn,count,sendMessage){
     if(msg){
         if(count === 0){
-            return <a  style={{float : 'left',color : "#20a8d8"}} href="javascript:;" onClick={fn}>Resend</a>
+            return <a  style={{float : 'left',color : "#20a8d8"}} href="xx" onClick={fn}>Resend</a>
         }else{
             return <p style={{float : 'left'}}>{`${count}s`}</p>
         }
@@ -67,7 +67,7 @@ function xx(msg,fn,count,sendMessage){
             if(count !== 0 ){
                  return <p style={{float : 'left'}}>{`${count}s`}</p>
             }else{
-                 return <a  style={{float : 'left',color : "#20a8d8"}} href="javascript:;" onClick={fn}>Resend</a>                 
+                 return <a  style={{float : 'left',color : "#20a8d8"}} href="xx" onClick={fn}>Resend</a>                 
             }
         }
         return ""
