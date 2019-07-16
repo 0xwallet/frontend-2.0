@@ -1,5 +1,5 @@
 import React, { Component, Suspense } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect} from 'react-router-dom';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 
@@ -25,12 +25,22 @@ const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayout extends Component {
+  constructor(){
+    super();
+    this.logout = this.logout.bind(this);
+  }
   loading = () => <div className="animated fadeIn pt-1 text-center"><div className="sk-spinner sk-spinner-pulse"></div></div>;
 
-  componentDidMount(){
-    if(this.props.tologin === false && !sessionStorage.getItem('user')){
-      this.props.history.push('/login')
-    }
+  // componentDidMount(){
+  //   if(this.props.tologin === false && !sessionStorage.getItem('user')){
+  //     this.props.history.push('/login')
+  //   }
+  // }
+
+  logout(){
+    console.log('test')
+    sessionStorage.clear()
+    this.props.history.push('/login')
   }
 
   render() {
@@ -38,7 +48,7 @@ class DefaultLayout extends Component {
       <div className="app">
         <AppHeader fixed>
           <Suspense fallback={this.loading()}>
-            <DefaultHeader />
+            <DefaultHeader logout={this.logout}/>
           </Suspense>
         </AppHeader>
         <div className="app-body">
@@ -70,6 +80,11 @@ class DefaultLayout extends Component {
                   })}
                   {/* <Redirect from="/" to="/dashboard" /> */}
                   {/* <Redirect from="/" to="/login" /> */}
+                  {
+                    sessionStorage.getItem('user') ?
+                    <Redirect from="/" to="/dashboard" /> :
+                    <Redirect from="/" to="/login" />
+                  }
                 </Switch>
               </Suspense>
             </Container>

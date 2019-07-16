@@ -7,6 +7,13 @@ export default (props)=> {
 
     const [open,setOpen] = useState(isOpen);
 
+    const icons = {
+        'card1' : 'fa fa-bitcoin',
+        'card2' : 'fa fa-dollar',
+        'card3' : 'fa fa-yen',
+        'card4' : 'fa fa-bitcoin'
+    }
+
     return(
          <Card className={name} >
               <CardBody className="pb-0">
@@ -22,7 +29,8 @@ export default (props)=> {
                     </DropdownMenu>
                   </ButtonDropdown>
                 </ButtonGroup>
-                <div className="text-value">9.823</div>
+                {/* fa fa-bitcoin */}
+                <div className="text-value"><i className={icons[id]}></i> 9.823</div>
                 {/* cardID */}
                 <div>0123 XXXX XXXX XXXX</div>
               </CardBody>

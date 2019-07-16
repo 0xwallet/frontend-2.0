@@ -1,5 +1,6 @@
 import React, { Component, lazy, Suspense } from 'react';
 import { Line } from 'react-chartjs-2';
+import { Redirect } from 'react-router-dom'
 import {
   Badge,
   Button,
@@ -20,6 +21,32 @@ import { getStyle, hexToRgba } from '@coreui/coreui-pro/dist/js/coreui-utilities
 import MoneyCard from './MoneyCard';
 
 const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
+
+const dateTime = function(){
+  const date = new Date();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const style = {
+    marginRight : '10px'
+  }
+  
+  const toEn = {
+    1 : 'January',
+    2 : 'February',
+    3 : 'March',
+    4 : 'April',
+    5 : 'May',
+    6 : 'June',
+    7 : 'July',
+    8 : 'August',
+    9 : 'September',
+    10 : 'October',
+    11 : 'November',
+    12 : 'December'
+  }
+  const dateformat = <div><span style={style}>{toEn[month]}</span>{year}</div>
+  return dateformat;
+}
 
 const brandPrimary = getStyle('--primary')
 const brandSuccess = getStyle('--success')
@@ -319,6 +346,11 @@ class Dashboard extends Component {
 
     return (
       <div className="animated fadeIn">
+         {
+            sessionStorage.getItem('user') ?
+             '':
+            <Redirect from="/" to="/login" />
+          }
         <Row>
           <Col xs="12" sm="6" lg="3">
             <MoneyCard chartData={cardChartData4} chartOpts={cardChartOpts4} id="card1" isOpen={this.state.card1}  name="text-white bg-warning"/>                        
@@ -344,7 +376,7 @@ class Dashboard extends Component {
                 <Row>
                   <Col sm="5">
                     <CardTitle className="mb-0">Token Traffic</CardTitle>
-                    <div className="small text-muted">November 2015</div>
+                    <div className="small text-muted">{dateTime()}</div>
                   </Col>
                   <Col sm="7" className="d-none d-sm-inline-block">
                     <Button color="primary" className="float-right"><i className="icon-cloud-download"></i></Button>

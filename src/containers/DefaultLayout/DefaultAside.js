@@ -240,7 +240,10 @@ class DefaultAside extends Component {
             <div className="aside-options">
               <div className="clearfix mt-4">
                 <small><b>Option 1</b></small>
-                <AppSwitch className={'float-right'} variant={'pill'} label color={'success'} defaultChecked size={'sm'}/>
+                <AppSwitch className={'float-right'} variant={'pill'} label color={'success'} defaultChecked size={'sm'} onClick={()=>{
+                  console.log('hello world');
+                  // window.document.documentElement.setAttribute('data-theme','test2')
+                }}/>
               </div>
               <div>
                 <small className="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

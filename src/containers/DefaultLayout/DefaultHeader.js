@@ -46,7 +46,7 @@ class DefaultHeader extends Component {
           <NavItem className="d-md-down-none">
             <NavLink href="#"><i className="icon-location-pin"></i></NavLink>
           </NavItem> */}
-          <DefaultHeaderDropdown onLogout={this.props.onLogout} accnt/>
+          <DefaultHeaderDropdown onLogout={this.props.logout} accnt/>
         </Nav>
         <AppAsideToggler className="d-md-down-none" />
         {/*<AppAsideToggler className="d-lg-none" mobile />*/}
