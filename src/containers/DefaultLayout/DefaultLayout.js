@@ -28,19 +28,19 @@ class DefaultLayout extends Component {
   constructor(){
     super();
     this.logout = this.logout.bind(this);
+    this.upgrade = this.upgrade.bind(this);
   }
+
   loading = () => <div className="animated fadeIn pt-1 text-center"><div className="sk-spinner sk-spinner-pulse"></div></div>;
 
-  // componentDidMount(){
-  //   if(this.props.tologin === false && !sessionStorage.getItem('user')){
-  //     this.props.history.push('/login')
-  //   }
-  // }
-
   logout(){
-    console.log('test')
-    sessionStorage.clear()
+    sessionStorage.clear();
+    this.props.tologin(false);
     this.props.history.push('/login')
+  }
+
+  upgrade(){
+    this.props.history.push('/upgrade')
   }
 
   render() {
@@ -48,7 +48,7 @@ class DefaultLayout extends Component {
       <div className="app">
         <AppHeader fixed>
           <Suspense fallback={this.loading()}>
-            <DefaultHeader logout={this.logout}/>
+            <DefaultHeader logout={this.logout} upgrade={this.upgrade}/>
           </Suspense>
         </AppHeader>
         <div className="app-body">
@@ -111,6 +111,12 @@ function mapStateToProps(state){
   }
 }
 
+function mapDispatchToProps(dispatch){
+  return {
+    tologin : (info)=> dispatch({type: 'login',payload : {info}})
+  }
+}
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,mapDispatchToProps
 )(DefaultLayout);

@@ -48,7 +48,8 @@ class DefaultHeaderDropdown extends Component {
         <DropdownToggle nav>
           <i className="icon-bell"></i><Badge pill color="danger">{itemsCount}</Badge>
         </DropdownToggle>
-        <DropdownMenu right>
+        {/* right */}
+        <DropdownMenu> 
           <DropdownItem header tag="div" className="text-center"><strong>You have {itemsCount} notifications</strong></DropdownItem>
           <DropdownItem><i className="icon-user-follow text-success"></i> New user followed </DropdownItem>
           <DropdownItem><i className="icon-user-unfollow text-danger"></i> User unfollowed</DropdownItem>
@@ -88,7 +89,8 @@ class DefaultHeaderDropdown extends Component {
         <DropdownToggle nav>
           <img src={imgUrl} className="img-avatar" alt="admin@bootstrapmaster.com" />
         </DropdownToggle>
-        <DropdownMenu right>
+        {/* rihgt */}
+        <DropdownMenu>
           <DropdownItem header tag="div" className="text-center"><strong>Account</strong></DropdownItem>
           <DropdownItem><i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge></DropdownItem>
           <DropdownItem><i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge></DropdownItem>
@@ -100,7 +102,7 @@ class DefaultHeaderDropdown extends Component {
           <DropdownItem><i className="fa fa-user"></i> Profile</DropdownItem>
           <DropdownItem><i className="fa fa-wrench"></i> Settings</DropdownItem>
           <DropdownItem><i className="fa fa-usd"></i> Report<Badge color="secondary">42</Badge></DropdownItem>
-          <DropdownItem><i className="fa fa-plus-square"></i> Upgrade<Badge color="primary">42</Badge></DropdownItem>
+          <DropdownItem onClick={this.props.upgrade}><i className="fa fa-plus-square"></i> Upgrade<Badge color="primary">42</Badge></DropdownItem>
           <DropdownItem divider />
           {/* <DropdownItem><i className="fa fa-shield"></i> Lock Account</DropdownItem> */}
           <DropdownItem onClick={this.props.onLogout}><i className="cui-account-logout icons"></i> Logout</DropdownItem>

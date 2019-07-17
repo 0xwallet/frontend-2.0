@@ -11,7 +11,7 @@ export default (props)=> {
         'card1' : 'fa fa-bitcoin',
         'card2' : 'fa fa-dollar',
         'card3' : 'fa fa-yen',
-        'card4' : 'fa fa-bitcoin'
+        'card4' : 'fa fa-code'
     }
 
     return(
@@ -20,7 +20,7 @@ export default (props)=> {
                 <ButtonGroup className="float-right">
                   <ButtonDropdown id={id} isOpen={open} toggle={() => setOpen(!open)}>
                     <DropdownToggle caret className="p-0" color="transparent">
-                      <i className="icon-settings"></i>
+                      <i className="fa fa-qrcode"></i>
                     </DropdownToggle>
                     <DropdownMenu right>
                       <DropdownItem>Action</DropdownItem>

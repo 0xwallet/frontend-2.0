@@ -1,9 +1,15 @@
 import React,{PureComponent} from 'react';
+import HOCFactoryFactory from './WrapAuth';
 
-export default class Wallet extends PureComponent{
+const auth = false;
+class Wallet extends PureComponent{
     render(){
         return(
-            <div>hello wallet</div>
+            <div>
+                {this.props.children}
+            </div>
         )
     }
 }
+
+export default HOCFactoryFactory(auth)(Wallet);

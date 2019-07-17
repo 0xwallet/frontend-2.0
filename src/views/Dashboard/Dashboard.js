@@ -29,7 +29,7 @@ const dateTime = function(){
   const style = {
     marginRight : '10px'
   }
-  
+
   const toEn = {
     1 : 'January',
     2 : 'February',
@@ -406,7 +406,7 @@ class Dashboard extends Component {
                     <Progress className="progress-xs mt-2" color="info" value="20" />
                   </Col>
                   <Col sm={12} md className="mb-sm-2 mb-0">
-                    <div className="text-muted">Pageviews</div>
+                    <div className="text-muted">Tokenviews</div>
                     <strong>78.706 Views (60%)</strong>
                     <Progress className="progress-xs mt-2" color="warning" value="60" />
                   </Col>

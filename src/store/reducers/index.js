@@ -9,8 +9,16 @@ function login(state = {info : false,sendAgain : false,tologin : false},action){
     }
 }
 
+function upgrade(state={auth : false},action){
+    switch(action.type){
+        case 'upgrade' : return {...state,auth : action.payload.auth};
+        default : return state
+    }
+}
+
 const rootRudecer = combineReducers({
-    login
+    login,
+    upgrade
 })
 
 export default rootRudecer

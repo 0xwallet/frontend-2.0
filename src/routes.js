@@ -23,6 +23,9 @@ const Account = React.lazy(()=>import('./views/Settings/Account'));
 const Security = React.lazy(()=>import('./views/Settings/Security'));
 const Blockchain = React.lazy(()=>import('./views/Settings/Blockchain'));
 
+// pay
+const Upgrade = React.lazy(()=>import('./views/Upgrade'))
+
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', name: 'Home', component: DefaultLayout, exact: true },
@@ -50,6 +53,9 @@ const routes = [
   { path: '/settings/account', name: 'Account', component: Account},
   { path: '/settings/security', name: 'Security', component: Security},
   { path: '/settings/blockchain', name: 'Blockchain', component: Blockchain},
+
+  // pay
+  { path: '/upgrade', name: 'Upgrade', component: Upgrade, exact: true}
 ];
 
 export default routes;
