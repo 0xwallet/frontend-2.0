@@ -16,7 +16,8 @@ class Login extends Component {
     this.register = this.register.bind(this);
     this.sendAgain = this.sendAgain.bind(this);
     this.state = {
-      count  : 60
+      count  : 60,
+      alias : "Guest"
     }
   }
 
@@ -42,8 +43,12 @@ class Login extends Component {
           email : formdata.get('email'),  
         }
       })
-      .then(function (response) {
-        console.log(response)
+      .then(function ({data:{r}}) {
+        if(r.registered){
+          that.setState({
+            alias : formdata.get('email')
+          })
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -57,18 +62,17 @@ class Login extends Component {
         }
       })
       .then(function ({data : {r}}) {
-        // if(r === 'ok'){
-        //   that.props.changeToLogin(true);
-        //   that.props.changeSendMsg(false);
-        //   that.props.history.push('/dashboard')// yanzheng to home
-        // }else{
-        //   that.props.changeSendMsg(true); // send again
-        //   that.props.changeInfo(false);
-        // }
-        sessionStorage.setItem('user',formdata.get('email'))
-        that.props.changeToLogin(true);// test
-        that.props.changeSendMsg(false);
-        that.props.history.push('/dashboard')// yanzheng to home
+        if(r !== 'wrong code'){
+          sessionStorage.setItem('user',formdata.get('email'));
+          sessionStorage.setItem('token',r.token);
+
+          that.props.changeToLogin(true);
+          that.props.changeSendMsg(false);
+          that.props.history.push('/dashboard')// yanzheng to home
+        }else{
+          that.props.changeSendMsg(true); // send again
+          that.props.changeInfo(false);
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -125,7 +129,8 @@ class Login extends Component {
       toLogin : this.props.info,
       sendMessage : this.props.sendMessage,
       sendAgain : this.sendAgain,
-      count : this.state.count
+      count : this.state.count,
+      alias : this.state.alias
     }
 
     return (

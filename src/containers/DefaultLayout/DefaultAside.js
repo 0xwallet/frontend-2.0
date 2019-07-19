@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Nav, NavItem, NavLink, Progress, TabContent, TabPane, ListGroup, ListGroupItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import { AppSwitch } from '@coreui/react'
 
 const propTypes = {
@@ -239,20 +240,29 @@ class DefaultAside extends Component {
 
             <div className="aside-options">
               <div className="clearfix mt-4">
-                <small><b>Option 1</b></small>
+                <small><b>主题切换</b></small>
                 <AppSwitch className={'float-right'} variant={'pill'} label color={'success'} defaultChecked size={'sm'} onClick={()=>{
-                  console.log('hello world');
-                  // window.document.documentElement.setAttribute('data-theme','test2')
+                  const theme = localStorage.getItem('theme');
+                  if(theme === 'dark'){
+                    localStorage.setItem('theme','light');
+                    window.location.reload();
+                    // this.props.changetheme('light');
+                  };
+                  if(theme === 'light'){
+                    localStorage.setItem('theme','dark');
+                    window.location.reload();
+                    // this.props.changetheme('dark');
+                  }
                 }}/>
               </div>
-              <div>
+              {/* <div>
                 <small className="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                   tempor incididunt ut labore et dolore magna aliqua.
                 </small>
-              </div>
+              </div> */}
             </div>
 
-            <div className="aside-options">
+            {/* <div className="aside-options">
               <div className="clearfix mt-3">
                 <small><b>Option 2</b></small>
                 <AppSwitch className={'float-right'} variant={'pill'} label color={'success'} size={'sm'}/>
@@ -262,9 +272,9 @@ class DefaultAside extends Component {
                   tempor incididunt ut labore et dolore magna aliqua.
                 </small>
               </div>
-            </div>
+            </div> */}
 
-            <div className="aside-options">
+            {/* <div className="aside-options">
               <div className="clearfix mt-3">
                 <small><b>Option 3</b></small>
                 <AppSwitch className={'float-right'} variant={'pill'} label color={'success'} defaultChecked size={'sm'} disabled/>
@@ -272,14 +282,14 @@ class DefaultAside extends Component {
                   <small className="text-muted">Option disabled.</small>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="aside-options">
+            {/* <div className="aside-options">
               <div className="clearfix mt-3">
                 <small><b>Option 4</b></small>
                 <AppSwitch className={'float-right'} variant={'pill'} label color={'success'} defaultChecked size={'sm'} />
               </div>
-            </div>
+            </div> */}
 
             <hr />
             <h6>Utilization</h6>
@@ -317,4 +327,15 @@ class DefaultAside extends Component {
 DefaultAside.propTypes = propTypes;
 DefaultAside.defaultProps = defaultProps;
 
-export default DefaultAside;
+function mapStateToProps(state){
+  return{
+    theme : state.updatetheme.theme
+  }
+};
+function mapDispatchToProps(Dispatch){
+  return{
+    changetheme : (theme)=> Dispatch({type: 'updatetheme', payload: { theme }})
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(DefaultAside);

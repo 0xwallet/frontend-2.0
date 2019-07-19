@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 // import { renderRoutes } from 'react-router-config';
 import Loadable from 'react-loadable';
-import './App.scss';
+import { connect } from 'react-redux';
 
 const loading = () => <div className="animated fadeIn pt-3 text-center"><div className="sk-spinner sk-spinner-pulse"></div></div>;
 
@@ -35,7 +35,15 @@ const Page404 = Loadable({
 
 class App extends Component {
 
-  render() {
+  render() { 
+    const theme = localStorage.getItem('theme');// this.props.theme
+    if(theme === 'dark'){
+      require('./Dark.scss');
+    }
+    if(theme === 'light'){
+      require('./App.scss');
+    }
+
     return (
       <HashRouter>
         <Switch>
@@ -50,4 +58,10 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps(state){
+  return{
+    theme : state.updatetheme.theme
+  }
+};
+
+export default connect(mapStateToProps)(App);

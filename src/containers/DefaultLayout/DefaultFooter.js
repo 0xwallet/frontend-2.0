@@ -15,7 +15,7 @@ class DefaultFooter extends Component {
 
     return (
       <React.Fragment>
-        <span><a href="https://www.owaf.org">0xWallet</a> &copy; 2018 creativeLabs.</span>
+        <span><a href="https://www.owaf.org">0xWallet</a> &copy; 2019 create by amount.</span>
         <span className="ml-auto">Powered by <a href="https://coreui.io/react">0xWallet for React</a></span>
       </React.Fragment>
     );

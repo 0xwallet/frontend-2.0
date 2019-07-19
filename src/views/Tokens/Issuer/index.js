@@ -13,7 +13,10 @@ class Issuer extends PureComponent{
   }
 
   render(){
-   return this.props.auth ? <div>you have auth</div> : 
+   return this.props.auth ? 
+   (<div>
+     hello auth
+   </div>) : 
     (
       <div>
       <Card>

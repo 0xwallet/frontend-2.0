@@ -18,7 +18,7 @@ export default (props)=>{
             }
 
             {
-                props.toLogin  ? <div style={{color : "#73818f"}}>Hello Guest!</div> : ""
+                props.toLogin  ? <div style={{color : "#73818f"}}>Hello {props.alias}!</div> : ""
             }
             
             <Form row="true" onSubmit={props.register} id="login">
@@ -47,7 +47,7 @@ export default (props)=>{
                      {
                          xx(props.toLogin,props.sendAgain,props.count,props.sendMessage)
                      }
-                    <a  style={{float : 'right'}} href="xx">WebAuthn</a>
+                    <span  style={{float : 'right'}}  className="webauthn">WebAuthn</span>
                 </div>
             </Form>
 
@@ -58,7 +58,7 @@ export default (props)=>{
 function xx(msg,fn,count,sendMessage){
     if(msg){
         if(count === 0){
-            return <a  style={{float : 'left',color : "#20a8d8"}} href="xx" onClick={fn}>Resend</a>
+            return <span  style={{float : 'left',color : "#20a8d8"}} onClick={fn} className="resend">Resend</span>
         }else{
             return <p style={{float : 'left'}}>{`${count}s`}</p>
         }
@@ -67,7 +67,7 @@ function xx(msg,fn,count,sendMessage){
             if(count !== 0 ){
                  return <p style={{float : 'left'}}>{`${count}s`}</p>
             }else{
-                 return <a  style={{float : 'left',color : "#20a8d8"}} href="xx" onClick={fn}>Resend</a>                 
+                 return <span  style={{float : 'left',color : "#20a8d8"}} className="resend" onClick={fn}>Resend</span>                 
             }
         }
         return ""
