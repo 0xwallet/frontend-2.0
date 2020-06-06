@@ -1,11 +1,10 @@
-import CoreuiVue from '@coreui/vue'
-import TheHeader from '@/containers/TheHeader'
-import Vuex from 'vuex'
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import CoreuiVue from '@coreui/vue'
+import Vuex from 'vuex'
+import TheSidebar from '@/containers/TheSidebar.vue'
 
 const localVue = createLocalVue()
 localVue.use(CoreuiVue)
-
 localVue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -17,9 +16,9 @@ const store = new Vuex.Store({
   }
 })
 
-describe('TheHeader.vue', () => {
+describe('TheSidebar.vue', () => {
   test('renders correctly', () => {
-    const wrapper = shallowMount(TheHeader, { localVue, store })
+    const wrapper = shallowMount(TheSidebar, { store, localVue })
     expect(wrapper.element).toMatchSnapshot()
   })
 })
