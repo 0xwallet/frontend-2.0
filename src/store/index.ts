@@ -13,7 +13,7 @@ const state: state = {
   sidebarShow: 'responsive',
   sidebarMinimize: false,
   asideShow: false,
-  darkMode: false
+  darkMode: true
 }
 
 const mutations = {
