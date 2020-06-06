@@ -7,23 +7,23 @@ const Dashboard = () => import('../views/Dashboard.vue')
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'hash', // https://router.vuejs.org/api/#mode
-  linkActiveClass: 'open active',
-  routes: [
-    {
-      path: '/',
-      redirect: '/dashboard',
-      name: 'Home',
-      component: TheContainer,
-      children: [
+    mode: 'hash', // https://router.vuejs.org/api/#mode
+    linkActiveClass: 'open active',
+    routes: [
         {
-          path: 'dashboard',
-          name: 'Dashboard',
-          component: Dashboard
+            path: '/',
+            redirect: '/dashboard',
+            name: 'Home',
+            component: TheContainer,
+            children: [
+                {
+                    path: 'dashboard',
+                    name: 'Dashboard',
+                    component: Dashboard
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 })
 
 export default router

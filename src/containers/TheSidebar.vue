@@ -1,56 +1,80 @@
 <template>
-  <CSidebar 
-    :minimize="minimize"
-    unfoldable
-    :show="show"
-    @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
-  >
-    <CSidebarBrand to="/">
-      <CIcon 
-        class="c-sidebar-brand-full" 
-        name="logo" 
-        size="custom-size"
-        :height="35" 
-        viewBox="0 0 556 134"
-      />
-      <CIcon 
-        class="c-sidebar-brand-minimized" 
-        name="logo" 
-        size="custom-size"
-        :height="35"
-        viewBox="0 0 110 134"
-      />
-    </CSidebarBrand>
-    <CRenderFunction flat :contentToRender="nav"/>
-    <CSidebarMinimizer 
-      class="c-d-md-down-none" 
-      @click.native="$store.commit('toggle', 'sidebarMinimize')"
-    />
-  </CSidebar>
+    <CSidebar
+            :minimize="minimize"
+            unfoldable
+            :show="show"
+            @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
+    >
+        <CSidebarBrand :class="{'c-sidebar-brand-dark' : darkMode}" to="/">
+            <c-img :class="[minimize ? 'logo-mini' : 'logo']" :src="logoSrc" alt="logo"/>
+        </CSidebarBrand>
+        <CRenderFunction flat :contentToRender="nav"/>
+        <CSidebarMinimizer
+                class="c-d-md-down-none"
+                @click.native="$store.commit('toggle', 'sidebarMinimize')"
+        />
+    </CSidebar>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import { nav } from './_nav'
+    import Vue from 'vue'
+    import {nav} from './_nav'
+    import Component from "vue-class-component"
 
-declare interface dataInterface {
-  nav: typeof nav
-}
+    // declare interface dataInterface {
+    //     nav: typeof nav
+    // }
 
-export default Vue.extend({
-  name: 'TheSidebar',
-  data (): dataInterface {
-    return {
-      nav
+    @Component
+    export default class TheSidebar extends Vue {
+
+        nav = nav
+
+        /**
+         * 为
+         */
+        get show(): string | boolean {
+            return this.$store.state.sidebarShow
+        }
+
+        get minimize(): boolean {
+            return this.$store.state.sidebarMinimize
+        }
+
+        get darkMode(): boolean {
+            return this.$store.state.darkMode
+        }
+
+        get logoSrc(): string {
+            if (this.minimize) {
+                if (this.darkMode) {
+                    return require<string>('@/assets/images/logo-mini-dark.png')
+                } else {
+                    return require<string>('@/assets/images/logo-mini.png')
+                }
+            } else {
+                if (this.darkMode) {
+                    return require<string>('@/assets/images/logo-dark.png')
+                } else {
+                    return require<string>('@/assets/images/logo.png')
+                }
+            }
+        }
+
+
     }
-  },
-  computed: {
-    show (): string | boolean {
-      return this.$store.state.sidebarShow
-    },
-    minimize (): boolean {
-      return this.$store.state.sidebarMinimize 
-    }
-  }
-})
 </script>
+<style lang="stylus" scoped>
+    .c-sidebar-brand
+        background #fff !important
+        height 56px
+
+        &-dark
+            background #2c2c34 !important
+
+        .logo
+            height 40px
+
+        .logo-mini
+            height 30px
+</style>
