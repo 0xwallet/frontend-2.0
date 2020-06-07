@@ -30,9 +30,6 @@
 
         nav = nav
 
-        /**
-         * 为
-         */
         get show(): string | boolean {
             return this.$store.state.sidebarShow
         }
