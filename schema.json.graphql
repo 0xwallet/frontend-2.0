@@ -1,0 +1,433 @@
+# This file was generated based on "schema.json". Do not edit manually.
+
+schema {
+    query: RootQueryType
+    mutation: RootMutationType
+}
+
+"user or channel"
+union ImContact = Channel | User
+
+"task or share"
+union KanbanItemInfo = Share | Task
+
+type Channel {
+    id: ID!
+    name: String!
+    organization: Organization
+    "1 public, 2 private"
+    type: Visible
+    users: [User]
+}
+
+type Email {
+    address: String
+    status: EmailStatus
+    tag: EmailTag
+    user: User
+}
+
+type ImMessage {
+    body: Json
+    fromContact: ImContact
+    id: Snowflake
+    insertedAt: NaiveDateTime
+    session: ImUserSession
+    toContact: ImContact
+    updatedAt: NaiveDateTime
+}
+
+type ImSessionReadPosition {
+    id: ID
+    insertedAt: NaiveDateTime
+    messageId: Snowflake
+    sessionId: String
+    updatedAt: NaiveDateTime
+    user: User
+}
+
+type ImUserSession {
+    contact: ImContact
+    id: ID
+    insertedAt: NaiveDateTime
+    lastMessage: ImMessage
+    otherSideReadPosition: Snowflake
+    selfReadPosition: Snowflake
+    sessionId: String
+    updatedAt: NaiveDateTime
+}
+
+"kanban column"
+type KanbanColumn {
+    id: ID!
+    items: [KanbanItem]
+    name: String!
+    organization: Organization
+    position: Int!
+}
+
+"kanban item"
+type KanbanItem {
+    column: KanbanColumn
+    id: ID!
+    info: KanbanItemInfo
+    insertedAt: NaiveDateTime!
+    organization: Organization
+    position: Int!
+    updatedAt: NaiveDateTime!
+}
+
+type Organization {
+    channels(pageNumber: Int = 1, pageSize: Int = 20): [Channel]
+    id: ID!
+    info: OrganizationInfo
+    kanbanColumns: [KanbanColumn]
+    name: String!
+    users: [User]
+}
+
+"Organization info"
+type OrganizationInfo {
+    country: String
+}
+
+type OrganizationInvitation {
+    id: ID!
+    message: String!
+    organization: Organization
+    status: InvitationStatus!
+    user: User
+}
+
+type OrganizationPages {
+    pageCount: Int
+    pageNumber: Int
+    pageSize: Int
+    results: [Organization]
+    totalCount: Int
+}
+
+type PersonalInfo {
+    country: String
+    creditCard: String
+    passport: String
+    phoneNumber: String
+}
+
+type RootMutationType {
+    "Activate email"
+    activateEmail(code: String, email: String): Email
+    "Bind a nkn address"
+    bindNknAddress(
+        "format: id.pubkey"
+        nknAddress: String!
+    ): Wallet
+    "Create a channel in organization."
+    createChannel(
+        name: String!,
+        organizationId: ID!,
+        "1 public, 2 private"
+        type: Visible!
+    ): Channel
+    "Add user to channel."
+    createChannelMember(channelId: ID!, userId: ID!): User
+    "Create Kanban column"
+    createKanbanColumn(name: String!, organizationId: ID!): KanbanColumn
+    "Create task at Kanban column"
+    createKanbanTask(body: String!, columnId: ID!, organizationId: ID!, title: String!): KanbanItem
+    "Create a organization for current user."
+    createOrganization(info: OrganizationInfoInput, name: String!): Organization
+    "Get public file upload token"
+    createPublicUploadToken(
+        filename: String!,
+        "byte size"
+        size: Int!
+    ): String
+    "Delete a channel."
+    deleteChannel(channelId: ID!): Channel
+    "Delete Kanban column"
+    deleteKanbanColumn(columnId: ID!): KanbanColumn
+    "Delete a organization."
+    deleteOrganization(organizationId: ID!): Organization
+    "Delete a wallet"
+    deleteWallet(id: ID!): Wallet
+    "Edit current user"
+    editCurrentUser(avatar: String, bio: String, personalInfo: PersonalInfoInput, username: String): User
+    "Edit a organization"
+    editOrganization(id: ID!, info: OrganizationInfoInput, name: String): Organization
+    "deal with organization's invitation"
+    editOrganizationInvitation(action: InvitationAction!, invitationId: ID!): OrganizationInvitation
+    "delete user session"
+    imDeleteUserSession(
+        "user session id"
+        id: ID!
+    ): ImUserSession
+    "Set message as read status"
+    imHaveRead(
+        "where is message from"
+        contactId: ID!,
+        "where is message from type"
+        contactType: ImContactType,
+        "readed message id"
+        messageId: Snowflake
+    ): ImSessionReadPosition
+    "Send message"
+    imSendMessage(
+        "im message json body"
+        body: Json,
+        "send message to"
+        contactId: ID!,
+        "user, channel ..."
+        contactType: ImContactType = USER
+    ): ImMessage
+    "Inviting a user to join an organization"
+    inviteUserToOrganization(message: String = "", organizationId: ID!, userId: ID!): User
+    "Move a kanban column"
+    moveKanbanColumn(
+        "send -1 if move to head"
+        afterColumnId: Int!,
+        columnId: ID!
+    ): KanbanColumn
+    "Move a kanban item"
+    moveKanbanItem(
+        "send -1 if move to head"
+        afterItemId: Int!,
+        itemId: ID!,
+        toColumnId: ID
+    ): KanbanItem
+    "Reset user's password"
+    resetPassword(code: String = "", email: String!, newPassword: String!, oldPassword: String = ""): Session
+    "Add current user to channel."
+    selfJoinChannel(channelId: ID!): User
+    "Send login code to user default nkn address, return this address"
+    sendLoginCode(email: String!, walletId: ID): String
+    "Send verify code to email"
+    sendVerifyCode(
+        "send verification code to this email address"
+        email: String,
+        "activate or reset the password"
+        type: VerifyCodeType = ACTIVE_EMAIL
+    ): String
+    "Set user as channel admin."
+    setChannelAdmin(channelId: ID!, userId: ID!): User
+    "Set user's default nkn address"
+    setDefaultNknAddress(
+        "Ensure that users can receive the login code."
+        loginCode: String,
+        password: String!,
+        tag: WalletTag!,
+        walletId: ID!
+    ): Wallet
+    "Set user as organization admin."
+    setOrganizationAdmin(organizationId: ID!, userId: ID!): User
+    "Sign in a user"
+    signin(
+        code: String = "",
+        email: String!,
+        "DEPRECATE! Use code field replacement"
+        loginCode: String = "",
+        password: String = ""
+    ): Session
+    "Create a user account"
+    signup(
+        avatar: String,
+        "email verify code"
+        code: String!,
+        email: String!,
+        password: String!,
+        username: String!
+    ): Session
+    "Unset user as channel admin."
+    unsetChannelAdmin(channelId: ID!, userId: ID!): User
+    "Unset user as organization admin."
+    unsetOrganizationAdmin(organizationId: ID!, userId: ID!): User
+}
+
+type RootQueryType {
+    "Get channel by id, if channel is public or current user in this channel"
+    channel(id: ID!): Channel
+    "Confirm successful upload"
+    confirmPublicUpload(uuid: String!): String
+    "Get offline messages"
+    imOfflineMessages(
+        """
+
+        The maximum number of messages to be returned; must be positive and can't be
+        greater than 100. If the offset is negative, the limit must be greater or
+        equal to -offset. Fewer messages may be returned than specified by the
+        limit, even if the end of the message history has not been reached.
+        """
+        limit: Int!,
+        "Identifier of the message starting from which history must be fetched; use 0 to get results from the last message."
+        messageId: Snowflake!,
+        """
+
+        Specify 0 to get results from exactly the from_message_id or a negative
+        offset up to 99 to get additionally some newer messages.
+        """
+        offset: Int!,
+        "user session db id"
+        userSessionId: ID!
+    ): [ImMessage]
+    "Get session list"
+    imUserSessions: [ImUserSession]
+    "List all kanban columns in organization"
+    kanbanColumns(organizationId: ID!): [KanbanColumn]
+    "Get the currently signed-in user"
+    me: User
+    "Get organization by id, if current user in this organization"
+    organization(id: ID!): Organization
+    "List organizations"
+    organizations(pageNumber: Int = 1, pageSize: Int = 20, userId: ID!): [OrganizationPages]
+}
+
+type Session {
+    token: String!
+    user: User!
+}
+
+"kanban share"
+type Share {
+    body: String
+    id: ID!
+    insertedAt: NaiveDateTime!
+    updatedAt: NaiveDateTime!
+    user: User
+}
+
+"kanban task"
+type Task {
+    body: String
+    id: ID!
+    insertedAt: NaiveDateTime!
+    title: String
+    updatedAt: NaiveDateTime!
+    user: User
+}
+
+type User {
+    avatar: String
+    bio: String
+    channels: [Channel]
+    email: String!
+    emails: [Email]
+    id: ID!
+    lastLoginAt: NaiveDateTime
+    loginNknAddress: String
+    messageNknAddress: String
+    organizationInvitations: [OrganizationInvitation]
+    organizations: [Organization]
+    personalInfo: PersonalInfo
+    role: Role
+    type: UserType
+    username: String!
+    wallets: [Wallet]
+}
+
+type Wallet {
+    description: String
+    id: ID!
+    info: WalletInfo!
+    "default nkn address tag"
+    tags: [WalletTag]
+    type: WalletType!
+    user: User!
+}
+
+type WalletInfo {
+    address: String
+    identifier: String
+    publicKey: String
+}
+
+enum EmailStatus {
+    ACTIVATED
+    INACTIVATED
+}
+
+enum EmailTag {
+    DEFAULT_EMAIL
+}
+
+"user or channel"
+enum ImContactType {
+    CHANNEL
+    USER
+}
+
+enum InvitationAction {
+    AGREE
+    DELETE
+    REJECT
+}
+
+enum InvitationStatus {
+    AGREED
+    DELETED
+    REJECTED
+    WAITING
+}
+
+enum Role {
+    ADMIN
+    MEMBER
+    OWNER
+}
+
+enum UserType {
+    BASIC
+    ISSUER
+}
+
+enum VerifyCodeType {
+    ACTIVE_EMAIL
+    RESET_PASSWORD
+}
+
+enum Visible {
+    PRIVATE
+    PUBLIC
+}
+
+enum WalletTag {
+    LOGIN_CODE
+    MESSAGE
+}
+
+enum WalletType {
+    NKN
+}
+
+"Organization info"
+input OrganizationInfoInput {
+    country: String = ""
+}
+
+"Personal info input"
+input PersonalInfoInput {
+    country: String
+    creditCard: String
+    passport: String
+}
+
+
+"""
+The `Naive DateTime` scalar type represents a naive date and time without
+timezone. The DateTime appears in a JSON response as an ISO8601 formatted
+string.
+"""
+scalar NaiveDateTime
+
+"""
+`Snowflake` type represents a 64 bit number, appears in JSON responses as a
+UTF-8 String due to Javascript's lack of support for numbers > 53-bits.
+Its parsed again to an integer after received.
+"""
+scalar Snowflake
+
+"""
+The `Json` scalar type represents arbitrary json string data, represented as UTF-8
+character sequences. The Json type is most often used to represent a free-form
+human-readable json string.
+"""
+scalar Json
