@@ -62,6 +62,7 @@
     "stylus-loader": "^3.0.2",
     "typescript": "~3.8.3",
     "vue-class-component": "^7.2.3",
+    "vue-particles": "^1.0.9",
     "vue-property-decorator": "^8.4.2",
     "vue-template-compiler": "~2.6.11",
     "vuex-module-decorators": "^0.17.0"

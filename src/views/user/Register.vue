@@ -1,5 +1,23 @@
 <template>
-    <div class="c-app flex-row align-items-center">
+    <div class="c-app flex-row align-items-center register">
+        <vue-particles
+                class="vue-particles"
+                color="#FFFFFF"
+                :particleOpacity="0.7"
+                :particlesNumber="120"
+                shapeType="circle"
+                :particleSize="4"
+                linesColor="#dedede"
+                :linesWidth="1"
+                :lineLinked="false"
+                :lineOpacity="0.4"
+                :linesDistance="150"
+                :moveSpeed="2"
+                :hoverEffect="false"
+                hoverMode="repulse"
+                :clickEffect="true"
+                clickMode="repulse">
+        </vue-particles>
         <CContainer>
             <CRow class="justify-content-center">
                 <CCol md="4">
@@ -58,7 +76,8 @@
                                             <CButton color="primary" class="px-4">Login</CButton>
                                         </CCol>
                                         <CCol col="6" class="text-right">
-                                            <CButton color="link" class="px-0" @click="$router.push('/login')">Sign In</CButton>
+                                            <CButton color="link" class="px-0" @click="$router.push('/login')">Sign In
+                                            </CButton>
                                         </CCol>
                                     </CRow>
                                     <CRow>
@@ -80,14 +99,37 @@
 <script lang="ts">
     import Vue from 'vue'
     import Component from "vue-class-component"
+    import VueParticles from 'vue-particles/src/vue-particles/vue-particles.vue'
+    import {CommonModule} from "@/store/CommonModule"
 
-    @Component
+
+    @Component({
+        components: {
+            VueParticles
+        }
+    })
     export default class Register extends Vue {
         logoImg = require('@/assets/images/logo.png')
+
+        mounted() {
+            setTimeout(() => CommonModule.hideLoading(), 800)
+        }
+
+        sendCode(){
+
+        }
     }
 </script>
 
 <style lang="stylus" scoped>
-    .logo
-        width 170px
+    .register
+        background linear-gradient(to bottom, #FFCC99 0%, #0066FF 80%)
+
+        .vue-particles
+            position fixed
+            width 100%
+            height 100%
+
+        .logo
+            width 170px
 </style>

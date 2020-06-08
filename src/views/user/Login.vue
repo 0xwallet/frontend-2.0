@@ -1,6 +1,23 @@
 <template>
-    <div class="c-app flex-row align-items-center">
-
+    <div class="c-app flex-row align-items-center login">
+        <vue-particles
+                class="vue-particles"
+                color="#FFFFFF"
+                :particleOpacity="0.7"
+                :particlesNumber="120"
+                shapeType="circle"
+                :particleSize="4"
+                linesColor="#dedede"
+                :linesWidth="1"
+                :lineLinked="false"
+                :lineOpacity="0.4"
+                :linesDistance="150"
+                :moveSpeed="2"
+                :hoverEffect="false"
+                hoverMode="repulse"
+                :clickEffect="true"
+                clickMode="repulse">
+        </vue-particles>
         <CContainer>
             <CRow class="justify-content-center">
                 <CCol md="8">
@@ -19,7 +36,7 @@
                                             autocomplete="username email"
                                     >
                                         <template #prepend-content>
-                                            <CIcon name="cil-user"/>
+                                            <CIcon name="cil-envelope-closed"/>
                                         </template>
                                     </CInput>
                                     <CInput
@@ -50,6 +67,7 @@
                                 </CForm>
                             </CCardBody>
                         </CCard>
+
                         <CCard
                                 color="primary"
                                 text-color="white"
@@ -81,8 +99,14 @@
     import Vue from 'vue'
     import Component from "vue-class-component"
     import {CommonModule} from "@/store/CommonModule"
+    import VueParticles from 'vue-particles/src/vue-particles/vue-particles.vue'
 
-    @Component
+
+    @Component({
+        components: {
+            VueParticles
+        }
+    })
     export default class Login extends Vue {
 
         loginType = 'Password'
@@ -90,6 +114,7 @@
 
         mounted() {
             CommonModule.hideLoading()
+
         }
 
         user = {
@@ -106,17 +131,31 @@
             }
         }
 
+        /**
+         * 发送验证码
+         */
         sendCode() {
 
         }
 
+        /**
+         * 登录
+         */
         login() {
-            CommonModule.toast('测试吐司')
+
         }
     }
 </script>
 
 <style lang="stylus" scoped>
-    .logo
-        width 170px
+    .login
+        background linear-gradient(to bottom , #FFCC99 0%, #0066FF 80%)
+
+        .vue-particles
+            position fixed
+            width 100%
+            height 100%
+
+        .logo
+            width 170px
 </style>
