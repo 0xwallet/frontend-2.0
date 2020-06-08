@@ -33,6 +33,7 @@
                                     <br>
                                     <CInput
                                             placeholder="Email"
+                                            :value.sync="user.email"
                                             autocomplete="username email"
                                     >
                                         <template #prepend-content>
@@ -40,14 +41,27 @@
                                         </template>
                                     </CInput>
                                     <CInput
-                                            :placeholder="loginType === 'Password' ? 'password' : 'loginCode'"
-                                            :type="loginType === 'Password' ? 'password' : 'text'"
+                                            v-if="loginType === 'Password'"
+                                            placeholder="password"
+                                            type="password"
+                                            :value.sync="user.password"
                                             autocomplete="false"
                                     >
                                         <template #prepend-content>
                                             <CIcon name="cil-lock-locked"/>
                                         </template>
-                                        <template #append v-if="loginType === 'NKN'">
+                                    </CInput>
+                                    <CInput
+                                            v-if="loginType === 'NKN'"
+                                            placeholder="loginCode"
+                                            type="text"
+                                            :value.sync="user.code"
+                                            autocomplete="false"
+                                    >
+                                        <template #prepend-content>
+                                            <CIcon name="cil-lock-locked"/>
+                                        </template>
+                                        <template #append>
                                             <CButton block pressed variant="ghost" color="light" @click="sendCode">
                                                 Send
                                             </CButton>
@@ -59,11 +73,12 @@
                                         </CCol>
                                         <CCol col="6" class="text-right">
                                             <CButton color="link" @click="changeLoginType" class="px-0">Use {{ loginType
-                                                === 'Password' ? 'Password' : 'NKN'}}
+                                                === 'Password' ? 'NKN' : 'Password'}}
                                             </CButton>
                                             <CButton color="link" class="px-0">Forgot password?</CButton>
                                         </CCol>
                                     </CRow>
+                                    <CElementCover :opacity="0.8" v-show="loading"/>
                                 </CForm>
                             </CCardBody>
                         </CCard>
@@ -100,6 +115,7 @@
     import Component from "vue-class-component"
     import {CommonModule} from "@/store/CommonModule"
     import VueParticles from 'vue-particles/src/vue-particles/vue-particles.vue'
+    import {UserModule} from "@/store/UserModule"
 
 
     @Component({
@@ -111,6 +127,7 @@
 
         loginType = 'Password'
         logoImg = require('@/assets/images/logo.png')
+        loading = false
 
         mounted() {
             CommonModule.hideLoading()
@@ -120,7 +137,7 @@
         user = {
             email: '',
             password: '',
-            emailCode: '',
+            code: ''
         }
 
         changeLoginType() {
@@ -142,6 +159,27 @@
          * 登录
          */
         login() {
+            this.loading = true
+
+            const param = {
+                email: this.user.email,
+                password: '',
+                code: '',
+            }
+            if (this.loginType === 'Password') {
+                param.password = this.user.password
+            } else {
+                param.code = this.user.code
+            }
+            UserModule.signIn(param).then(() => {
+                CommonModule.toast('Login Successful')
+                this.loading = false
+                setTimeout(() => {
+                    this.$router.push('/')
+                }, 500)
+            }).catch(() => {
+                this.loading = false
+            })
 
         }
     }
@@ -149,7 +187,7 @@
 
 <style lang="stylus" scoped>
     .login
-        background linear-gradient(to bottom , #FFCC99 0%, #0066FF 80%)
+        background linear-gradient(to bottom, #FFCC99 0%, #0066FF 80%)
 
         .vue-particles
             position fixed

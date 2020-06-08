@@ -17,7 +17,7 @@
                 <CToast
                         :key="'toast' + index"
                         :show="true"
-                        header="提示"
+                        header="Message"
                 >
                     {{toast}}
                 </CToast>
@@ -30,9 +30,18 @@
     import Vue from 'vue'
     import Component from "vue-class-component"
     import {CommonModule} from "@/store/CommonModule"
+    import {UserModule} from "@/store/UserModule"
 
     @Component
     export default class App extends Vue {
+
+        mounted() {
+            UserModule.setToken(String(localStorage.getItem('auth-token')))
+
+            if (UserModule.token == 'null') {
+                this.$router.push('/login')
+            }
+        }
 
         get toast() {
             return CommonModule.toasts

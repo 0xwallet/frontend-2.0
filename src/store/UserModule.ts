@@ -1,4 +1,4 @@
-import {getModule, Module, VuexModule, Action} from "vuex-module-decorators"
+import {getModule, Module, VuexModule, Action, Mutation} from "vuex-module-decorators"
 import {store} from './index'
 import {meService, sendVerifyCodeService, signInService} from '@/service/UserService'
 
@@ -9,13 +9,25 @@ import {meService, sendVerifyCodeService, signInService} from '@/service/UserSer
 })
 class UserModulePrivate extends VuexModule {
 
+    token = ''
+
+    @Mutation
+    setToken(token: string) {
+        this.token = token
+        localStorage.setItem('auth-token', token)
+    }
+
     @Action
-    signIn(email: string, password: string | null, code: string | null) {
-        return new Promise(((resolve) => {
-            signInService({email, password, code}).then(res => {
-                // 登录成功操作
-                console.log(res)
-            })
+    signIn(param: {
+        email: string,
+        password?: string,
+        code?: string
+    }) {
+        return new Promise(((resolve, reject) => {
+            signInService(param).then(res => {
+                resolve(res.data.signin)
+                this.setToken(res.data.signin.token)
+            }).catch(error => reject(error))
         }))
     }
 

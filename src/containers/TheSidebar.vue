@@ -30,6 +30,10 @@
 
         nav = nav
 
+        mounted() {
+
+        }
+
         get show(): string | boolean {
             return this.$store.state.sidebarShow
         }

@@ -115,7 +115,7 @@
             setTimeout(() => CommonModule.hideLoading(), 800)
         }
 
-        sendCode(){
+        sendCode() {
 
         }
     }

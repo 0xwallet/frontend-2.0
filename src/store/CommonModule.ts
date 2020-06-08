@@ -3,7 +3,7 @@ import {store} from './index'
 
 @Module({
     dynamic: true,
-    name: 'UserModule',
+    name: 'CommonModule',
     store
 })
 class CommonModulePrivate extends VuexModule {

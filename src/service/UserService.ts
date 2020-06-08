@@ -6,8 +6,8 @@ import Client from "@/graphql/apollo"
  */
 export const signInService = (param: {
     email: string,
-    password: string | null,
-    code: string | null,
+    password?: string,
+    code?: string,
 }) => Client.getInstance().mutate({
     mutation: signInMutation,
     variables: param

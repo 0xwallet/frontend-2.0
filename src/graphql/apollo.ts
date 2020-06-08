@@ -10,7 +10,7 @@ import {ApolloClient} from "apollo-client"
 Vue.use(VueApollo)
 
 const apiLink = new HttpLink({
-    uri: process.env.Vue_APP_BASE_URL
+    uri: process.env.VUE_APP_BASE_URL
 })
 
 const middlewareLink = new ApolloLink((operation: Operation, forward: NextLink) => {
@@ -36,7 +36,6 @@ const errorLink = onError(({
     }
     if (errorMsg) {
         // 全局异常消息
-        console.error(errorMsg)
     }
 })
 
