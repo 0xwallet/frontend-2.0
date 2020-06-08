@@ -11,9 +11,13 @@
 <script lang="ts">
     import Vue from 'vue'
     import Component from "vue-class-component"
+    import {CommonModule} from "@/store/CommonModule"
 
     @Component
     export default class Dashboard extends Vue {
 
+        mounted() {
+            setTimeout(() => CommonModule.hideLoading(), 500)
+        }
     }
 </script>

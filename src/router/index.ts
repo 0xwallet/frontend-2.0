@@ -22,6 +22,16 @@ const router = new Router({
                     component: Dashboard
                 }
             ]
+        },
+        {
+            path: '/login',
+            name: 'Login',
+            component: () => import('@/views/user/Login.vue')
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: () => import('@/views/user/Register.vue')
         }
     ]
 })

@@ -10,6 +10,24 @@ class CommonModulePrivate extends VuexModule {
 
     toasts: Array<string> = []
 
+    globalLoading = true
+
+    /**
+     * 显示全局加载
+     */
+    @Mutation
+    showLoading() {
+        this.globalLoading = true
+    }
+
+    /**
+     * 隐藏全局加载
+     */
+    @Mutation
+    hideLoading() {
+        this.globalLoading = false
+    }
+
     /**
      * 全局Toast提示
      * @param content

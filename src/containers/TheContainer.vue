@@ -7,7 +7,6 @@
                 <main class="c-main">
                     <CContainer fluid>
                         <transition name="fade">
-
                             <router-view></router-view>
                         </transition>
                     </CContainer>
@@ -40,7 +39,7 @@
 <style scoped>
     .fade-enter-active,
     .fade-leave-active {
-        transition: opacity 0.3s;
+        transition: opacity .5s;
     }
 
     .fade-enter,
