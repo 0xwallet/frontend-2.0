@@ -31,7 +31,6 @@
     import Component from "vue-class-component"
     import {CommonModule} from "@/store/CommonModule"
     import {UserModule} from "@/store/UserModule"
-    import {store} from './store'
 
     @Component
     export default class App extends Vue {
@@ -39,9 +38,6 @@
         mounted() {
             UserModule.setToken(String(localStorage.getItem('auth-token')))
 
-            if (UserModule.token == 'null') {
-                this.$router.push('/login')
-            }
 
             // 获取界面设置
             const settings = JSON.parse(localStorage.getItem('setting') || "{}")
@@ -70,6 +66,5 @@
 </script>
 <style src="spinkit/spinkit.min.css"></style>
 <style lang="scss">
-    // Import Main styles for this application
     @import 'assets/scss/style';
 </style>

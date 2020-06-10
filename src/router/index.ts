@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import {UserModule} from "@/store/UserModule"
 
 const TheContainer = () => import('../containers/TheContainer.vue')
 const Dashboard = () => import('../views/Dashboard.vue')
@@ -34,6 +35,16 @@ const router = new Router({
             component: () => import('@/views/user/Register.vue')
         }
     ]
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.path != '/login' && to.path != '/register') {
+        if (UserModule.token == '' || UserModule.token == 'null' || UserModule.token == null) {
+            next('/login')
+        }
+    } else {
+        next()
+    }
 })
 
 export default router
