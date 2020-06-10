@@ -28,9 +28,20 @@ const mutations = {
     },
     set(state: any, [variable, value]: [string, any]) {
         state[variable] = value
+        store.commit('saveSetting')
     },
     toggle(state: any, variable: string) {
         state[variable] = !state[variable]
+        store.commit('saveSetting')
+    },
+    saveSetting(state: any) {
+        const data = {
+            sidebarShow: state['sidebarShow'],
+            sidebarMinimize: state['sidebarMinimize'],
+            asideShow: state['asideShow'],
+            darkMode: state['darkMode']
+        }
+        localStorage.setItem('setting', JSON.stringify(data))
     }
 }
 

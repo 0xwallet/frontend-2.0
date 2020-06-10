@@ -21,10 +21,6 @@
     import {nav} from './_nav'
     import Component from "vue-class-component"
 
-    // declare interface dataInterface {
-    //     nav: typeof nav
-    // }
-
     @Component
     export default class TheSidebar extends Vue {
 

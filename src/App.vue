@@ -31,6 +31,7 @@
     import Component from "vue-class-component"
     import {CommonModule} from "@/store/CommonModule"
     import {UserModule} from "@/store/UserModule"
+    import {store} from './store'
 
     @Component
     export default class App extends Vue {
@@ -42,10 +43,19 @@
                 this.$router.push('/login')
             }
 
+            // 获取界面设置
+            const settings = JSON.parse(localStorage.getItem('setting') || "{}")
+            for (let setting in settings) {
+                if (Object.prototype.hasOwnProperty.call(settings, setting)) {
+                    this.$store.commit('set', [setting, settings[setting]])
+                }
+            }
+
             // 请求用户信息
             UserModule.me().then(() => {
                 CommonModule.hideLoading()
             })
+
         }
 
         get toast() {
