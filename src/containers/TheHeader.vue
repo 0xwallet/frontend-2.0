@@ -34,6 +34,8 @@
                     <CIcon v-else name="cil-moon"/>
                 </button>
             </CHeaderNavItem>
+            <TheHeaderDropdownAccount/>
+
         </CHeaderNav>
 
         <CSubheader class="px-3">
@@ -45,8 +47,11 @@
 <script lang="ts">
     import Vue from 'vue'
     import Component from "vue-class-component"
+    import TheHeaderDropdownAccount from "@/containers/TheHeaderDropdownAccount.vue"
 
-    @Component
+    @Component({
+        components: {TheHeaderDropdownAccount}
+    })
     export default class TheHeader extends Vue {
 
     }
