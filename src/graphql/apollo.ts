@@ -5,6 +5,7 @@ import {ApolloLink, NextLink, Operation} from "apollo-link"
 import {onError} from "apollo-link-error"
 import {InMemoryCache, IntrospectionFragmentMatcher, NormalizedCacheObject} from "apollo-cache-inmemory"
 import {ApolloClient} from "apollo-client"
+import {UserModule} from "@/store/UserModule"
 
 
 Vue.use(VueApollo)
@@ -18,7 +19,9 @@ const middlewareLink = new ApolloLink((operation: Operation, forward: NextLink) 
         return null
     }
     operation.setContext({
-        headers: {}
+        headers: {
+            'Authorization': UserModule.token ? 'Bearer ' + UserModule.token : ''
+        }
     })
     return forward(operation)
 })

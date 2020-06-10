@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition name="fade">
-            <router-view v-show="!globalLoading"></router-view>
+            <router-view v-if="!globalLoading"></router-view>
         </transition>
         <CElementCover v-if="globalLoading">
             <div class="sk-wave">
@@ -41,6 +41,11 @@
             if (UserModule.token == 'null') {
                 this.$router.push('/login')
             }
+
+            // 请求用户信息
+            UserModule.me().then(() => {
+                CommonModule.hideLoading()
+            })
         }
 
         get toast() {

@@ -1,6 +1,7 @@
 import {getModule, Module, VuexModule, Action, Mutation} from "vuex-module-decorators"
 import {store} from './index'
 import {meService, sendVerifyCodeService, signInService} from '@/service/UserService'
+import {User} from "@/store/model/User"
 
 @Module({
     dynamic: true,
@@ -11,10 +12,19 @@ class UserModulePrivate extends VuexModule {
 
     token = ''
 
+    userInfo: User = new User()
+
     @Mutation
     setToken(token: string) {
         this.token = token
         localStorage.setItem('auth-token', token)
+    }
+
+    @Mutation
+    setUserInfo(userInfo: User) {
+        console.log('mutation')
+        this.userInfo = userInfo
+        console.log(this.userInfo)
     }
 
     @Action
@@ -35,7 +45,9 @@ class UserModulePrivate extends VuexModule {
     me() {
         return new Promise((resolve => {
             meService().then(res => {
-                // 个人信息
+                // console.log(res)
+                this.setUserInfo(res.data.me)
+                resolve(res)
             })
         }))
     }

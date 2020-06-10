@@ -3,6 +3,8 @@ import Client from "@/graphql/apollo"
 
 /**
  * 登录
+ * @param param { email: 邮箱，password: 密码（可选），code（NKN登录使用）}
+ * @return { token }
  */
 export const signInService = (param: {
     email: string,
