@@ -61,7 +61,7 @@
             <CBadge color="primary" class="ml-auto">{{ itemsCount }}</CBadge>
         </CDropdownItem>
         <CDropdownDivider/>
-        <CDropdownItem>
+        <CDropdownItem @click="logout">
             <CIcon name="cil-lock-locked"/>
             Logout
         </CDropdownItem>
@@ -82,6 +82,11 @@
         }
 
         defaultAvatar = require('@/assets/images/default-avatar.png')
+
+        logout() {
+            UserModule.setToken('')
+            this.$router.push('/login')
+        }
     }
 </script>
 

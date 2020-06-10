@@ -22,9 +22,7 @@ class UserModulePrivate extends VuexModule {
 
     @Mutation
     setUserInfo(userInfo: User) {
-        console.log('mutation')
         this.userInfo = userInfo
-        console.log(this.userInfo)
     }
 
     @Action
