@@ -21,7 +21,17 @@ const router = new Router({
                     path: 'dashboard',
                     name: 'Dashboard',
                     component: Dashboard
-                }
+                },
+                {
+                    path: 'security',
+                    name: 'Security',
+                    component: () => import('@/views/Security.vue')
+                },
+                {
+                    path: 'account',
+                    name: 'Account',
+                    component: () => import('@/views/Account.vue')
+                },
             ]
         },
         {
@@ -33,14 +43,14 @@ const router = new Router({
             path: '/register',
             name: 'Register',
             component: () => import('@/views/user/Register.vue')
-        }
+        },
     ]
 })
 
 router.beforeEach((to, from, next) => {
-    console.log(to.path)
     if (to.path != '/login' && to.path != '/register') {
-        if (UserModule.token == '' || UserModule.token == 'null' || UserModule.token == null) {
+        let token = UserModule.token || localStorage.getItem('auth-token')
+        if (token == '' || token == 'null' || token == null) {
             next('/login')
         }
     }
