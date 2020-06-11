@@ -75,6 +75,10 @@
                                             <CButton color="link" @click="changeLoginType" class="px-0">Use {{ loginType
                                                 === 'Password' ? 'NKN' : 'Password'}}
                                             </CButton>
+                                        </CCol>
+                                    </CRow>
+                                    <CRow>
+                                        <CCol col="12" class="text-right">
                                             <CButton color="link" class="px-0">Forgot password?</CButton>
                                         </CCol>
                                     </CRow>

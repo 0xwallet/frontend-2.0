@@ -1,10 +1,8 @@
-import {meQuery, sendVerifyCodeMutation, signInMutation} from "@/graphql/userGraphql"
+import {meQuery, sendVerifyCodeMutation, signInMutation, signUpMutation} from "@/graphql/userGraphql"
 import Client from "@/graphql/apollo"
 
 /**
  * 登录
- * @param param { email: 邮箱，password: 密码（可选），code（NKN登录使用）}
- * @return { token }
  */
 export const signInService = (param: {
     email: string,
@@ -14,7 +12,6 @@ export const signInService = (param: {
     mutation: signInMutation,
     variables: param
 })
-
 
 /**
  * 获取个人信息
@@ -33,3 +30,15 @@ export const sendVerifyCodeService = (param: {
     variables: param
 })
 
+/**
+ *
+ */
+export const signUpService = (params: {
+    userName: string,
+    password: string,
+    email: string,
+    code: string
+}) => Client.getInstance().mutate({
+    mutation: signUpMutation,
+    variables: params
+})

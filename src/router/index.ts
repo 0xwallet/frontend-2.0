@@ -38,13 +38,13 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+    console.log(to.path)
     if (to.path != '/login' && to.path != '/register') {
         if (UserModule.token == '' || UserModule.token == 'null' || UserModule.token == null) {
             next('/login')
         }
-    } else {
-        next()
     }
+    next()
 })
 
 export default router

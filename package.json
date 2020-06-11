@@ -21,6 +21,7 @@
     "@coreui/coreui-pro": "^3.2.0",
     "@coreui/icons": "^1.0.1",
     "@coreui/vue": "^3.0.10",
+    "@types/vuelidate": "^0.7.13",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",
@@ -35,6 +36,7 @@
     "vue": "~2.6.11",
     "vue-apollo": "^3.0.3",
     "vue-router": "~3.1.6",
+    "vuelidate": "^0.7.5",
     "vuex": "^3.4.0"
   },
   "devDependencies": {

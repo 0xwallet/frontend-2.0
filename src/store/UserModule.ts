@@ -1,7 +1,8 @@
-import {getModule, Module, VuexModule, Action, Mutation} from "vuex-module-decorators"
+import {Action, getModule, Module, Mutation, VuexModule} from "vuex-module-decorators"
 import {store} from './index'
-import {meService, sendVerifyCodeService, signInService} from '@/service/UserService'
+import {meService, sendVerifyCodeService, signInService, signUpService} from '@/service/UserService'
 import {User} from "@/store/model/User"
+import {CommonModule} from "@/store/CommonModule"
 
 @Module({
     dynamic: true,
@@ -26,15 +27,31 @@ class UserModulePrivate extends VuexModule {
     }
 
     @Action
-    signIn(param: {
+    signIn(params: {
         email: string,
         password?: string,
         code?: string
     }) {
         return new Promise(((resolve, reject) => {
-            signInService(param).then(res => {
-                resolve(res.data.signin)
+            signInService(params).then(res => {
                 this.setToken(res.data.signin.token)
+                resolve(res.data.signin)
+            }).catch(error => reject(error))
+        }))
+    }
+
+    @Action
+    signUp(params: {
+        userName: string,
+        password: string,
+        email: string,
+        code: string,
+    }) {
+        return new Promise(((resolve, reject) => {
+            signUpService(params).then(res => {
+                resolve(res.data.signup)
+                this.setToken(res.data.signup.token)
+                // TODO: 为用户创建并绑定地址
             }).catch(error => reject(error))
         }))
     }
@@ -43,7 +60,6 @@ class UserModulePrivate extends VuexModule {
     me() {
         return new Promise((resolve => {
             meService().then(res => {
-                // console.log(res)
                 this.setUserInfo(res.data.me)
                 resolve(res)
             })
@@ -53,8 +69,9 @@ class UserModulePrivate extends VuexModule {
     @Action
     sendVerifyCode(email: string) {
         return new Promise((resolve => {
-            sendVerifyCodeService({email}).then(res => {
-                // 发送成功
+            sendVerifyCodeService({email}).then(() => {
+                CommonModule.toast('Verification code sent successfully')
+                resolve()
             })
         }))
     }

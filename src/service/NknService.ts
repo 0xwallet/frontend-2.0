@@ -14,7 +14,10 @@ export const bindNknAddressService = (params: {
 
 
 export const setDefaultNknAddressService = (params: {
-    loginCode: string
+    loginCode?: string,
+    password: string,
+    tag: string,
+    walletId: string | number,
 }) => Client.getInstance().mutate({
     mutation: setDefaultNknAddressMutation,
     variables: params
