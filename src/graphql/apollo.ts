@@ -1,14 +1,10 @@
-import Vue from 'vue'
-import VueApollo from 'vue-apollo'
 import {HttpLink} from "apollo-link-http"
 import {ApolloLink, NextLink, Operation} from "apollo-link"
 import {onError} from "apollo-link-error"
 import {InMemoryCache, IntrospectionFragmentMatcher, NormalizedCacheObject} from "apollo-cache-inmemory"
 import {ApolloClient} from "apollo-client"
 import {UserModule} from "@/store/UserModule"
-
-
-Vue.use(VueApollo)
+import {CommonModule} from "@/store/CommonModule"
 
 const apiLink = new HttpLink({
     uri: process.env.VUE_APP_BASE_URL
@@ -39,6 +35,7 @@ const errorLink = onError(({
     }
     if (errorMsg) {
         // 全局异常消息
+        CommonModule.toast(errorMsg)
     }
 })
 
@@ -65,3 +62,4 @@ export default class Client {
         return this.instance
     }
 }
+
