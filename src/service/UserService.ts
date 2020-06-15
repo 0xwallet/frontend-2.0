@@ -16,9 +16,11 @@ export const signInService = (param: {
 /**
  * 获取个人信息
  */
-export const meService = () => Client.getInstance().query({
-    query: meQuery
-})
+export const meService = () => Client.getInstance()
+    .query({
+        query: meQuery,
+        fetchPolicy: 'network-only'
+    })
 
 /**
  * 获取验证码
