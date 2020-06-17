@@ -156,7 +156,6 @@
 
         mounted() {
             setTimeout(() => CommonModule.hideLoading(), 800)
-            console.log(NknModule.getNknClient('23'))
             this.timeReduction()
         }
 
