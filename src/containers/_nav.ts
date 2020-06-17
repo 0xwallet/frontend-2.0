@@ -84,13 +84,13 @@ export const nav: ContentToRender = [{
         {
             _name: 'CSidebarNavItem',
             name: 'Account',
-            // to: '/item',
+            to: '/account',
             icon: 'cil-at'
         },
         {
             _name: 'CSidebarNavItem',
             name: 'Security',
-            // to: '/item',
+            to: '/security',
             icon: 'cil-shield-alt'
         },
         {

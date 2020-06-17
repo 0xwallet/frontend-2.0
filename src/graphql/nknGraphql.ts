@@ -16,3 +16,18 @@ export const setDefaultNknAddressMutation = gql`
         }
     }
 `
+
+export const deleteWalletMutation = gql`
+    mutation deleteWallet($id:ID!){
+        deleteWallet(id:$id){
+            id
+        }
+    }
+`
+
+export const sendLoginCodeMutation = gql`
+    mutation sendLoginCode($email:String!,$walletId: ID){
+        sendLoginCode(email:$email,walletId:$walletId)
+    }
+`
+

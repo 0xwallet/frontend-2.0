@@ -1,12 +1,13 @@
-import {Action, getModule, Module, Mutation, VuexModule} from "vuex-module-decorators"
+import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators'
 import {store} from './index'
 import {meService, sendVerifyCodeService, signInService, signUpService} from '@/service/UserService'
-import {User} from "@/store/model/User"
-import {CommonModule} from "@/store/CommonModule"
+import {User} from '@/store/model/User'
+import {CommonModule} from '@/store/CommonModule'
+import {NknModule} from '@/store/NknModule'
 
 @Module({
     dynamic: true,
-    name: 'UserModule',
+    name   : 'UserModule',
     store
 })
 class UserModulePrivate extends VuexModule {
@@ -23,6 +24,9 @@ class UserModulePrivate extends VuexModule {
 
     @Mutation
     setUserInfo(userInfo: User) {
+        userInfo.wallets?.map(((value, index, array) => {
+            value.show = false
+        }))
         this.userInfo = userInfo
     }
 
@@ -35,7 +39,9 @@ class UserModulePrivate extends VuexModule {
         return new Promise(((resolve, reject) => {
             signInService(params).then(res => {
                 this.setToken(res.data.signin.token)
-                resolve(res.data.signin)
+                this.me().then(() => {
+                    resolve()
+                })
             }).catch(error => reject(error))
         }))
     }
@@ -49,9 +55,15 @@ class UserModulePrivate extends VuexModule {
     }) {
         return new Promise(((resolve, reject) => {
             signUpService(params).then(res => {
-                resolve(res.data.signup)
                 this.setToken(res.data.signup.token)
-                // TODO: 为用户创建并绑定地址
+
+                this.me().then(() => {
+                    NknModule.bindAndSetDefault({
+                        password: params.password
+                    }).then(() => {
+                        resolve(res.data.signup)
+                    })
+                })
             }).catch(error => reject(error))
         }))
     }

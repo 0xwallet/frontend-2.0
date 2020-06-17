@@ -1,14 +1,16 @@
-import {HttpLink} from "apollo-link-http"
-import {ApolloLink, NextLink, Operation} from "apollo-link"
-import {onError} from "apollo-link-error"
-import {InMemoryCache, IntrospectionFragmentMatcher, NormalizedCacheObject} from "apollo-cache-inmemory"
-import {ApolloClient} from "apollo-client"
-import {UserModule} from "@/store/UserModule"
-import {CommonModule} from "@/store/CommonModule"
+import {HttpLink} from 'apollo-link-http'
+import {ApolloLink, NextLink, Operation} from 'apollo-link'
+import {onError} from 'apollo-link-error'
+import {InMemoryCache, IntrospectionFragmentMatcher, NormalizedCacheObject} from 'apollo-cache-inmemory'
+import {ApolloClient} from 'apollo-client'
+import {UserModule} from '@/store/UserModule'
+import {CommonModule} from '@/store/CommonModule'
+import {ToastColor} from '@/store/model/Toast'
 
 const apiLink = new HttpLink({
     uri: process.env.VUE_APP_BASE_URL
 })
+
 
 const middlewareLink = new ApolloLink((operation: Operation, forward: NextLink) => {
     if (forward === undefined) {
@@ -35,7 +37,7 @@ const errorLink = onError(({
     }
     if (errorMsg) {
         // 全局异常消息
-        CommonModule.toast(errorMsg)
+        CommonModule.toast(errorMsg, ToastColor.DANGER)
     }
 })
 
@@ -48,8 +50,9 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 })
 
 const apolloClient = new ApolloClient({
-    link: errorLink.concat(middlewareLink).concat(apiLink),
+    link : errorLink.concat(middlewareLink).concat(apiLink),
     cache: new InMemoryCache({fragmentMatcher})
+
 })
 
 export default class Client {

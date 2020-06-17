@@ -4,7 +4,7 @@ import router from './router'
 import CoreuiVue from '@coreui/vue/src'
 import {iconsSet as icons} from './assets/icons/icons'
 import {store} from '@/store'
-
+import 'babel-polyfill'
 
 Vue.use(CoreuiVue)
 

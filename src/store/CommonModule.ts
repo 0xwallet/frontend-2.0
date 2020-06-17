@@ -1,16 +1,18 @@
-import {getModule, Module, VuexModule, Action, Mutation} from "vuex-module-decorators"
+import {getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators'
 import {store} from './index'
+import {Toast, ToastColor} from '@/store/model/Toast'
 
 @Module({
     dynamic: true,
-    name: 'CommonModule',
+    name   : 'CommonModule',
     store
 })
 class CommonModulePrivate extends VuexModule {
 
-    toasts: Array<string> = []
+    toasts: Array<Toast> = []
 
     globalLoading = true
+    pageLoading = true
 
     /**
      * 显示全局加载
@@ -29,12 +31,32 @@ class CommonModulePrivate extends VuexModule {
     }
 
     /**
-     * 全局Toast提示
-     * @param content
+     * 显示页面加载
      */
     @Mutation
-    toast(content: string) {
-        this.toasts.push(content)
+    showPageLoading() {
+        this.pageLoading = true
+    }
+
+    /**
+     * 隐藏页面加载
+     */
+    @Mutation
+    hidePageLoading() {
+        this.pageLoading = false
+    }
+
+    /**
+     * 全局Toast提示
+     * @param content
+     * @param color
+     */
+    @Mutation
+    toast(content: string, color: ToastColor = ToastColor.SECONDARY) {
+        this.toasts.push({
+            content: content,
+            color  : color
+        })
     }
 
 }

@@ -49,3 +49,6 @@ export const sendVerifyCodeMutation = gql`
         sendVerifyCode(email:$email,type:$type)
     }
 `
+
+
+

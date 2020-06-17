@@ -1,12 +1,13 @@
-import {User} from "./User"
+import {User} from './User'
 
 export class Wallet {
     description?: string
-    id !: string
+    id!: string
     info!: WalletInfo
     tags?: WalletTag[]
     type!: WalletType
     user!: User
+    show!: boolean
 }
 
 export class WalletInfo {
@@ -16,13 +17,10 @@ export class WalletInfo {
 }
 
 export enum WalletTag {
-    // eslint-disable-next-line no-unused-vars
     LOGIN_CODE = 'LOGIN_CODE',
-    // eslint-disable-next-line no-unused-vars
-    MESSAGE = 'MESSAGE'
+    MESSAGE    = 'MESSAGE'
 }
 
 export class WalletType {
-    // eslint-disable-next-line no-unused-vars
     NKN = 'NKN'
 }

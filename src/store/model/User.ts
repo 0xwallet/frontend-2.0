@@ -1,3 +1,5 @@
+import {Wallet} from "@/store/model/Wallet"
+
 export class User {
     avatar?: string
     bio?: string
@@ -8,4 +10,5 @@ export class User {
     role?: string
     type!: string
     username!: string
+    wallets?: Wallet[]
 }

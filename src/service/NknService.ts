@@ -1,24 +1,42 @@
-import Client from "@/graphql/apollo"
-import {setDefaultNknAddressMutation, bindNknAddressMutation} from "@/graphql/nknGraphql"
+import Client from '@/graphql/apollo'
+import {
+    setDefaultNknAddressMutation,
+    bindNknAddressMutation,
+    deleteWalletMutation,
+    sendLoginCodeMutation
+} from '@/graphql/nknGraphql'
+import {WalletTag} from '@/store/model/Wallet'
 
-/**
- * 绑定
- * @param params
- */
+
 export const bindNknAddressService = (params: {
     nknAddress: string
 }) => Client.getInstance().mutate({
-    mutation: bindNknAddressMutation,
+    mutation : bindNknAddressMutation,
     variables: params
 })
-
 
 export const setDefaultNknAddressService = (params: {
     loginCode?: string,
     password: string,
-    tag: string,
+    tag: WalletTag,
     walletId: string | number,
 }) => Client.getInstance().mutate({
-    mutation: setDefaultNknAddressMutation,
+    mutation : setDefaultNknAddressMutation,
     variables: params
 })
+
+export const deleteWalletService = (params: {
+    id: string
+}) => Client.getInstance().mutate({
+    mutation : deleteWalletMutation,
+    variables: params
+})
+
+export const sendLoginCodeService = (params: {
+    email: string,
+    walletId?: string,
+}) => Client.getInstance().mutate({
+    mutation : sendLoginCodeMutation,
+    variables: params
+})
+

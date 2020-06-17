@@ -33,7 +33,9 @@
                                     <br>
                                     <CInput
                                             placeholder="Email"
-                                            :value.sync="user.email"
+                                            :value.sync="$v.form.email.$model"
+                                            :isValid="checkIfValid('email')"
+                                            invalidFeedback="This is a required field and must be an email"
                                             autocomplete="username email"
                                     >
                                         <template #prepend-content>
@@ -44,7 +46,9 @@
                                             v-if="loginType === 'Password'"
                                             placeholder="password"
                                             type="password"
-                                            :value.sync="user.password"
+                                            :value.sync="$v.form.password.$model"
+                                            :isValid="checkIfValid('password')"
+                                            invalidFeedback="Password must be at least 8 digits"
                                             autocomplete="false"
                                     >
                                         <template #prepend-content>
@@ -55,7 +59,9 @@
                                             v-if="loginType === 'NKN'"
                                             placeholder="loginCode"
                                             type="text"
-                                            :value.sync="user.code"
+                                            :value.sync="$v.form.code.$model"
+                                            :isValid="checkIfValid('code')"
+                                            invalidFeedback="Email Code must be at least 6 digits"
                                             autocomplete="false"
                                     >
                                         <template #prepend-content>
@@ -63,7 +69,7 @@
                                         </template>
                                         <template #append>
                                             <CButton block pressed variant="ghost" color="light" @click="sendCode">
-                                                Send
+                                                {{ time !== 0 ? time + 's' : 'Send'}}
                                             </CButton>
                                         </template>
                                     </CInput>
@@ -116,15 +122,34 @@
 
 <script lang="ts">
     import Vue from 'vue'
-    import Component from "vue-class-component"
-    import {CommonModule} from "@/store/CommonModule"
+    import Component from 'vue-class-component'
+    import {CommonModule} from '@/store/CommonModule'
     import VueParticles from 'vue-particles/src/vue-particles/vue-particles.vue'
-    import {UserModule} from "@/store/UserModule"
+    import {UserModule} from '@/store/UserModule'
+    import {validationMixin} from 'vuelidate'
+    import {email, minLength, required} from 'vuelidate/lib/validators'
+    import {NknModule} from '@/store/NknModule'
 
 
     @Component({
-        components: {
+        mixins     : [validationMixin],
+        components : {
             VueParticles
+        },
+        validations: {
+            form: {
+                email   : {
+                    required, email
+                },
+                code    : {
+                    required,
+                    minLength: minLength(6)
+                },
+                password: {
+                    required,
+                    minLength: minLength(8)
+                },
+            }
         }
     })
     export default class Login extends Vue {
@@ -132,16 +157,36 @@
         loginType = 'Password'
         logoImg = require('@/assets/images/logo.png')
         loading = false
+        time = 0
 
         mounted() {
             CommonModule.hideLoading()
-
+            this.timeReduction()
         }
 
-        user = {
-            email: '',
-            password: '',
-            code: ''
+        form = this.getEmptyForm()
+
+        valid() {
+            return !this.$v.form.$invalid
+        }
+
+        checkIfValid(fieldName: string) {
+            const field = this.$v.form[fieldName]
+            if (field == undefined) {
+                return null
+            }
+            if (!field.$dirty) {
+                return null
+            }
+            return !(field.$invalid || field.$model === '')
+        }
+
+        getEmptyForm() {
+            return {
+                email   : '',
+                password: '',
+                code    : ''
+            }
         }
 
         changeLoginType() {
@@ -156,7 +201,20 @@
          * 发送验证码
          */
         sendCode() {
+            if (this.time == 0 && this.form.email != '') {
+                this.time = 60
+                NknModule.sendLoginCode({
+                    email: this.form.email,
+                })
+            }
+        }
 
+        timeReduction() {
+            setInterval(() => {
+                if (this.time > 0) {
+                    this.time--
+                }
+            }, 1000)
         }
 
         /**
@@ -166,25 +224,24 @@
             this.loading = true
 
             const param = {
-                email: this.user.email,
+                email   : this.form.email,
                 password: '',
-                code: '',
+                code    : '',
             }
             if (this.loginType === 'Password') {
-                param.password = this.user.password
+                param.password = this.form.password
             } else {
-                param.code = this.user.code
+                param.code = this.form.code
             }
             UserModule.signIn(param).then(() => {
                 CommonModule.toast('Login Successful')
-                this.loading = false
                 setTimeout(() => {
+                    this.loading = false
                     this.$router.push('/')
                 }, 500)
             }).catch(() => {
                 this.loading = false
             })
-
         }
     }
 </script>

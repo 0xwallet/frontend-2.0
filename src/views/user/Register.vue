@@ -110,29 +110,29 @@
 
 <script lang="ts">
     import Vue from 'vue'
-    import Component from "vue-class-component"
+    import Component from 'vue-class-component'
     import VueParticles from 'vue-particles/src/vue-particles/vue-particles.vue'
-    import {CommonModule} from "@/store/CommonModule"
-    import {validationMixin} from "vuelidate"
-    import {required, email, sameAs, minLength} from "vuelidate/lib/validators"
-    import {UserModule} from "@/store/UserModule"
-    import {NknModule} from "@/store/NknModule"
+    import {CommonModule} from '@/store/CommonModule'
+    import {validationMixin} from 'vuelidate'
+    import {required, email, sameAs, minLength} from 'vuelidate/lib/validators'
+    import {UserModule} from '@/store/UserModule'
+    import {NknModule} from '@/store/NknModule'
 
     @Component({
-        mixins: [validationMixin],
-        components: {
+        mixins     : [validationMixin],
+        components : {
             VueParticles
         },
         validations: {
             form: {
-                email: {
+                email    : {
                     required, email
                 },
                 emailCode: {
                     required,
                     minLength: minLength(6)
                 },
-                password: {
+                password : {
                     required,
                     minLength: minLength(8)
                 },
@@ -146,6 +146,7 @@
     export default class Register extends Vue {
         logoImg = require('@/assets/images/logo.png')
         time = 0
+        loading = false
 
         form = this.getEmptyForm()
 
@@ -179,31 +180,33 @@
         }
 
         sendCode() {
-            if (this.time == 0) {
+            if (this.time == 0 && this.form.email != '') {
                 this.time = 60
-                // UserModule.sendVerifyCode('')
+                UserModule.sendVerifyCode(this.form.email)
             }
         }
 
         register() {
             if (this.valid()) {
-                CommonModule.showLoading()
                 UserModule.signUp({
-                    email: this.form.email,
-                    code: this.form.emailCode,
+                    email   : this.form.email,
+                    code    : this.form.emailCode,
                     userName: this.form.email.substring(0, this.form.email.indexOf('@')),
                     password: this.form.password,
                 }).then(() => {
-                    CommonModule.hideLoading()
+                    setTimeout(() => {
+                        this.loading = false
+                        this.$router.push('/')
+                    }, 500)
                 })
             }
         }
 
         getEmptyForm() {
             return {
-                email: '',
+                email    : '',
                 emailCode: '',
-                password: '',
+                password : '',
                 password2: '',
             }
         }
