@@ -10,14 +10,14 @@
                         </CButton>
                     </CCardHeader>
                     <CCardBody>
-                        <CCard color="gradient-secondary" v-for="wallet in wallets" :key="wallet.id">
+                        <CCard accent-color="info" v-for="wallet in wallets" :key="wallet.id">
                             <CCardHeader>
                                 <div class="title">{{ wallet.info.publicKey || wallet.info.address }}</div>
                                 <CBadge class="wallet-type" color="warning">{{ wallet.type }}</CBadge>
                                 <CBadge class="wallet-tag" v-for="(tag,index) in wallet.tags" :key="'tag' + index"
                                         color="info" shape="pill">{{ tag }}
                                 </CBadge>
-                                <div class="card-header-actions" style="width: 73px">
+                                <div class="card-header-actions" style="width: 74px">
                                     <CDropdown
                                             add-toggler-classes="card-header-action wallet-action"
                                             size="sm"
@@ -30,10 +30,11 @@
                                             Login Code
                                         </CDropdownItem>
                                     </CDropdown>
-                                    <CLink class="card-header-action btn-minimize" @click="wallet.show = !wallet.show">
+                                    <CLink style="color: #8a93a2" class="card-header-action btn-minimize"
+                                           @click="wallet.show = !wallet.show">
                                         <CIcon :name="`cil-chevron-${!wallet.show ? 'bottom' : 'top'}`"/>
                                     </CLink>
-                                    <CLink href="#" class="card-header-action btn-close"
+                                    <CLink style="color: #8a93a2" href="#" class="card-header-action btn-close"
                                            @click="deleteWallet(wallet.id)">
                                         <CIcon name="cil-x-circle"/>
                                     </CLink>
@@ -45,7 +46,7 @@
                                     <!--                                    <div><strong>identifier:</strong> {{ wallet.info.identifier }}</div>-->
                                     <div>
                                         <!--                                        <strong>publicKey:</strong>-->
-                                        <CCard color="gradient-secondary" body-wrapper>
+                                        <CCard body-wrapper>
                                             <div>
                                                 <div>{{ wallet.info.publicKey || wallet.info.address}}</div>
                                                 <div class="public-key-action card-header-action copy" @click="copy"
