@@ -23,6 +23,16 @@
                     Dashboard
                 </CHeaderNavLink>
             </CHeaderNavItem>
+            <CHeaderNavItem class="px-3">
+                <CHeaderNavLink to="#">
+                    Blog
+                </CHeaderNavLink>
+            </CHeaderNavItem>
+            <CHeaderNavItem class="px-3">
+                <CHeaderNavLink to="#">
+                    Help
+                </CHeaderNavLink>
+            </CHeaderNavItem>
         </CHeaderNav>
         <CHeaderNav>
             <CHeaderNavItem class="px-3">
@@ -46,8 +56,8 @@
 
 <script lang="ts">
     import Vue from 'vue'
-    import Component from "vue-class-component"
-    import TheHeaderDropdownAccount from "@/containers/TheHeaderDropdownAccount.vue"
+    import Component from 'vue-class-component'
+    import TheHeaderDropdownAccount from '@/containers/TheHeaderDropdownAccount.vue'
 
     @Component({
         components: {TheHeaderDropdownAccount}

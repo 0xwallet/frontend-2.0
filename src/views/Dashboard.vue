@@ -1,13 +1,7 @@
 <template>
     <div>
-        <p>This view file path: src/views/dashboard</p>
-        <p>
-            <span class="mr-1">Check</span>
-            <a href="https://coreui.io/vue/docs" target="_blank">CoreUI Vue Documentation</a>
-        </p>
-        <p>
-            <button class="btn btn-success" @click="test">Test</button>
-        </p>
+        <widget-wallet></widget-wallet>
+        <widget-token-traffic></widget-token-traffic>
     </div>
 </template>
 
@@ -15,19 +9,19 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     import {CommonModule} from '@/store/CommonModule'
-    import {NknModule} from '@/store/NknModule'
+    import WidgetWallet from '@/views/widgets/WidgetWallet.vue'
+    import WidgetTokenTraffic from '@/views/widgets/WidgetTokenTraffic.vue'
 
-    @Component
+
+    @Component({
+        components: {WidgetTokenTraffic, WidgetWallet}
+    })
     export default class Dashboard extends Vue {
 
         mounted() {
             CommonModule.hidePageLoading()
         }
 
-        test() {
-            NknModule.bindAndSetDefault({
-                password: 'lty01234',
-            }).then()
-        }
+
     }
 </script>

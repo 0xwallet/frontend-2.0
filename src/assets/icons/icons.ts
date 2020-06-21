@@ -35,6 +35,8 @@ import {
     cilChevronBottom,
     cilXCircle,
     cilCopy,
+    cilLocationPin,
+    cilCloudDownload,
 } from '@coreui/icons'
 
 import {logo} from './logo'
@@ -77,4 +79,6 @@ export const iconsSet: { [key: string]: string[] } = Object.assign({}, {
     cilChevronBottom,
     cilXCircle,
     cilCopy,
+    cilLocationPin,
+    cilCloudDownload,
 })
