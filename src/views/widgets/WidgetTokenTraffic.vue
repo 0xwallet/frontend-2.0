@@ -93,7 +93,7 @@
         }
     })
     export default class WidgetTokenTraffic extends Vue {
-
+        selected = 'Month'
     }
 </script>
 

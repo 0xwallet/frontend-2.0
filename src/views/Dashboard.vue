@@ -2,6 +2,8 @@
     <div>
         <widget-wallet></widget-wallet>
         <widget-token-traffic></widget-token-traffic>
+        <widget-social></widget-social>
+        <widget-traffic-and-sales></widget-traffic-and-sales>
     </div>
 </template>
 
@@ -11,10 +13,12 @@
     import {CommonModule} from '@/store/CommonModule'
     import WidgetWallet from '@/views/widgets/WidgetWallet.vue'
     import WidgetTokenTraffic from '@/views/widgets/WidgetTokenTraffic.vue'
+    import WidgetSocial from '@/views/widgets/WidgetSocial.vue'
+    import WidgetTrafficAndSales from '@/views/widgets/WidgetTrafficAndSales.vue'
 
 
     @Component({
-        components: {WidgetTokenTraffic, WidgetWallet}
+        components: {WidgetTrafficAndSales, WidgetSocial, WidgetTokenTraffic, WidgetWallet}
     })
     export default class Dashboard extends Vue {
 
