@@ -11,6 +11,7 @@
                         </transition>
                     </CContainer>
                 </main>
+                <CElementCover v-if="pageLoading"/>
                 <TheFooter/>
             </div>
         </CWrapper>
@@ -22,7 +23,8 @@
     import TheSidebar from './TheSidebar.vue'
     import TheHeader from './TheHeader.vue'
     import TheFooter from './TheFooter.vue'
-    import Component from "vue-class-component"
+    import Component from 'vue-class-component'
+    import {CommonModule} from '@/store/CommonModule'
 
     @Component({
         components: {
@@ -32,6 +34,10 @@
         }
     })
     export default class TheContainer extends Vue {
+
+        get pageLoading() {
+            return CommonModule.pageLoading
+        }
 
     }
 </script>
