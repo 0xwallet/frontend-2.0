@@ -5,7 +5,8 @@
                 <AccountProfile></AccountProfile>
             </CCol>
             <CCol col="6">
-                sss
+                <AccountCreditCard></AccountCreditCard>
+                <AccountApps></AccountApps>
             </CCol>
         </CRow>
     </div>
@@ -18,8 +19,10 @@
     import {formatDate} from '@/common/DateUtil'
     import {CommonModule} from '@/store/CommonModule'
     import AccountProfile from '@/views/Account/AccountProfile.vue'
+    import AccountCreditCard from '@/views/Account/AccountCreditCard.vue'
+    import AccountApps from '@/views/Account/AccountApps.vue'
     @Component({
-        components: {AccountProfile}
+        components: {AccountApps, AccountCreditCard, AccountProfile}
     })
     export default class Account extends Vue {
 
