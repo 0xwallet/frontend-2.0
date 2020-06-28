@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {UserModule} from "@/store/UserModule"
-import {CommonModule} from "@/store/CommonModule"
+import {UserModule} from '@/store/UserModule'
+import {CommonModule} from '@/store/CommonModule'
 
 const TheContainer = () => import('../containers/TheContainer.vue')
 const Dashboard = () => import('../views/Dashboard.vue')
@@ -9,42 +9,51 @@ const Dashboard = () => import('../views/Dashboard.vue')
 Vue.use(Router)
 
 const router = new Router({
-    mode: 'hash',
+    mode           : 'hash',
     linkActiveClass: 'open active',
-    routes: [
+    routes         : [
         {
-            path: '/',
-            redirect: '/dashboard',
-            name: 'Home',
+            path     : '/',
+            redirect : '/dashboard',
+            name     : 'Home',
             component: TheContainer,
-            children: [
+            children : [
                 {
-                    path: 'dashboard',
-                    name: 'Dashboard',
+                    path     : 'dashboard',
+                    name     : 'Dashboard',
                     component: Dashboard
                 },
                 {
-                    path: 'security',
-                    name: 'Security',
+                    path     : 'security',
+                    name     : 'Security',
                     component: () => import('@/views/Security.vue')
                 },
                 {
-                    path: 'account',
-                    name: 'Account',
+                    path     : 'account',
+                    name     : 'Account',
                     component: () => import('@/views/Account.vue')
                 },
             ]
         },
         {
-            path: '/login',
-            name: 'Login',
-            component: () => import('@/views/user/Login.vue')
+            path     : '/user',
+            redirect : '/login',
+            name     : 'User',
+            component: () => import('@/views/user/User.vue'),
+            children : [
+                {
+                    path     : 'login',
+                    name     : 'Login',
+                    component: () => import('@/views/user/LoginForm.vue')
+                },
+                {
+                    path     : 'register',
+                    name     : 'RegisterForm',
+                    component: () => import('@/views/user/RegisterForm.vue')
+                },
+            ]
         },
-        {
-            path: '/register',
-            name: 'Register',
-            component: () => import('@/views/user/Register.vue')
-        },
+
     ]
 })
 
