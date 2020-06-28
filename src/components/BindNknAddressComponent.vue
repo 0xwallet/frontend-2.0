@@ -80,7 +80,7 @@
                 NknModule.bindNknAddress({
                     nknAddress: this.form.publicKey
                 }).then(() => {
-                    CommonModule.toast('Create Wallet Successfully', ToastColor.SUCCESS)
+                    CommonModule.toast({content: 'Create Wallet Successfully', color: ToastColor.SUCCESS})
                     this.form.publicKey = ''
                     this.loading = false
                     this.show = false

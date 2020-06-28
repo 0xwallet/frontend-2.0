@@ -21,6 +21,12 @@ export const meQuery = gql`
             messageNknAddress
             role
             type
+            personalInfo{
+                country
+                creditCard
+                passport
+                phoneNumber
+            }
             wallets{
                 id
                 description
@@ -50,5 +56,11 @@ export const sendVerifyCodeMutation = gql`
     }
 `
 
-
+export const editCurrentUserMutation = gql`
+    mutation editCurrentUser($avatar: String, $bio: String, $personalInfo: PersonalInfoInput, $userName:String){
+        editCurrentUser(avatar: $avatar, bio: $bio, personalInfo:$personalInfo, username:$userName){
+            id
+        }
+    }
+`
 

@@ -37,7 +37,10 @@ const errorLink = onError(({
     }
     if (errorMsg) {
         // 全局异常消息
-        CommonModule.toast(errorMsg, ToastColor.DANGER)
+        CommonModule.toast({
+            content: errorMsg,
+            color  : ToastColor.DANGER
+        })
     }
 })
 

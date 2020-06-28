@@ -83,6 +83,7 @@
     import BindNknAddressComponent from '@/components/BindNknAddressComponent.vue'
     import Clipboard from 'clipboard'
     import BindLoginCodeComponent from '@/components/BindLoginCodeComponent.vue'
+    import {ToastColor} from '@/store/model/Toast'
 
     @Component({
         components: {BindLoginCodeComponent, BindNknAddressComponent}
@@ -95,14 +96,13 @@
         }
 
         copy() {
-            console.log('test')
             let clipboard = new Clipboard('.copy')
             clipboard.on('success', () => {
-                CommonModule.toast('Copy Successfully')
+                CommonModule.toast({content: 'Copy Successfully'})
                 clipboard.destroy()
             })
             clipboard.on('error', () => {
-                CommonModule.toast('The browser does not support automatic copying')
+                CommonModule.toast({content: 'The browser does not support automatic copying'})
                 clipboard.destroy()
             })
         }
@@ -130,7 +130,7 @@
             NknModule.deleteWallet({
                 id: id
             }).then(() => {
-                CommonModule.toast('Delete Successfully')
+                CommonModule.toast({content: 'Delete Successfully', color: ToastColor.SUCCESS})
             })
         }
     }

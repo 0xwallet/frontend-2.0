@@ -83,7 +83,6 @@
 
         changeEdit(checked: boolean) {
             this.edit = checked
-            CommonModule.toast(JSON.stringify(this.form))
         }
     }
 </script>

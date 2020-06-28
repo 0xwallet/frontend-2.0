@@ -234,7 +234,7 @@
                 param.code = this.form.code
             }
             UserModule.signIn(param).then(() => {
-                CommonModule.toast('Login Successful')
+                CommonModule.toast({content: 'Login Successful'})
                 setTimeout(() => {
                     this.loading = false
                     this.$router.push('/')

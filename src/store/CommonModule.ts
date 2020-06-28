@@ -48,14 +48,16 @@ class CommonModulePrivate extends VuexModule {
 
     /**
      * 全局Toast提示
-     * @param content
-     * @param color
+     * @param params
      */
     @Mutation
-    toast(content: string, color: ToastColor = ToastColor.SECONDARY) {
+    toast(params: {
+        content: string,
+        color?: ToastColor
+    }) {
         this.toasts.push({
-            content: content,
-            color  : color
+            content: params.content,
+            color  : params.color || ToastColor.SECONDARY
         })
     }
 

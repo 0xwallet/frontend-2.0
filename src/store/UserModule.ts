@@ -1,7 +1,13 @@
 import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators'
 import {store} from './index'
-import {meService, sendVerifyCodeService, signInService, signUpService} from '@/service/UserService'
-import {User} from '@/store/model/User'
+import {
+    editCurrentUserService,
+    meService,
+    sendVerifyCodeService,
+    signInService,
+    signUpService
+} from '@/service/UserService'
+import {PersonalInfoInput, User} from '@/store/model/User'
 import {CommonModule} from '@/store/CommonModule'
 import {NknModule} from '@/store/NknModule'
 
@@ -82,8 +88,24 @@ class UserModulePrivate extends VuexModule {
     sendVerifyCode(email: string) {
         return new Promise((resolve => {
             sendVerifyCodeService({email}).then(() => {
-                CommonModule.toast('Verification code sent successfully')
+                CommonModule.toast({content: 'Verification code sent successfully'})
                 resolve()
+            })
+        }))
+    }
+
+    @Action
+    editCurrentUser(params: {
+        avatar?: string,
+        bio?: string,
+        personalInfo?: PersonalInfoInput,
+        userName?: string
+    }) {
+        return new Promise((resolve => {
+            editCurrentUserService(params).then(() => {
+                this.me().then(() => {
+                    resolve()
+                })
             })
         }))
     }

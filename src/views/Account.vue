@@ -1,10 +1,10 @@
 <template>
     <div>
         <CRow v-if="!pageLoading">
-            <CCol col="6" class="left">
+            <CCol xl="6"  class="left">
                 <AccountProfile></AccountProfile>
             </CCol>
-            <CCol col="6">
+            <CCol xl="6">
                 <AccountCreditCard></AccountCreditCard>
                 <AccountApps></AccountApps>
             </CCol>
@@ -21,6 +21,7 @@
     import AccountProfile from '@/views/Account/AccountProfile.vue'
     import AccountCreditCard from '@/views/Account/AccountCreditCard.vue'
     import AccountApps from '@/views/Account/AccountApps.vue'
+
     @Component({
         components: {AccountApps, AccountCreditCard, AccountProfile}
     })

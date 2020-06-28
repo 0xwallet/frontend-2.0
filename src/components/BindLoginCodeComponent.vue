@@ -96,7 +96,7 @@
                     email   : UserModule.userInfo.email,
                     walletId: this.walletId
                 }).then(() => {
-                    CommonModule.toast('Login Code Send Successfully')
+                    CommonModule.toast({content: 'Login Code Send Successfully'})
                 })
             }
         }
@@ -125,7 +125,7 @@
 
         commit() {
             if (this.walletId == '') {
-                CommonModule.toast('An error occurred during the binding process')
+                CommonModule.toast({content: 'An error occurred during the binding process'})
                 this.show = false
                 return
             }
@@ -137,7 +137,7 @@
                     tag      : WalletTag.LOGIN_CODE,
                     walletId : this.walletId,
                 }).then(() => {
-                    CommonModule.toast('Bind Login Wallet Successfully', ToastColor.SUCCESS)
+                    CommonModule.toast({content: 'Bind Login Wallet Successfully', color: ToastColor.SUCCESS})
                     this.loading = false
                     this.show = false
                 })

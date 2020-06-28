@@ -1,4 +1,4 @@
-import {Wallet} from "@/store/model/Wallet"
+import {Wallet} from '@/store/model/Wallet'
 
 export class User {
     avatar?: string
@@ -11,4 +11,18 @@ export class User {
     type!: string
     username!: string
     wallets?: Wallet[]
+    personalInfo ?: PersonalInfoInput
+}
+
+export class PersonalInfo {
+    country ?: string
+    creditCard ?: string
+    passport ?: string
+    phoneNumber ?: string
+}
+
+export class PersonalInfoInput {
+    country ?: string
+    creditCard?: string
+    passport?: string
 }
