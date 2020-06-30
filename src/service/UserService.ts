@@ -34,6 +34,7 @@ export const meService = () => Client.getInstance()
  */
 export const sendVerifyCodeService = (param: {
     email: string
+    type?: string
 }) => Client.getInstance().mutate({
     mutation : sendVerifyCodeMutation,
     variables: param
@@ -46,7 +47,7 @@ export const signUpService = (params: {
     userName: string,
     password: string,
     email: string,
-    code: string
+    code: string,
 }) => Client.getInstance().mutate({
     mutation : signUpMutation,
     variables: params

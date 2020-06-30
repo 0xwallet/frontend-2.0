@@ -1,7 +1,7 @@
 <template>
     <div>
         <CRow v-if="!pageLoading">
-            <CCol xl="6"  class="left">
+            <CCol xl="6" class="left">
                 <AccountProfile></AccountProfile>
             </CCol>
             <CCol xl="6">
@@ -23,7 +23,11 @@
     import AccountApps from '@/views/Account/AccountApps.vue'
 
     @Component({
-        components: {AccountApps, AccountCreditCard, AccountProfile}
+        components: {
+            AccountApps,
+            AccountCreditCard,
+            AccountProfile,
+        }
     })
     export default class Account extends Vue {
 
@@ -44,7 +48,6 @@
         get pageLoading() {
             return CommonModule.pageLoading
         }
-
 
     }
 </script>

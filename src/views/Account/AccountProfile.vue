@@ -206,7 +206,9 @@
         }
 
         choiceImg() {
-            this.$refs.choiceImg.dispatchEvent(new MouseEvent('click'))
+            if (this.edit) {
+                this.$refs.choiceImg.dispatchEvent(new MouseEvent('click'))
+            }
         }
 
         fileChange(e: any) {

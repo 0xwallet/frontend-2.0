@@ -85,9 +85,12 @@ class UserModulePrivate extends VuexModule {
     }
 
     @Action
-    sendVerifyCode(email: string) {
+    sendVerifyCode(params: {
+        email: string
+        type?: string
+    }) {
         return new Promise((resolve => {
-            sendVerifyCodeService({email}).then(() => {
+            sendVerifyCodeService(params).then(() => {
                 CommonModule.toast({content: 'Verification code sent successfully'})
                 resolve()
             })
@@ -98,6 +101,7 @@ class UserModulePrivate extends VuexModule {
     editCurrentUser(params: {
         avatar?: string,
         bio?: string,
+        code?: string,
         personalInfo?: PersonalInfoInput,
         userName?: string
     }) {

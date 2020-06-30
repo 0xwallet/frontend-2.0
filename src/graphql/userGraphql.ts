@@ -23,7 +23,13 @@ export const meQuery = gql`
             type
             personalInfo{
                 country
-                creditCard
+                creditCard{
+                    month
+                    name
+                    number
+                    securityCode
+                    year
+                }
                 passport
                 phoneNumber
             }
@@ -56,11 +62,19 @@ export const sendVerifyCodeMutation = gql`
     }
 `
 
+
 export const editCurrentUserMutation = gql`
-    mutation editCurrentUser($avatar: String, $bio: String, $personalInfo: PersonalInfoInput, $userName:String){
-        editCurrentUser(avatar: $avatar, bio: $bio, personalInfo:$personalInfo, username:$userName){
+    mutation editCurrentUser($avatar: String,$code: String, $bio: String, $personalInfo: PersonalInfoInput, $userName:String){
+        editCurrentUser(avatar: $avatar, bio: $bio, personalInfo:$personalInfo, username:$userName,code: $code){
             id
         }
     }
 `
 
+export const editCurrentSettingMutation = gql`
+    mutation editCurrentUserSetting($currency : Currency){
+        editCurrentUserSetting(currency: $currency){
+            currency
+        }
+    }
+`

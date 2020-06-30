@@ -20,6 +20,14 @@ type Channel {
     users: [User]
 }
 
+type CreditCard {
+    month: String
+    name: String
+    number: String
+    securityCode: String
+    year: String
+}
+
 type Email {
     address: String
     status: EmailStatus
@@ -109,7 +117,7 @@ type OrganizationPages {
 
 type PersonalInfo {
     country: String
-    creditCard: String
+    creditCard: CreditCard
     passport: String
     phoneNumber: String
 }
@@ -119,7 +127,7 @@ type RootMutationType {
     activateEmail(code: String, email: String): Email
     "Bind a nkn address"
     bindNknAddress(
-        "format: id.pubkey"
+        "format: pubkey"
         nknAddress: String!
     ): Wallet
     "Create a channel in organization."
@@ -152,7 +160,16 @@ type RootMutationType {
     "Delete a wallet"
     deleteWallet(id: ID!): Wallet
     "Edit current user"
-    editCurrentUser(avatar: String, bio: String, personalInfo: PersonalInfoInput, username: String): User
+    editCurrentUser(
+        avatar: String,
+        bio: String,
+        "needed when setting credit card info."
+        code: String = "",
+        personalInfo: PersonalInfoInput,
+        username: String
+    ): User
+    "Edit current user settings"
+    editCurrentUserSetting(currency: Currency): Setting
     "Edit a organization"
     editOrganization(id: ID!, info: OrganizationInfoInput, name: String): Organization
     "deal with organization's invitation"
@@ -286,6 +303,13 @@ type Session {
     user: User!
 }
 
+type Setting {
+    currency: Currency
+    insertedAt: NaiveDateTime
+    updatedAt: NaiveDateTime
+    user: User!
+}
+
 "kanban share"
 type Share {
     body: String
@@ -319,6 +343,7 @@ type User {
     organizations: [Organization]
     personalInfo: PersonalInfo
     role: Role
+    setting: Setting
     type: UserType
     username: String!
     wallets: [Wallet]
@@ -338,6 +363,12 @@ type WalletInfo {
     address: String
     identifier: String
     publicKey: String
+}
+
+"ISO 4217"
+enum Currency {
+    CNY
+    USD
 }
 
 enum EmailStatus {
@@ -381,6 +412,7 @@ enum UserType {
 
 enum VerifyCodeType {
     ACTIVE_EMAIL
+    CHANGE_INFO
     RESET_PASSWORD
 }
 
@@ -395,7 +427,17 @@ enum WalletTag {
 }
 
 enum WalletType {
+    BSV
     NKN
+}
+
+"credit card info input"
+input CreditCardInput {
+    month: String
+    name: String
+    number: String
+    securityCode: String
+    year: String
 }
 
 "Organization info"
@@ -406,7 +448,7 @@ input OrganizationInfoInput {
 "Personal info input"
 input PersonalInfoInput {
     country: String
-    creditCard: String
+    creditCard: CreditCardInput
     passport: String
 }
 

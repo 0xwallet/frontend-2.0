@@ -11,18 +11,34 @@ export class User {
     type!: string
     username!: string
     wallets?: Wallet[]
-    personalInfo ?: PersonalInfoInput
+    personalInfo ?: PersonalInfo
 }
 
 export class PersonalInfo {
     country ?: string
-    creditCard ?: string
+    creditCard ?: CreditCard
     passport ?: string
     phoneNumber ?: string
 }
 
+export class CreditCard {
+    month ?: string
+    name ?: string
+    number ?: string
+    securityCode ?: string
+    year ?: string
+}
+
+export class CreditCardInput {
+    month ?: string
+    name ?: string
+    number ?: string
+    securityCode ?: string
+    year ?: string
+}
+
 export class PersonalInfoInput {
     country ?: string
-    creditCard?: string
+    creditCard?: CreditCardInput
     passport?: string
 }
