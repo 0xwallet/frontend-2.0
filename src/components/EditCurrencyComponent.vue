@@ -49,7 +49,7 @@
         commit() {
             this.show = false
             UserModule.editCurrentUserSetting({
-                currency: this.form.currency
+                currency: this.form.currency!
             }).then(() => {
                 this.$router.go(0)
             })
