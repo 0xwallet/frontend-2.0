@@ -12,6 +12,16 @@ export class User {
     username!: string
     wallets?: Wallet[]
     personalInfo ?: PersonalInfo
+    setting ?: Setting
+}
+
+export class Setting {
+    currency?: Currency
+}
+
+export enum Currency {
+    CNY = 'CNY',
+    USD = 'USD',
 }
 
 export class PersonalInfo {

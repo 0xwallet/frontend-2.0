@@ -1,12 +1,13 @@
 import {
     editCurrentUserMutation,
+    editCurrentUserSettingMutation,
     meQuery,
     sendVerifyCodeMutation,
     signInMutation,
     signUpMutation
 } from '@/graphql/userGraphql'
 import Client from '@/graphql/apollo'
-import {PersonalInfoInput} from '@/store/model/User'
+import {Currency, PersonalInfoInput} from '@/store/model/User'
 
 /**
  * 登录
@@ -64,5 +65,12 @@ export const editCurrentUserService = (params: {
     userName?: string
 }) => Client.getInstance().mutate({
     mutation : editCurrentUserMutation,
+    variables: params
+})
+
+export const editCurrentUserSettingService = (params: {
+    currency: Currency
+}) => Client.getInstance().mutate({
+    mutation : editCurrentUserSettingMutation,
     variables: params
 })

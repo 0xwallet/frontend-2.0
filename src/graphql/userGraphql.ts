@@ -44,6 +44,9 @@ export const meQuery = gql`
                 tags
                 type
             }
+            setting{
+                currency
+            }
         }
     }
 `
@@ -71,7 +74,7 @@ export const editCurrentUserMutation = gql`
     }
 `
 
-export const editCurrentSettingMutation = gql`
+export const editCurrentUserSettingMutation = gql`
     mutation editCurrentUserSetting($currency : Currency){
         editCurrentUserSetting(currency: $currency){
             currency

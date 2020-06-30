@@ -1,13 +1,13 @@
 import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators'
 import {store} from './index'
 import {
-    editCurrentUserService,
+    editCurrentUserService, editCurrentUserSettingService,
     meService,
     sendVerifyCodeService,
     signInService,
     signUpService
 } from '@/service/UserService'
-import {PersonalInfoInput, User} from '@/store/model/User'
+import {Currency, PersonalInfoInput, User} from '@/store/model/User'
 import {CommonModule} from '@/store/CommonModule'
 import {NknModule} from '@/store/NknModule'
 
@@ -114,6 +114,16 @@ class UserModulePrivate extends VuexModule {
         }))
     }
 
+    @Action
+    editCurrentUserSetting(params: {
+        currency: Currency
+    }) {
+        return new Promise((resolve => {
+            editCurrentUserSettingService(params).then(() => {
+                resolve()
+            })
+        }))
+    }
 
 }
 

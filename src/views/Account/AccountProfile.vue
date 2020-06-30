@@ -1,173 +1,178 @@
 <template>
-    <CCard class="profile">
-        <CCardHeader class="header">Profile
-            <CSwitch
-                    class="float-right"
-                    variant="3d"
-                    size="sm"
-                    shape="pill"
-                    color="info"
-                    data-on="on"
-                    data-off="Off"
-                    :checked="edit"
-                    @update:checked="changeEdit"
-            />
-        </CCardHeader>
-        <CCardBody class="body">
-            <div class="bottom-right"></div>
-            <div class="avatar-name">
-                <div @click="choiceImg">
-                    <div class="avatar-box">
-                        <CImg class="avatar" :src="avatar || defaultAvatar"></CImg>
-                        <div class="avatar cover" v-if="edit"></div>
-                        <div class="edit" v-if="edit">edit</div>
+    <div>
+
+        <CCard class="profile">
+            <CCardHeader class="header">Profile
+                <CSwitch
+                        class="float-right"
+                        variant="3d"
+                        size="sm"
+                        shape="pill"
+                        color="info"
+                        data-on="on"
+                        data-off="Off"
+                        :checked="edit"
+                        @update:checked="changeEdit"
+                />
+            </CCardHeader>
+            <CCardBody class="body">
+                <div class="bottom-right"></div>
+                <div class="avatar-name">
+                    <div @click="choiceImg">
+                        <div class="avatar-box">
+                            <CImg class="avatar" :src="avatar || defaultAvatar"></CImg>
+                            <div class="avatar cover" v-if="edit"></div>
+                            <div class="edit" v-if="edit">edit</div>
+                        </div>
                     </div>
-                </div>
-                <input ref="choiceImg" type="file" name="" accept="image/gif,image/jpeg,image/png,image/jpg"
-                       style="display: none;"
-                       @change="fileChange">
-                <div class="name">{{ userInfo.username }}</div>
-                <div class="exchange-rate">
-                    <div class="flag">
-                        <CIcon name="cif-us" height="50" width="50"></CIcon>
+                    <input ref="choiceImg" type="file" name="" accept="image/gif,image/jpeg,image/png,image/jpg"
+                           style="display: none;"
+                           @change="fileChange">
+                    <div class="name">{{ userInfo.username }}</div>
+                    <div class="exchange-rate">
+                        <div class="flag" @click="$refs.editCurrency.showModal()">
+                            <CIcon :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase()" height="50"
+                                   width="50"></CIcon>
+                        </div>
+                        <div class="info">1 BSV = 254.23 USD</div>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="info">1 BSV = 254.23 USD</div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="address">
-                <div class="how">
-                    <CImg class="icon" :src="require('@/assets/images/icon/icon-info.png')"></CImg>
-                    <div class="info"><i>How <strong>D-Chat</strong> works</i></div>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="card">
-                    <div class="left"></div>
-                    <div class="mid">
-                        <div class="public">
-                            {{ userInfo.messageNknAddress }}
-                        </div>
-                        <div @click="copy"
-                             class="copy"
-                             :data-clipboard-text="userInfo.messageNknAddress">
-                            <CIcon
-                                    name="cil-copy"
-                                    v-c-tooltip.hover.click="'Copy Public Key'"/>
-                        </div>
-                        <div class="pub-name">
-                            <CImg class="icon" :src="require('@/assets/images/icon/icon-ok.png')"></CImg>
-                            <i class="white-text">
-                                Primary
-                            </i>
-                            <i>
-                                NKN Pubkey Address
-                            </i>
-                        </div>
-                        <div class="share">
-                            <CButton class="btn-outline-light btn-pill">Share</CButton>
-                        </div>
+                <div class="address">
+                    <div class="how">
+                        <CImg class="icon" :src="require('@/assets/images/icon/icon-info.png')"></CImg>
+                        <div class="info"><i>How <strong>D-Chat</strong> works</i></div>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="right">
-                        <div class="bottom-right"></div>
-                        <div class="qrcode">
-                            <CImg class="img" :src="require('@/assets/images/icon/icon-qrcode.png')"></CImg>
+                    <div class="card">
+                        <div class="left"></div>
+                        <div class="mid">
+                            <div class="public">
+                                {{ userInfo.messageNknAddress }}
+                            </div>
+                            <div @click="copy"
+                                 class="copy"
+                                 :data-clipboard-text="userInfo.messageNknAddress">
+                                <CIcon
+                                        name="cil-copy"
+                                        v-c-tooltip.hover.click="'Copy Public Key'"/>
+                            </div>
+                            <div class="pub-name">
+                                <CImg class="icon" :src="require('@/assets/images/icon/icon-ok.png')"></CImg>
+                                <i class="white-text">
+                                    Primary
+                                </i>
+                                <i>
+                                    NKN Pubkey Address
+                                </i>
+                            </div>
+                            <div class="share">
+                                <CButton class="btn-outline-light btn-pill">Share</CButton>
+                            </div>
                         </div>
-                        <div class="option">
-                            <CDropdown
-                                    color="link"
-                                    size="lg"
-                                    :caret="false"
-                            >
-                                <template #toggler-content>
-                                    <CIcon name="cil-options"></CIcon>
-                                    <span class="sr-only">Search</span>
-                                </template>
-                                <CDropdownItem>Export Wallet</CDropdownItem>
-                                <CDropdownItem>Import</CDropdownItem>
-                                <CDropdownItem>Show Secret Seed</CDropdownItem>
-                            </CDropdown>
+                        <div class="right">
+                            <div class="bottom-right"></div>
+                            <div class="qrcode">
+                                <CImg class="img" :src="require('@/assets/images/icon/icon-qrcode.png')"></CImg>
+                            </div>
+                            <div class="option">
+                                <CDropdown
+                                        color="link"
+                                        size="lg"
+                                        :caret="false"
+                                >
+                                    <template #toggler-content>
+                                        <CIcon name="cil-options"></CIcon>
+                                        <span class="sr-only">Search</span>
+                                    </template>
+                                    <CDropdownItem>Export Wallet</CDropdownItem>
+                                    <CDropdownItem>Import</CDropdownItem>
+                                    <CDropdownItem>Show Secret Seed</CDropdownItem>
+                                </CDropdown>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="info-check">
-                <CRow>
-                    <CCol col="4">
-                        <div>Email</div>
-                        <div class="bold">{{ userInfo.email }}</div>
-                        <div>
-                            <CIcon name="cil-check" class="verified"></CIcon>
-                            Verified
-                        </div>
-                    </CCol>
-                    <CCol col="4">
-                        <div>Country</div>
-                        <div v-if="!edit" class="bold">
-                            {{ form.country || 'UnKnow' }}
-                        </div>
-                        <CSelect
-                                v-if="edit"
-                                :options="countries"
-                                style="width: 120px;"
-                                :value.sync="form.country"
-                        />
-                        <div>
-                            <CIcon name="cil-check"></CIcon>
-                            Unverified
-                        </div>
-                    </CCol>
-                    <CCol col="4">
-                        <div>Passport</div>
-                        <div v-if="!edit" class="bold">
-                            {{ form.passport || 'UnKnow' }}
-                        </div>
-                        <CInput v-if="edit" :value.sync="form.passport"></CInput>
-                        <div>
-                            <CIcon name="cil-check"></CIcon>
-                            Unverified
-                        </div>
-                    </CCol>
-                </CRow>
-            </div>
-            <div class="user-info">
-                <CRow>
-                    <CCol col="6">
-                        <div class="name" @click="changeEdit(true)">
-                            <CIcon name="cib-apache"></CIcon>
-                            Name
-                        </div>
-                        <div>
-                            <div class="text" v-if="!edit">{{ form.name }}</div>
-                            <CInput v-if="edit" style="width: 200px;" :value.sync="form.name"></CInput>
-                        </div>
-                    </CCol>
-                    <CCol col="6">
-                        <div class="name" @click="changeEdit(true)">
-                            <CIcon name="cib-apache"></CIcon>
-                            Bio
-                        </div>
-                        <div>
-                            <div class="text" v-if="!edit">{{ form.bio }}</div>
-                            <CInput v-if="edit" style="width: 200px;" :value.sync="form.bio"></CInput>
-                        </div>
-                    </CCol>
-                </CRow>
-            </div>
-            <div class="backup">
-                <div class="bottom-box">
-                    <div class="left">
-                        <div><strong>0xWallet ID</strong></div>
-                        <div>KJWE WEWE LXKD KDKD</div>
-                    </div>
-                    <div class="btns right">
-                        <!--                        <CIcon name="cil-save"></CIcon>-->
-                        <CButton class="btn btn-pill btn-outline-dark btn-lg"><i>Change my ID</i></CButton>
                     </div>
                 </div>
-            </div>
-        </CCardBody>
-    </CCard>
+                <div class="info-check">
+                    <CRow>
+                        <CCol col="4">
+                            <div>Email</div>
+                            <div class="bold">{{ userInfo.email }}</div>
+                            <div>
+                                <CIcon name="cil-check" class="verified"></CIcon>
+                                Verified
+                            </div>
+                        </CCol>
+                        <CCol col="4">
+                            <div>Country</div>
+                            <div v-if="!edit" class="bold">
+                                {{ form.country || 'UnKnow' }}
+                            </div>
+                            <CSelect
+                                    v-if="edit"
+                                    :options="countries"
+                                    style="width: 120px;"
+                                    :value.sync="form.country"
+                            />
+                            <div>
+                                <CIcon name="cil-check"></CIcon>
+                                Unverified
+                            </div>
+                        </CCol>
+                        <CCol col="4">
+                            <div>Passport</div>
+                            <div v-if="!edit" class="bold">
+                                {{ form.passport || 'UnKnow' }}
+                            </div>
+                            <CInput v-if="edit" :value.sync="form.passport"></CInput>
+                            <div>
+                                <CIcon name="cil-check"></CIcon>
+                                Unverified
+                            </div>
+                        </CCol>
+                    </CRow>
+                </div>
+                <div class="user-info">
+                    <CRow>
+                        <CCol col="6">
+                            <div class="name" @click="changeEdit(true)">
+                                <CIcon name="cib-apache"></CIcon>
+                                Name
+                            </div>
+                            <div>
+                                <div class="text" v-if="!edit">{{ form.name }}</div>
+                                <CInput v-if="edit" style="width: 200px;" :value.sync="form.name"></CInput>
+                            </div>
+                        </CCol>
+                        <CCol col="6">
+                            <div class="name" @click="changeEdit(true)">
+                                <CIcon name="cib-apache"></CIcon>
+                                Bio
+                            </div>
+                            <div>
+                                <div class="text" v-if="!edit">{{ form.bio }}</div>
+                                <CInput v-if="edit" style="width: 200px;" :value.sync="form.bio"></CInput>
+                            </div>
+                        </CCol>
+                    </CRow>
+                </div>
+                <div class="backup">
+                    <div class="bottom-box">
+                        <div class="left">
+                            <div><strong>0xWallet ID</strong></div>
+                            <div>KJWE WEWE LXKD KDKD</div>
+                        </div>
+                        <div class="btns right">
+                            <!--                        <CIcon name="cil-save"></CIcon>-->
+                            <CButton class="btn btn-pill btn-outline-dark btn-lg"><i>Change my ID</i></CButton>
+                        </div>
+                    </div>
+                </div>
+            </CCardBody>
+        </CCard>
+        <EditCurrencyComponent ref="editCurrency"></EditCurrencyComponent>
+    </div>
 </template>
 
 <script lang="ts">
@@ -178,8 +183,11 @@
     import Clipboard from 'clipboard'
     import {ToastColor} from '@/store/model/Toast'
     import {getNames} from 'country-list'
+    import EditCurrencyComponent from '@/components/EditCurrencyComponent.vue'
 
-    @Component
+    @Component({
+        components: {EditCurrencyComponent}
+    })
     export default class AccountProfile extends Vue {
 
         $refs!: {

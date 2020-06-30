@@ -8,7 +8,7 @@
             <CForm>
                 <CSelect
                         label="Currency"
-                        :options="['CNY','USD']"
+                        :options="currency"
                         :value.sync="form.currency"
                 />
             </CForm>
@@ -26,13 +26,19 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     import {UserModule} from '@/store/UserModule'
+    import {Currency} from '@/store/model/User'
 
     @Component
     export default class EditCurrencyComponent extends Vue {
         form = {
-            currency: 'CNY'
+            currency: this.userInfo.setting?.currency
         }
         show = false
+        currency = [
+            Currency.CNY,
+            Currency.USD,
+        ]
+
 
         loading = false
 
@@ -42,7 +48,11 @@
 
         commit() {
             this.show = false
-
+            UserModule.editCurrentUserSetting({
+                currency: this.form.currency
+            }).then(() => {
+                this.$router.go(0)
+            })
         }
 
         get userInfo() {
