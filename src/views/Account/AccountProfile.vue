@@ -34,7 +34,7 @@
                             <CIcon :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase()" height="50"
                                    width="50"></CIcon>
                         </div>
-                        <div class="info">1 BSV = 254.23 USD</div>
+                        <div class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency }}</div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="clearfix"></div>
@@ -184,6 +184,8 @@
     import {ToastColor} from '@/store/model/Toast'
     import {getNames} from 'country-list'
     import EditCurrencyComponent from '@/components/EditCurrencyComponent.vue'
+    import {Currency} from '@/store/model/User'
+    import cheerio from 'cheerio'
 
     @Component({
         components: {EditCurrencyComponent}
@@ -206,8 +208,27 @@
             passport: this.userInfo.personalInfo?.passport,
         }
 
+
         avatar ?: any = ''
         file: any = null
+        usdRate = 0
+        currentRate = 'UnKnow'
+
+        mounted() {
+            this.axios.get('https://api.whatsonchain.com/v1/bsv/main/exchangerate').then((res) => {
+                this.usdRate = res.data.rate
+                if (this.userInfo.setting?.currency != Currency.USD) {
+                    this.axios.get('http://hl.anseo.cn/cal_USD_To_' + this.userInfo.setting?.currency + '.aspx').then((res) => {
+                        let $ = cheerio.load(res.data)
+                        let result = Number($('#result').find('p').eq(0).text().replace('当前汇率：', ''))
+                        this.currentRate = (this.usdRate * result).toFixed(2)
+                    })
+                } else {
+                    this.currentRate = Number(this.usdRate).toFixed(2)
+                }
+            })
+        }
+
 
         get userInfo() {
             return UserModule.userInfo

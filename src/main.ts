@@ -5,8 +5,11 @@ import CoreuiVue from '@coreui/vue/src'
 import {iconsSet as icons} from './assets/icons/icons'
 import {store} from '@/store'
 import 'babel-polyfill'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 Vue.use(CoreuiVue)
+Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
 
