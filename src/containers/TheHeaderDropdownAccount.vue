@@ -70,8 +70,8 @@
 
 <script lang="ts">
     import Vue from 'vue'
-    import Component from "vue-class-component"
-    import {UserModule} from "@/store/UserModule"
+    import Component from 'vue-class-component'
+    import {UserModule} from '@/store/UserModule'
 
     @Component
     export default class TheHeaderDropdownAccount extends Vue {
@@ -85,7 +85,7 @@
 
         logout() {
             UserModule.setToken('')
-            this.$router.push('/login')
+            this.$router.push('/user/login')
         }
     }
 </script>

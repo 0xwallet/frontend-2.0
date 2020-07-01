@@ -58,11 +58,11 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.path != '/login' && to.path != '/register') {
+    if (to.path != '/user/login' && to.path != '/user/register') {
         let token = UserModule.token || localStorage.getItem('auth-token')
         if (token == '' || token == 'null' || token == null) {
             CommonModule.showLoading()
-            next('/login')
+            next('/user/login')
         }
     }
     CommonModule.showPageLoading()

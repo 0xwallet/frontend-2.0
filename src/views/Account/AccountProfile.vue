@@ -31,10 +31,13 @@
                     <div class="name">{{ userInfo.username }}</div>
                     <div class="exchange-rate">
                         <div class="flag" @click="$refs.editCurrency.showModal()">
-                            <CIcon :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase()" height="50"
+                            <CIcon :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase() || 'us'"
+                                   height="50"
                                    width="50"></CIcon>
                         </div>
-                        <div class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency }}</div>
+                        <div class="info">1 BSV = {{ currentRate || usdRate }} {{ userInfo.setting.currency || 'USD'
+                            }}
+                        </div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="clearfix"></div>
@@ -212,15 +215,18 @@
         avatar ?: any = ''
         file: any = null
         usdRate = 0
-        currentRate = 'UnKnow'
+        currentRate = 'Waiting...'
 
         mounted() {
             this.axios.get('https://api.whatsonchain.com/v1/bsv/main/exchangerate').then((res) => {
                 this.usdRate = res.data.rate
                 if (this.userInfo.setting?.currency != Currency.USD) {
-                    this.axios.get('http://hl.anseo.cn/cal_USD_To_' + this.userInfo.setting?.currency + '.aspx').then((res) => {
+                    this.axios.get('https://finance.yahoo.com/quote/' + this.userInfo.setting?.currency + '=X').then((res) => {
                         let $ = cheerio.load(res.data)
-                        let result = Number($('#result').find('p').eq(0).text().replace('当前汇率：', ''))
+                        let result = Number($('#quote-header-info span')
+                            .eq(3)
+                            .text())
+
                         this.currentRate = (this.usdRate * result).toFixed(2)
                     })
                 } else {
