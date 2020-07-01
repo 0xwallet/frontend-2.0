@@ -35,7 +35,7 @@
                                    height="50"
                                    width="50"></CIcon>
                         </div>
-                        <div class="info">1 BSV = {{ currentRate || usdRate }} {{ userInfo.setting.currency || 'USD'
+                        <div class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency || 'USD'
                             }}
                         </div>
                         <div class="clearfix"></div>
@@ -187,8 +187,6 @@
     import {ToastColor} from '@/store/model/Toast'
     import {getNames} from 'country-list'
     import EditCurrencyComponent from '@/components/EditCurrencyComponent.vue'
-    import {Currency} from '@/store/model/User'
-    import cheerio from 'cheerio'
 
     @Component({
         components: {EditCurrencyComponent}
@@ -214,24 +212,16 @@
 
         avatar ?: any = ''
         file: any = null
-        usdRate = 0
         currentRate = 'Waiting...'
 
         mounted() {
-            this.axios.get('https://api.whatsonchain.com/v1/bsv/main/exchangerate').then((res) => {
-                this.usdRate = res.data.rate
-                if (this.userInfo.setting?.currency != Currency.USD) {
-                    this.axios.get('https://finance.yahoo.com/quote/' + this.userInfo.setting?.currency + '=X').then((res) => {
-                        let $ = cheerio.load(res.data)
-                        let result = Number($('#quote-header-info span')
-                            .eq(3)
-                            .text())
-
-                        this.currentRate = (this.usdRate * result).toFixed(2)
-                    })
-                } else {
-                    this.currentRate = Number(this.usdRate).toFixed(2)
+            this.axios.get('https://api.coinbase.com/v2/prices/BSV-' + this.userInfo.setting?.currency + '/buy', {
+                headers: {
+                    'Authorization': 'Bearer abd90df5f27a7b170cd775abf89d632b350b7c1c9d53e08b340cd9832ce52c2c'
                 }
+            }).then((res) => {
+                console.log(res.data.data.amount)
+                this.currentRate = res.data.data.amount
             })
         }
 
