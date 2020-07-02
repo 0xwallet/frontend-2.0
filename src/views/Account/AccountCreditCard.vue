@@ -118,10 +118,6 @@
                         year        : String(this.form.year),
                     }
                 }
-            }).then(() => {
-                UserModule.me().then(() => {
-                    this.$router.go(0)
-                })
             })
             this.edit = false
         }

@@ -1,7 +1,8 @@
 import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators'
 import {store} from './index'
 import {
-    editCurrentUserService, editCurrentUserSettingService,
+    editCurrentUserService,
+    editCurrentUserSettingService,
     meService,
     sendVerifyCodeService,
     signInService,
@@ -10,6 +11,7 @@ import {
 import {Currency, PersonalInfoInput, User} from '@/store/model/User'
 import {CommonModule} from '@/store/CommonModule'
 import {NknModule} from '@/store/NknModule'
+import {ToastColor} from '@/store/model/Toast'
 
 @Module({
     dynamic: true,
@@ -30,10 +32,11 @@ class UserModulePrivate extends VuexModule {
 
     @Mutation
     setUserInfo(userInfo: User) {
-        userInfo.wallets?.map(((value, index, array) => {
+        userInfo.wallets?.map(((value) => {
             value.show = false
         }))
-        this.userInfo = userInfo
+        this.userInfo = new User()
+        this.userInfo = JSON.parse(JSON.stringify(userInfo))
     }
 
     @Action
@@ -107,9 +110,12 @@ class UserModulePrivate extends VuexModule {
     }) {
         return new Promise((resolve => {
             editCurrentUserService(params).then(() => {
-                this.me().then(() => {
-                    resolve()
+                this.me().then()
+                CommonModule.toast({
+                    content: 'Profile update successful',
+                    color  : ToastColor.SUCCESS
                 })
+                resolve()
             })
         }))
     }
@@ -120,6 +126,8 @@ class UserModulePrivate extends VuexModule {
     }) {
         return new Promise((resolve => {
             editCurrentUserSettingService(params).then(() => {
+                this.me().then()
+                CommonModule.toast({content: 'Edit User Setting Successful', color: ToastColor.SUCCESS})
                 resolve()
             })
         }))

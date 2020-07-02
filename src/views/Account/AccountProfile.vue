@@ -187,6 +187,7 @@
     import {ToastColor} from '@/store/model/Toast'
     import {getNames} from 'country-list'
     import EditCurrencyComponent from '@/components/EditCurrencyComponent.vue'
+    import {Watch} from 'vue-property-decorator'
 
     @Component({
         components: {EditCurrencyComponent}
@@ -214,7 +215,12 @@
         file: any = null
         currentRate = 'Waiting...'
 
-        mounted() {
+        @Watch('userInfo', {immediate: true, deep: true})
+        onUserInfoChange() {
+            this.getCurrencyRate()
+        }
+
+        getCurrencyRate() {
             this.axios.get('https://api.coinbase.com/v2/prices/BSV-' + this.userInfo.setting?.currency + '/buy', {
                 headers: {
                     'Authorization': 'Bearer abd90df5f27a7b170cd775abf89d632b350b7c1c9d53e08b340cd9832ce52c2c'
@@ -293,7 +299,7 @@
             this.edit = checked
 
             if (!this.edit) {
-                CommonModule.showPageLoading()
+                // CommonModule.showPageLoading()
                 UserModule.editCurrentUser({
                     userName    : this.form.name,
                     bio         : this.form.bio,
@@ -301,12 +307,6 @@
                         passport: this.form.passport,
                         country : this.form.country,
                     }
-                }).then(() => {
-                    CommonModule.hidePageLoading()
-                    CommonModule.toast({
-                        content: 'Profile update successful',
-                        color  : ToastColor.SUCCESS
-                    })
                 })
             }
         }
