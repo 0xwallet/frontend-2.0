@@ -1,7 +1,7 @@
 <template>
     <div>
         <CCard class="credit-card">
-            <CCardHeader class="header">Credit Card
+            <CCardHeader class="header">{{ $t('account.credit_card.credit_card') }}
                 <CSwitch
                         class="float-right"
                         variant="3d"
@@ -21,7 +21,7 @@
                         <CCol sm="12">
                             <CInput
                                     :disabled="!edit"
-                                    label="Name"
+                                    :label="$t('account.credit_card.name')"
                                     placeholder="Enter your name"
                                     :value.sync="form.name"
                             />
@@ -31,7 +31,7 @@
                         <CCol sm="12">
                             <CInput
                                     :disabled="!edit"
-                                    label="Credit Card Number"
+                                    :label="$t('account.credit_card.credit_card_number')"
                                     placeholder="0000 0000 0000 0000"
                                     :value.sync="form.creditCardNumber"
                             />
@@ -41,7 +41,7 @@
                         <CCol sm="4">
                             <CSelect
                                     :disabled="!edit"
-                                    label="Month"
+                                    :label="$t('account.credit_card.month')"
                                     :options="[1,2,3,4,5,6,7,8,9,10,11,12]"
                                     :value.sync="form.month"
                             />
@@ -49,7 +49,7 @@
                         <CCol sm="4">
                             <CSelect
                                     :disabled="!edit"
-                                    label="Year"
+                                    :label="$t('account.credit_card.year')"
                                     :options="[2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025]"
                                     :value.sync="form.year"
                             />

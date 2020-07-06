@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "dashboard": "仪表板",
+    "token": "数字代币",
+    "issuer": "发行人",
+    "management": "管理",
+    "wallet": "钱包",
+    "contracts": "合同",
+    "organizations": "组织",
+    "clients": "客户",
+    "general": "常规",
+    "history": "历史",
+    "payments": "支付",
+    "settlement": "Settlement",
+    "activity": "活动",
+    "settings": "设置",
+    "account": "账户",
+    "security": "安全",
+    "blockchain": "区块链",
+    "account_type": "账户类型",
+    "basic": "用户"
+  },
+  "header": {
+    "dash_board": "仪表盘",
+    "blog": "博客",
+    "help": "帮助"
+  },
+  "Home": "首页",
+  "Account": "账户",
+  "account": {
+    "profile": {
+      "profile": "个人信息",
+      "primary": "主要",
+      "nkn_public_address": "NKN 公开地址",
+      "share": "分享",
+      "email": "邮箱",
+      "country": "国家",
+      "passport": "护照",
+      "verified": "已验证",
+      "unverified": "未验证",
+      "name": "昵称",
+      "bio": "签名",
+      "change_my_id": "修改我的ID",
+      "un_know": "未知",
+      "how": "了解",
+      "works": "工作方式",
+      "export_wallet": "导出钱包",
+      "import": "导入",
+      "show_secret_seed": "显示密码种子"
+    },
+    "credit_card": {
+      "credit_card": "信用卡",
+      "name": "姓名",
+      "credit_card_number": "信用卡号",
+      "month": "月份",
+      "year": "年份"
+    },
+    "apps": {
+      "apps": "我的设备",
+      "create_new_app": "创建新的设备"
+    }
+  }
+}

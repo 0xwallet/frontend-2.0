@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "token": "Token",
+    "issuer": "Issuer",
+    "management": "Management",
+    "wallet": "Wallet",
+    "contracts": "Contract",
+    "organizations": "Organizations",
+    "clients": "Clients",
+    "general": "General",
+    "history": "History",
+    "payments": "Payments",
+    "settlement": "Settlement",
+    "activity": "Activity",
+    "settings": "Settings",
+    "account": "Account",
+    "security": "Security",
+    "blockchain": "Blockchain",
+    "account_type": "Account Type",
+    "basic": "Basic"
+  },
+  "header": {
+    "dash_board": "Dashboard",
+    "blog": "Blog",
+    "help": "Help"
+  },
+  "Home": "Home",
+  "Account": "Account",
+  "account": {
+    "profile": {
+      "profile": "Profile",
+      "primary": "Primary",
+      "nkn_public_address": "NKN Public Address",
+      "share": "Share",
+      "email": "Email",
+      "country": "Country",
+      "passport": "Passport",
+      "verified": "Verified",
+      "unverified": "UnVerified",
+      "name": "Name",
+      "bio": "Bio",
+      "change_my_id": "Change My ID",
+      "un_know": "UnKnow",
+      "how": "How",
+      "works": "works",
+      "export_wallet": "Export wallet",
+      "import": "Import",
+      "show_secret_seed": "Show secret seed"
+    },
+    "credit_card": {
+      "credit_card": "Credit Card",
+      "name": "Name",
+      "credit_card_number": "Credit Card Number",
+      "month": "Month",
+      "year": "Year"
+    },
+    "apps": {
+      "apps": "Apps",
+      "create_new_app": "Create new app"
+    }
+  }
+}

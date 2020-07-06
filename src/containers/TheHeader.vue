@@ -20,21 +20,33 @@
         <CHeaderNav class="d-md-down-none mr-auto">
             <CHeaderNavItem class="px-3">
                 <CHeaderNavLink to="/dashboard">
-                    Dashboard
+                    {{ $t('header.dash_board') }}
                 </CHeaderNavLink>
             </CHeaderNavItem>
             <CHeaderNavItem class="px-3">
                 <CHeaderNavLink to="#">
-                    Blog
+                    {{ $t('header.blog') }}
                 </CHeaderNavLink>
             </CHeaderNavItem>
             <CHeaderNavItem class="px-3">
                 <CHeaderNavLink to="#">
-                    Help
+                    {{ $t('header.help') }}
                 </CHeaderNavLink>
             </CHeaderNavItem>
         </CHeaderNav>
+
+
         <CHeaderNav>
+            <CHeaderNavItem class="px-3">
+                <CDropdown
+                        color="link"
+                        :toggler-text="getCurrentLocale()"
+                        class="m-2"
+                        :in-nav="true"
+                >
+                    <CDropdownItem v-for="item in locale" @click="setLocale(item.name)">{{ item.text }}</CDropdownItem>
+                </CDropdown>
+            </CHeaderNavItem>
             <CHeaderNavItem class="px-3">
                 <button
                         @click="() => $store.commit('toggle', 'darkMode')"
@@ -49,7 +61,7 @@
         </CHeaderNav>
 
         <CSubheader class="px-3">
-            <CBreadcrumbRouter class="border-0 mb-0"/>
+            <MyCBreadcrumbRouter class="border-0 mb-0"/>
         </CSubheader>
     </CHeader>
 </template>
@@ -58,11 +70,35 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     import TheHeaderDropdownAccount from '@/containers/TheHeaderDropdownAccount.vue'
+    import MyCBreadcrumbRouter from '@/components/MyCBreadcrumbRouter.vue'
 
     @Component({
-        components: {TheHeaderDropdownAccount}
+        components: {TheHeaderDropdownAccount, MyCBreadcrumbRouter}
     })
     export default class TheHeader extends Vue {
 
+        locale = [
+            {name: 'en', text: 'English'},
+            {name: 'zh', text: '简体中文'},
+        ]
+
+        getCurrentLocale() {
+            let currentLocale = localStorage.getItem('locale')
+
+            let text = 'English'
+
+            this.locale.map(item => {
+                if (item.name == currentLocale) {
+                    text = item.text
+                }
+            })
+
+            return text
+        }
+
+        setLocale(locale: string) {
+            localStorage.setItem('locale', locale)
+            this.$router.go(0)
+        }
     }
 </script>

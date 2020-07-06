@@ -1,7 +1,7 @@
 <template>
     <CCard class="apps">
-        <CCardHeader class="header">Apps
-            <CButton class="btn btn-pill btn-ghost-info">Create new app</CButton>
+        <CCardHeader class="header">{{ $t('account.apps.apps') }}
+            <CButton class="btn btn-pill btn-ghost-info">{{ $t('account.apps.create_new_app') }} </CButton>
         </CCardHeader>
         <CCardBody class="body">
             <div class="bottom-right"></div>

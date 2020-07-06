@@ -2,7 +2,7 @@
     <div>
 
         <CCard class="profile">
-            <CCardHeader class="header">Profile
+            <CCardHeader class="header">{{ $t('account.profile.profile') }}
                 <CSwitch
                         class="float-right"
                         variant="3d"
@@ -35,8 +35,7 @@
                                    height="50"
                                    width="50"></CIcon>
                         </div>
-                        <div class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency || 'USD'
-                            }}
+                        <div class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency || 'USD' }}
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -45,7 +44,8 @@
                 <div class="address">
                     <div class="how">
                         <CImg class="icon" :src="require('@/assets/images/icon/icon-info.png')"></CImg>
-                        <div class="info"><i>How <strong>D-Chat</strong> works</i></div>
+                        <div class="info"><i>{{ $t('account.profile.how') }} <strong>D-Chat</strong> {{ $t('account.profile.works')
+                            }}</i></div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="card">
@@ -64,14 +64,14 @@
                             <div class="pub-name">
                                 <CImg class="icon" :src="require('@/assets/images/icon/icon-ok.png')"></CImg>
                                 <i class="white-text">
-                                    Primary
+                                    {{ $t('account.profile.primary') }}
                                 </i>
                                 <i>
-                                    NKN Pubkey Address
+                                    {{ $t('account.profile.nkn_public_address') }}
                                 </i>
                             </div>
                             <div class="share">
-                                <CButton class="btn-outline-light btn-pill">Share</CButton>
+                                <CButton class="btn-outline-light btn-pill">{{ $t('account.profile.share') }}</CButton>
                             </div>
                         </div>
                         <div class="right">
@@ -87,11 +87,10 @@
                                 >
                                     <template #toggler-content>
                                         <CIcon name="cil-options"></CIcon>
-                                        <span class="sr-only">Search</span>
                                     </template>
-                                    <CDropdownItem>Export Wallet</CDropdownItem>
-                                    <CDropdownItem>Import</CDropdownItem>
-                                    <CDropdownItem>Show Secret Seed</CDropdownItem>
+                                    <CDropdownItem>{{ $t('account.profile.export_wallet') }}</CDropdownItem>
+                                    <CDropdownItem>{{ $t('account.profile.import') }}</CDropdownItem>
+                                    <CDropdownItem>{{ $t('account.profile.show_secret_seed') }}</CDropdownItem>
                                 </CDropdown>
                             </div>
                         </div>
@@ -100,17 +99,17 @@
                 <div class="info-check">
                     <CRow>
                         <CCol col="4">
-                            <div>Email</div>
+                            <div>{{ $t('account.profile.email') }}</div>
                             <div class="bold">{{ userInfo.email }}</div>
                             <div>
                                 <CIcon name="cil-check" class="verified"></CIcon>
-                                Verified
+                                {{ $t('account.profile.verified') }}
                             </div>
                         </CCol>
                         <CCol col="4">
-                            <div>Country</div>
+                            <div>{{ $t('account.profile.country') }}</div>
                             <div v-if="!edit" class="bold">
-                                {{ form.country || 'UnKnow' }}
+                                {{ form.country || $t('account.profile.un_know') }}
                             </div>
                             <CSelect
                                     v-if="edit"
@@ -120,18 +119,18 @@
                             />
                             <div>
                                 <CIcon name="cil-check"></CIcon>
-                                Unverified
+                                {{ $t('account.profile.unverified') }}
                             </div>
                         </CCol>
                         <CCol col="4">
-                            <div>Passport</div>
+                            <div>{{ $t('account.profile.passport') }}</div>
                             <div v-if="!edit" class="bold">
-                                {{ form.passport || 'UnKnow' }}
+                                {{ form.passport || $t('account.profile.un_know') }}
                             </div>
                             <CInput v-if="edit" :value.sync="form.passport"></CInput>
                             <div>
                                 <CIcon name="cil-check"></CIcon>
-                                Unverified
+                                {{ $t('account.profile.unverified') }}
                             </div>
                         </CCol>
                     </CRow>
@@ -141,7 +140,7 @@
                         <CCol col="6">
                             <div class="name" @click="changeEdit(true)">
                                 <CIcon name="cib-apache"></CIcon>
-                                Name
+                                {{ $t('account.profile.name') }}
                             </div>
                             <div>
                                 <div class="text" v-if="!edit">{{ form.name }}</div>
@@ -151,7 +150,7 @@
                         <CCol col="6">
                             <div class="name" @click="changeEdit(true)">
                                 <CIcon name="cib-apache"></CIcon>
-                                Bio
+                                {{ $t('account.profile.bio') }}
                             </div>
                             <div>
                                 <div class="text" v-if="!edit">{{ form.bio }}</div>
@@ -168,7 +167,8 @@
                         </div>
                         <div class="btns right">
                             <!--                        <CIcon name="cil-save"></CIcon>-->
-                            <CButton class="btn btn-pill btn-outline-dark btn-lg"><i>Change my ID</i></CButton>
+                            <CButton class="btn btn-pill btn-outline-dark btn-lg"><i>{{ $t('account.profile.change_my_id')
+                                }}</i></CButton>
                         </div>
                     </div>
                 </div>
@@ -226,7 +226,6 @@
                     'Authorization': 'Bearer abd90df5f27a7b170cd775abf89d632b350b7c1c9d53e08b340cd9832ce52c2c'
                 }
             }).then((res) => {
-                console.log(res.data.data.amount)
                 this.currentRate = res.data.data.amount
             })
         }

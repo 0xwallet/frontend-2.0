@@ -7,16 +7,31 @@ import {store} from '@/store'
 import 'babel-polyfill'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueI18n from 'vue-i18n'
+
 
 Vue.use(CoreuiVue)
+Vue.use(VueI18n)
 Vue.use(VueAxios, axios)
+
+const i18n = new VueI18n({
+    locale  : localStorage.getItem('locale') || 'en',
+    messages: {
+        'zh': require('@/assets/languages/zh.json'),
+        'en': require('@/assets/languages/en.json'),
+    }
+})
+
+
 
 Vue.config.productionTip = false
 
 new Vue({
+    i18n,
     router,
     store,
     //CIcon component documentation: https://coreui.io/vue/docs/components/icon
     icons,
     render: h => h(App)
 }).$mount('#app')
+

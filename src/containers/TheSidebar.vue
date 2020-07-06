@@ -19,12 +19,16 @@
 <script lang="ts">
     import Vue from 'vue'
     import {nav} from './_nav'
-    import Component from "vue-class-component"
+    import Component from 'vue-class-component'
 
-    @Component
+    @Component({
+        data() {
+            return {
+                nav: nav(this.$i18n)
+            }
+        }
+    })
     export default class TheSidebar extends Vue {
-
-        nav = nav
 
         mounted() {
 
