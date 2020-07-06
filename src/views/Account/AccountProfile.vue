@@ -44,7 +44,8 @@
                 <div class="address">
                     <div class="how">
                         <CImg class="icon" :src="require('@/assets/images/icon/icon-info.png')"></CImg>
-                        <div class="info"><i>{{ $t('account.profile.how') }} <strong>D-Chat</strong> {{ $t('account.profile.works')
+                        <div class="info"><i>{{ $t('account.profile.how') }} <strong>D-Chat</strong> {{
+                            $t('account.profile.works')
                             }}</i></div>
                         <div class="clearfix"></div>
                     </div>
@@ -167,7 +168,8 @@
                         </div>
                         <div class="btns right">
                             <!--                        <CIcon name="cil-save"></CIcon>-->
-                            <CButton class="btn btn-pill btn-outline-dark btn-lg"><i>{{ $t('account.profile.change_my_id')
+                            <CButton class="btn btn-pill btn-outline-dark btn-lg"><i
+                                    :style="{color:darkMode?'white':''}">{{ $t('account.profile.change_my_id')
                                 }}</i></CButton>
                         </div>
                     </div>
@@ -292,6 +294,10 @@
                 CommonModule.toast({content: 'The browser does not support automatic copying'})
                 clipboard.destroy()
             })
+        }
+
+        get darkMode(): boolean {
+            return this.$store.state.darkMode
         }
 
         changeEdit(checked: boolean) {

@@ -1,14 +1,14 @@
 <template>
     <CCard class="apps">
         <CCardHeader class="header">{{ $t('account.apps.apps') }}
-            <CButton class="btn btn-pill btn-ghost-info">{{ $t('account.apps.create_new_app') }} </CButton>
+            <CButton class="btn btn-pill btn-ghost-info">{{ $t('account.apps.create_new_app') }}</CButton>
         </CCardHeader>
         <CCardBody class="body">
             <div class="bottom-right"></div>
             <div class="app-items">
-                <div class="app-item" v-for="(app,index) in apps" :key="index">
-                    <div class="bottom-right"></div>
-                    <div class="left-border"></div>
+                <div :class=" [{ 'app-item-dark':darkMode},'app-item']" v-for="(app,index) in apps" :key="index">
+                    <div :class="[{'bottom-right-dark':darkMode},'bottom-right']"></div>
+                    <div :class="[{'left-border-dark':darkMode},'left-border']"></div>
                     <div> {{ app.name }}</div>
                 </div>
             </div>
@@ -22,6 +22,11 @@
 
     @Component
     export default class AccountApps extends Vue {
+
+        get darkMode(): boolean {
+            return this.$store.state.darkMode
+        }
+
         apps = [
             {name: 'test'},
             {name: 'test2'},
@@ -75,6 +80,9 @@
                     padding-left 30px
                     position relative
 
+                    &-dark
+                        background #181924 !important
+
                     .left-border
                         width 12px
                         height 100%
@@ -86,6 +94,9 @@
                         left 0
                         top 0
 
+                        &-dark
+                            background #4f74ee !important
+
                     .bottom-right
                         height 23px
                         width 23px
@@ -96,4 +107,7 @@
                         border-bottom-right-radius 10px
                         box-shadow -1px -1px 5px #cdcdcd
                         border-top-left-radius 6px
+
+                        &-dark
+                            background #4f74ee !important
 </style>
