@@ -31,11 +31,13 @@
                     <div class="name">{{ userInfo.username }}</div>
                     <div class="exchange-rate">
                         <div class="flag" @click="$refs.editCurrency.showModal()">
-                            <CIcon :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase() || 'us'"
+                            <CIcon v-if="userInfo.setting"
+                                   :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase() || 'us'"
                                    height="50"
                                    width="50"></CIcon>
                         </div>
-                        <div class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency || 'USD' }}
+                        <div v-if="userInfo.setting" class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency
+                            || 'USD' }}
                         </div>
                         <div class="clearfix"></div>
                     </div>
@@ -223,13 +225,15 @@
         }
 
         getCurrencyRate() {
-            this.axios.get('https://api.coinbase.com/v2/prices/BSV-' + this.userInfo.setting?.currency + '/buy', {
-                headers: {
-                    'Authorization': 'Bearer abd90df5f27a7b170cd775abf89d632b350b7c1c9d53e08b340cd9832ce52c2c'
-                }
-            }).then((res) => {
-                this.currentRate = res.data.data.amount
-            })
+            if (this.userInfo.setting) {
+                this.axios.get('https://api.coinbase.com/v2/prices/BSV-' + this.userInfo.setting?.currency + '/buy', {
+                    headers: {
+                        'Authorization': 'Bearer abd90df5f27a7b170cd775abf89d632b350b7c1c9d53e08b340cd9832ce52c2c'
+                    }
+                }).then((res) => {
+                    this.currentRate = res.data.data.amount
+                })
+            }
         }
 
 
