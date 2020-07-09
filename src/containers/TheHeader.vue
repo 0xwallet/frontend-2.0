@@ -57,7 +57,15 @@
                 </button>
             </CHeaderNavItem>
             <TheHeaderDropdownAccount/>
-
+            <CHeaderNavItem class="px-3">
+                <button
+                        in-header
+                        class="c-header-nav-btn"
+                        @click="$store.commit('toggle', 'asideShow')"
+                >
+                    <CIcon size="lg" name="cil-applications-settings" class="mr-2"/>
+                </button>
+            </CHeaderNavItem>
         </CHeaderNav>
 
         <CSubheader class="px-3">

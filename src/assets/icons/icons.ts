@@ -62,6 +62,10 @@ import {
     cibApache,
     cilSave,
     cifCn,
+    cilList,
+    cilSpeech,
+    cibSkype,
+    cilHome,
 } from '@coreui/icons'
 
 import {logo} from './logo'
@@ -131,4 +135,8 @@ export const iconsSet: { [key: string]: string[] } = Object.assign({}, {
     cibApache,
     cilSave,
     cifCn,
+    cilList,
+    cilSpeech,
+    cibSkype,
+    cilHome,
 })

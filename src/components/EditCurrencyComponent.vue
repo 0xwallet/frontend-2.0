@@ -31,7 +31,7 @@
     @Component
     export default class EditCurrencyComponent extends Vue {
         form = {
-            currency: this.userInfo.setting?.currency
+            currency: this.userInfo.setting?.currency || Currency.USD
         }
         show = false
         currency = [
@@ -45,7 +45,6 @@
         showModal() {
             this.show = true
         }
-
         commit() {
             this.show = false
             UserModule.editCurrentUserSetting({
