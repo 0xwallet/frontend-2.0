@@ -2,6 +2,7 @@
     <div class="c-app" :class="{ 'c-dark-theme': $store.state.darkMode }">
         <TheSidebar/>
         <TheAside></TheAside>
+        <MessageComponent></MessageComponent>
         <CWrapper>
             <TheHeader/>
             <div class="c-body">
@@ -27,9 +28,11 @@
     import Component from 'vue-class-component'
     import {CommonModule} from '@/store/CommonModule'
     import TheAside from '@/containers/TheAside.vue'
+    import MessageComponent from '@/components/MessageComponent.vue'
 
     @Component({
         components: {
+            MessageComponent,
             TheAside,
             TheSidebar,
             TheHeader,
