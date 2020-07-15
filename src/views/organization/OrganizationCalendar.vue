@@ -206,50 +206,62 @@
 
 <style lang="scss">
     @import '../../assets/scss/style';
+
     #calendar {
         color: $body-color;
         height: 63vh;
         margin-left: auto;
         margin-right: auto;
     }
+
     .theme-default .cv-event {
         background-color: #C8CED3;
         border-color: $table-border-color;
         color: $body-color;
     }
+
     .theme-default .cv-event.success {
         background-color: $success;
         border-color: lighten($success, 5%);
     }
+
     .theme-default .cv-event.danger {
         background-color: $danger;
     }
+
     .theme-default .cv-event.primary {
         background-color: #20A8D8;
     }
+
     .theme-default .cv-event.orange {
         background-color: #F8CB00;
         border-color: lighten(#F8CB00, 5%);
     }
+
     .theme-default .cv-day.today {
         background-color: $gray-300;
     }
+
     .theme-default .cv-day.today > .cv-day-number {
         background-color: #20A8D8;
         border-radius: 50%;
         position: absolute;
         left: 0;
     }
+
     .theme-default .cv-day.past {
         background-color: $body-bg;
     }
+
     .theme-default .cv-day.outsideOfMonth {
         background-color: $body-bg;
     }
+
     .theme-default .cv-weeks,
     .theme-default .cv-day {
         border-color: $table-border-color;
     }
+
     .theme-default .cv-header,
     .theme-default .cv-header-days,
     .theme-default .cv-header-day {
@@ -257,11 +269,13 @@
         border-color: $table-border-color;
         border-style: solid;
     }
+
     .theme-default .cv-header-nav > button {
         color: $body-color;
         background-color: $input-bg;
         border-color: $input-border-color;
     }
+
     .theme-default .cv-day.draghover {
         box-shadow: inset 0 0 0.2em 0.2em #321FDB;
     }

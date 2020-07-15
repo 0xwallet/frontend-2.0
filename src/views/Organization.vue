@@ -45,8 +45,8 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     import {CommonModule} from '@/store/CommonModule'
-    import Calendar from '@/views/organization/Calendar.vue'
-    import DisplayBoard from '@/views/organization/DisplayBoard.vue'
+    import Calendar from '@/views/organization/OrganizationCalendar.vue'
+    import DisplayBoard from '@/views/organization/OrganizationDisplayBoard.vue'
 
     @Component({
         components: {
