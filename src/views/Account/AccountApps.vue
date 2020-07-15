@@ -1,26 +1,25 @@
 <template>
-    <CCard class="apps">
-        <CCardHeader class="header">{{ $t('account.apps.apps') }}
-            <CButton class="btn btn-pill btn-ghost-info">{{ $t('account.apps.create_new_app') }}</CButton>
-        </CCardHeader>
-        <CCardBody class="body">
-            <div class="bottom-right"></div>
-            <div class="app-items">
-                <div :class=" [{ 'app-item-dark':darkMode},'app-item']" v-for="(app,index) in apps" :key="index">
-                    <div :class="[{'bottom-right-dark':darkMode},'bottom-right']"></div>
-                    <div :class="[{'left-border-dark':darkMode},'left-border']"></div>
-                    <div> {{ app.name }}</div>
-                </div>
+    <main-card-component :title="$t('account.apps.apps')" class="apps">
+        <CButton slot="right-action" class="btn-right btn-pill btn-ghost-info">{{ $t('account.apps.create_new_app') }}
+        </CButton>
+        <div class="app-items">
+            <div :class=" [{ 'app-item-dark':darkMode},'app-item']" v-for="(app,index) in apps" :key="index">
+                <div :class="[{'bottom-right-dark':darkMode},'bottom-right']"></div>
+                <div :class="[{'left-border-dark':darkMode},'left-border']"></div>
+                <div> {{ app.name }}</div>
             </div>
-        </CCardBody>
-    </CCard>
+        </div>
+    </main-card-component>
 </template>
 
 <script lang="ts">
     import Vue from 'vue'
     import Component from 'vue-class-component'
+    import MainCardComponent from '@/components/MainCardComponent.vue'
 
-    @Component
+    @Component({
+        components: {MainCardComponent}
+    })
     export default class AccountApps extends Vue {
 
         get darkMode(): boolean {
@@ -37,77 +36,56 @@
 
 <style lang="stylus" scoped>
     .apps
-        border-left 8px solid rgb(79, 116, 238) !important
-        box-shadow 2px 2px 5px #BBBBBB !important
-        border-radius 10px
+        .btn-right
+            float right
 
-        .bottom-right
-            height 23px
-            width 23px
-            background rgb(79, 116, 238)
-            right 0
-            bottom 0
-            position absolute
-            border-bottom-right-radius 10px
-            border-top-left-radius 6px
+        .app-items
+            display flex
+            flex-wrap wrap
+            padding-left 6%
+            padding-right 6%
+            padding-bottom 50px
+            justify-content space-between
 
-        .header
-            border-top-right-radius 10px
-            border-top-left-radius 10px
-            padding-left 40px !important
-            font-size 20px
+            .app-item
+                width 48%
+                height 100px
+                background rgb(247, 247, 247)
+                box-shadow 0 2px 5px #ababab
+                border-radius 15px
+                margin-top 25px
+                padding 18px
+                padding-left 30px
+                position relative
 
-            .btn
-                float right
+                &-dark
+                    background #181924 !important
 
-        .body
-            .app-items
-                display flex
-                flex-wrap wrap
-                padding-left 6%
-                padding-right 6%
-                padding-bottom 50px
-                justify-content space-between
-
-                .app-item
-                    width 48%
-                    height 100px
-                    background rgb(247, 247, 247)
-                    box-shadow 0 2px 5px #ababab
-                    border-radius 15px
-                    margin-top 25px
-                    padding 18px
-                    padding-left 30px
-                    position relative
+                .left-border
+                    width 12px
+                    height 100%
+                    background white
+                    position: absolute;
+                    border-top-left-radius 20px
+                    border-bottom-left-radius 20px
+                    box-shadow 0 2px 5px #cdcdcc
+                    left 0
+                    top 0
 
                     &-dark
-                        background #181924 !important
+                        background #4f74ee !important
 
-                    .left-border
-                        width 12px
-                        height 100%
-                        background white
-                        position: absolute;
-                        border-top-left-radius 20px
-                        border-bottom-left-radius 20px
-                        box-shadow 0 2px 5px #cdcdcc
-                        left 0
-                        top 0
+                .bottom-right
+                    height 23px
+                    width 23px
+                    background white
+                    right 0
+                    bottom 0
+                    position absolute
+                    border-bottom-right-radius 10px
+                    box-shadow -1px -1px 5px #cdcdcd
+                    border-top-left-radius 6px
 
-                        &-dark
-                            background #4f74ee !important
-
-                    .bottom-right
-                        height 23px
-                        width 23px
-                        background white
-                        right 0
-                        bottom 0
-                        position absolute
-                        border-bottom-right-radius 10px
-                        box-shadow -1px -1px 5px #cdcdcd
-                        border-top-left-radius 6px
-
-                        &-dark
-                            background #4f74ee !important
+                    &-dark
+                        background #4f74ee !important
 </style>

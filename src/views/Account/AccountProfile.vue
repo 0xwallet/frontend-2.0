@@ -1,183 +1,166 @@
 <template>
     <div>
-
-        <CCard class="profile">
-            <CCardHeader class="header">{{ $t('account.profile.profile') }}
-                <CSwitch
-                        class="float-right"
-                        variant="3d"
-                        size="sm"
-                        shape="pill"
-                        color="info"
-                        data-on="on"
-                        data-off="Off"
-                        :checked="edit"
-                        @update:checked="changeEdit"
-                />
-            </CCardHeader>
-            <CCardBody class="body">
-                <div class="bottom-right"></div>
-                <div class="avatar-name">
-                    <div @click="choiceImg">
-                        <div class="avatar-box">
-                            <CImg class="avatar" :src="avatar || defaultAvatar"></CImg>
-                            <div class="avatar cover" v-if="edit"></div>
-                            <div class="edit" v-if="edit">edit</div>
-                        </div>
+        <main-card-component :title="$t('account.profile.profile')" @onClose="onClose" @onOpen="onOpen" class="profile">
+            <div class="avatar-name">
+                <div @click="choiceImg">
+                    <div class="avatar-box">
+                        <CImg class="avatar" :src="avatar || defaultAvatar"></CImg>
+                        <div class="avatar cover" v-if="edit"></div>
+                        <div class="edit" v-if="edit">edit</div>
                     </div>
-                    <input ref="choiceImg" type="file" name="" accept="image/gif,image/jpeg,image/png,image/jpg"
-                           style="display: none;"
-                           @change="fileChange">
-                    <div class="name">{{ userInfo.username }}</div>
-                    <div class="exchange-rate">
-                        <div class="flag" @click="$refs.editCurrency.showModal()">
-                            <CIcon v-if="userInfo.setting"
-                                   :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase() || 'us'"
-                                   height="50"
-                                   width="50"></CIcon>
-                        </div>
-                        <div v-if="userInfo.setting" class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency
-                            || 'USD' }}
-                        </div>
-                        <div class="clearfix"></div>
+                </div>
+                <input ref="choiceImg" type="file" name="" accept="image/gif,image/jpeg,image/png,image/jpg"
+                       style="display: none;"
+                       @change="fileChange">
+                <div class="name">{{ userInfo.username }}</div>
+                <div class="exchange-rate">
+                    <div class="flag" @click="$refs.editCurrency.showModal()">
+                        <CIcon v-if="userInfo.setting"
+                               :name="'cif-' + userInfo.setting.currency.substring(0,2).toLowerCase() || 'us'"
+                               height="50"
+                               width="50"></CIcon>
+                    </div>
+                    <div v-if="userInfo.setting" class="info">1 BSV = {{ currentRate }} {{ userInfo.setting.currency
+                        || 'USD' }}
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div class="address">
-                    <div class="how">
-                        <CImg class="icon" :src="require('@/assets/images/icon/icon-info.png')"></CImg>
-                        <div class="info"><i>{{ $t('account.profile.how') }} <strong>D-Chat</strong> {{
-                            $t('account.profile.works')
-                            }}</i></div>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="card">
-                        <div class="left"></div>
-                        <div class="mid">
-                            <div class="public">
-                                {{ userInfo.messageNknAddress }}
-                            </div>
-                            <div @click="copy"
-                                 class="copy"
-                                 :data-clipboard-text="userInfo.messageNknAddress">
-                                <CIcon
-                                        name="cil-copy"
-                                        v-c-tooltip.hover.click="'Copy Public Key'"/>
-                            </div>
-                            <div class="pub-name">
-                                <CImg class="icon" :src="require('@/assets/images/icon/icon-ok.png')"></CImg>
-                                <i class="white-text">
-                                    {{ $t('account.profile.primary') }}
-                                </i>
-                                <i>
-                                    {{ $t('account.profile.nkn_public_address') }}
-                                </i>
-                            </div>
-                            <div class="share">
-                                <CButton class="btn-outline-light btn-pill">{{ $t('account.profile.share') }}</CButton>
-                            </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="address">
+                <div class="how">
+                    <CImg class="icon" :src="require('@/assets/images/icon/icon-info.png')"></CImg>
+                    <div class="info"><i>{{ $t('account.profile.how') }} <strong>D-Chat</strong> {{
+                        $t('account.profile.works')
+                        }}</i></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="card">
+                    <div class="left"></div>
+                    <div class="mid">
+                        <div class="public">
+                            {{ userInfo.messageNknAddress }}
                         </div>
-                        <div class="right">
-                            <div class="bottom-right"></div>
-                            <div class="qrcode">
-                                <CImg class="img" :src="require('@/assets/images/icon/icon-qrcode.png')"></CImg>
-                            </div>
-                            <div class="option">
-                                <CDropdown
-                                        color="link"
-                                        size="lg"
-                                        :caret="false"
-                                >
-                                    <template #toggler-content>
-                                        <CIcon name="cil-options"></CIcon>
-                                    </template>
-                                    <CDropdownItem>{{ $t('account.profile.export_wallet') }}</CDropdownItem>
-                                    <CDropdownItem>{{ $t('account.profile.import') }}</CDropdownItem>
-                                    <CDropdownItem>{{ $t('account.profile.show_secret_seed') }}</CDropdownItem>
-                                </CDropdown>
-                            </div>
+                        <div @click="copy"
+                             class="copy"
+                             :data-clipboard-text="userInfo.messageNknAddress">
+                            <CIcon
+                                    name="cil-copy"
+                                    v-c-tooltip.hover.click="'Copy Public Key'"/>
+                        </div>
+                        <div class="pub-name">
+                            <CImg class="icon" :src="require('@/assets/images/icon/icon-ok.png')"></CImg>
+                            <i class="white-text">
+                                {{ $t('account.profile.primary') }}
+                            </i>
+                            <i>
+                                {{ $t('account.profile.nkn_public_address') }}
+                            </i>
+                        </div>
+                        <div class="share">
+                            <CButton class="btn-outline-light btn-pill">{{ $t('account.profile.share') }}</CButton>
                         </div>
                     </div>
-                </div>
-                <div class="info-check">
-                    <CRow>
-                        <CCol col="4">
-                            <div>{{ $t('account.profile.email') }}</div>
-                            <div class="bold">{{ userInfo.email }}</div>
-                            <div>
-                                <CIcon name="cil-check" class="verified"></CIcon>
-                                {{ $t('account.profile.verified') }}
-                            </div>
-                        </CCol>
-                        <CCol col="4">
-                            <div>{{ $t('account.profile.country') }}</div>
-                            <div v-if="!edit" class="bold">
-                                {{ form.country || $t('account.profile.un_know') }}
-                            </div>
-                            <CSelect
-                                    v-if="edit"
-                                    :options="countries"
-                                    style="width: 120px;"
-                                    :value.sync="form.country"
-                            />
-                            <div>
-                                <CIcon name="cil-check"></CIcon>
-                                {{ $t('account.profile.unverified') }}
-                            </div>
-                        </CCol>
-                        <CCol col="4">
-                            <div>{{ $t('account.profile.passport') }}</div>
-                            <div v-if="!edit" class="bold">
-                                {{ form.passport || $t('account.profile.un_know') }}
-                            </div>
-                            <CInput v-if="edit" :value.sync="form.passport"></CInput>
-                            <div>
-                                <CIcon name="cil-check"></CIcon>
-                                {{ $t('account.profile.unverified') }}
-                            </div>
-                        </CCol>
-                    </CRow>
-                </div>
-                <div class="user-info">
-                    <CRow>
-                        <CCol col="6">
-                            <div class="name" @click="changeEdit(true)">
-                                <CIcon name="cib-apache"></CIcon>
-                                {{ $t('account.profile.name') }}
-                            </div>
-                            <div>
-                                <div class="text" v-if="!edit">{{ form.name }}</div>
-                                <CInput v-if="edit" style="width: 200px;" :value.sync="form.name"></CInput>
-                            </div>
-                        </CCol>
-                        <CCol col="6">
-                            <div class="name" @click="changeEdit(true)">
-                                <CIcon name="cib-apache"></CIcon>
-                                {{ $t('account.profile.bio') }}
-                            </div>
-                            <div>
-                                <div class="text" v-if="!edit">{{ form.bio }}</div>
-                                <CInput v-if="edit" style="width: 200px;" :value.sync="form.bio"></CInput>
-                            </div>
-                        </CCol>
-                    </CRow>
-                </div>
-                <div class="backup">
-                    <div class="bottom-box">
-                        <div class="left">
-                            <div><strong>0xWallet ID</strong></div>
-                            <div>KJWE WEWE LXKD KDKD</div>
+                    <div class="right">
+                        <div class="bottom-right"></div>
+                        <div class="qrcode">
+                            <CImg class="img" :src="require('@/assets/images/icon/icon-qrcode.png')"></CImg>
                         </div>
-                        <div class="btns right">
-                            <!--                        <CIcon name="cil-save"></CIcon>-->
-                            <CButton class="btn btn-pill btn-outline-dark btn-lg"><i
-                                    :style="{color:darkMode?'white':''}">{{ $t('account.profile.change_my_id')
-                                }}</i></CButton>
+                        <div class="option">
+                            <CDropdown
+                                    color="link"
+                                    size="lg"
+                                    :caret="false"
+                            >
+                                <template #toggler-content>
+                                    <CIcon name="cil-options"></CIcon>
+                                </template>
+                                <CDropdownItem>{{ $t('account.profile.export_wallet') }}</CDropdownItem>
+                                <CDropdownItem>{{ $t('account.profile.import') }}</CDropdownItem>
+                                <CDropdownItem>{{ $t('account.profile.show_secret_seed') }}</CDropdownItem>
+                            </CDropdown>
                         </div>
                     </div>
                 </div>
-            </CCardBody>
-        </CCard>
+            </div>
+            <div class="info-check">
+                <CRow>
+                    <CCol col="4">
+                        <div>{{ $t('account.profile.email') }}</div>
+                        <div class="bold">{{ userInfo.email }}</div>
+                        <div>
+                            <CIcon name="cil-check" class="verified"></CIcon>
+                            {{ $t('account.profile.verified') }}
+                        </div>
+                    </CCol>
+                    <CCol col="4">
+                        <div>{{ $t('account.profile.country') }}</div>
+                        <div v-if="!edit" class="bold">
+                            {{ form.country || $t('account.profile.un_know') }}
+                        </div>
+                        <CSelect
+                                v-if="edit"
+                                :options="countries"
+                                style="width: 120px;"
+                                :value.sync="form.country"
+                        />
+                        <div>
+                            <CIcon name="cil-check"></CIcon>
+                            {{ $t('account.profile.unverified') }}
+                        </div>
+                    </CCol>
+                    <CCol col="4">
+                        <div>{{ $t('account.profile.passport') }}</div>
+                        <div v-if="!edit" class="bold">
+                            {{ form.passport || $t('account.profile.un_know') }}
+                        </div>
+                        <CInput v-if="edit" :value.sync="form.passport"></CInput>
+                        <div>
+                            <CIcon name="cil-check"></CIcon>
+                            {{ $t('account.profile.unverified') }}
+                        </div>
+                    </CCol>
+                </CRow>
+            </div>
+            <div class="user-info">
+                <CRow>
+                    <CCol col="6">
+                        <div class="name" @click="changeEdit(true)">
+                            <CIcon name="cib-apache"></CIcon>
+                            {{ $t('account.profile.name') }}
+                        </div>
+                        <div>
+                            <div class="text" v-if="!edit">{{ form.name }}</div>
+                            <CInput v-if="edit" style="width: 200px;" :value.sync="form.name"></CInput>
+                        </div>
+                    </CCol>
+                    <CCol col="6">
+                        <div class="name" @click="changeEdit(true)">
+                            <CIcon name="cib-apache"></CIcon>
+                            {{ $t('account.profile.bio') }}
+                        </div>
+                        <div>
+                            <div class="text" v-if="!edit">{{ form.bio }}</div>
+                            <CInput v-if="edit" style="width: 200px;" :value.sync="form.bio"></CInput>
+                        </div>
+                    </CCol>
+                </CRow>
+            </div>
+            <div class="backup">
+                <div class="bottom-box">
+                    <div class="left">
+                        <div><strong>0xWallet ID</strong></div>
+                        <div>KJWE WEWE LXKD KDKD</div>
+                    </div>
+                    <div class="btns right">
+                        <!--                        <CIcon name="cil-save"></CIcon>-->
+                        <CButton class="btn btn-pill btn-outline-dark btn-lg"><i
+                                :style="{color:darkMode?'white':''}">{{ $t('account.profile.change_my_id')
+                            }}</i></CButton>
+                    </div>
+                </div>
+            </div>
+        </main-card-component>
         <EditCurrencyComponent ref="editCurrency"></EditCurrencyComponent>
     </div>
 </template>
@@ -192,9 +175,10 @@
     import {getNames} from 'country-list'
     import EditCurrencyComponent from '@/components/EditCurrencyComponent.vue'
     import {Watch} from 'vue-property-decorator'
+    import MainCardComponent from '@/components/MainCardComponent.vue'
 
     @Component({
-        components: {EditCurrencyComponent}
+        components: {MainCardComponent, EditCurrencyComponent}
     })
     export default class AccountProfile extends Vue {
 
@@ -304,20 +288,20 @@
             return this.$store.state.darkMode
         }
 
-        changeEdit(checked: boolean) {
-            this.edit = checked
+        onClose() {
+            this.edit = false
+            UserModule.editCurrentUser({
+                userName    : this.form.name,
+                bio         : this.form.bio,
+                personalInfo: {
+                    passport: this.form.passport,
+                    country : this.form.country,
+                }
+            })
+        }
 
-            if (!this.edit) {
-                // CommonModule.showPageLoading()
-                UserModule.editCurrentUser({
-                    userName    : this.form.name,
-                    bio         : this.form.bio,
-                    personalInfo: {
-                        passport: this.form.passport,
-                        country : this.form.country,
-                    }
-                })
-            }
+        onOpen() {
+            this.edit = true
         }
     }
 </script>
@@ -328,26 +312,6 @@
         margin 0
 
     .profile
-        border-left 8px solid rgb(79, 116, 238) !important
-        box-shadow 2px 2px 5px #BBBBBB !important
-        border-radius 10px
-
-        .bottom-right
-            height 23px
-            width 23px
-            background rgb(79, 116, 238)
-            right 0
-            bottom 0
-            position absolute
-            border-bottom-right-radius 10px
-            border-top-left-radius 6px
-
-        .header
-            border-top-right-radius 10px
-            border-top-left-radius 10px
-            padding-left 40px !important
-            font-size 20px
-
         .body
             .avatar-name
                 border-bottom 1px solid #bcbcbc
