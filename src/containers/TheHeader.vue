@@ -44,7 +44,9 @@
                         class="m-2"
                         :in-nav="true"
                 >
-                    <CDropdownItem v-for="item in locale" @click="setLocale(item.name)">{{ item.text }}</CDropdownItem>
+                    <CDropdownItem v-for="(item,index) in locale" :key="index" @click="setLocale(item.name)">{{
+                        item.text }}
+                    </CDropdownItem>
                 </CDropdown>
             </CHeaderNavItem>
             <CHeaderNavItem class="px-3">

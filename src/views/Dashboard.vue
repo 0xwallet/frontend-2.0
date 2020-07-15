@@ -23,7 +23,9 @@
     export default class Dashboard extends Vue {
 
         mounted() {
-            CommonModule.hidePageLoading()
+            setTimeout(() => {
+                CommonModule.hidePageLoading()
+            }, 1000)
         }
 
 

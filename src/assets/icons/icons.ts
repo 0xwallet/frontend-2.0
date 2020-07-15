@@ -67,6 +67,9 @@ import {
     cibSkype,
     cilHome,
     cilGraph,
+    cilChartPie,
+    cilUserFollow,
+    cilBasket,
 } from '@coreui/icons'
 
 import {logo} from './logo'
@@ -141,4 +144,7 @@ export const iconsSet: { [key: string]: string[] } = Object.assign({}, {
     cibSkype,
     cilHome,
     cilGraph,
+    cilChartPie,
+    cilUserFollow,
+    cilBasket,
 })

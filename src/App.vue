@@ -80,5 +80,5 @@
         margin-top 1px
 
     .toast-body
-        padding 0
+        padding 0 !important
 </style>

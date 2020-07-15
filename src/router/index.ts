@@ -33,6 +33,11 @@ const router = new Router({
                     name     : 'Account',
                     component: () => import('@/views/Account.vue')
                 },
+                {
+                    path     : 'organization',
+                    name     : 'Organization',
+                    component: () => import('@/views/Organization.vue')
+                }
             ]
         },
         {
