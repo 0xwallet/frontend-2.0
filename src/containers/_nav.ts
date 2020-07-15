@@ -38,12 +38,12 @@ export const nav = ($i18n: VueI18n): ContentToRender => {
             },
             {
                 _name    : 'CSidebarNavTitle',
-                _children: [$i18n.t('nav.contracts') + '']
+                _children: [$i18n.t('nav.contact') + '']
             },
             {
                 _name: 'CSidebarNavItem',
                 name : $i18n.t('nav.organizations'),
-                // to: '/item',
+                to   : '/organization',
                 icon : 'cil-sitemap'
             },
             {
