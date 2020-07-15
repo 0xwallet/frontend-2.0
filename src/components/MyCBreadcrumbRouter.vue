@@ -24,6 +24,8 @@
                 })
                 return routes.map(route => {
                     const meta = route.meta || {}
+                    console.log(route.name)
+
                     return {
                         to: route,
                         text: this.$t(meta.label || route.name)

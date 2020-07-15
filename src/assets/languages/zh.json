@@ -27,6 +27,8 @@
   },
   "Home": "首页",
   "Account": "账户",
+  "Security": "安全",
+  "Dashboard": "仪表板",
   "account": {
     "profile": {
       "profile": "个人信息",

@@ -82,11 +82,11 @@
                 </CHeaderNavLink>
                 <CHeaderNavLink to="/dashboard">
                     <CIcon name="cil-graph"></CIcon>
-                    Dashboard
+                    {{ $t('nav.dashboard') }}
                 </CHeaderNavLink>
                 <CHeaderNavLink to="#" exact>
                     <CIcon name="cil-settings"></CIcon>
-                    Setting
+                    {{ $t('nav.settings') }}
                 </CHeaderNavLink>
             </CHeaderNav>
         </CSubheader>

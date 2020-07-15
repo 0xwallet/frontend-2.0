@@ -27,6 +27,8 @@
   },
   "Home": "Home",
   "Account": "Account",
+  "Security": "Security",
+  "Dashboard": "Dashboard",
   "account": {
     "profile": {
       "profile": "Profile",
