@@ -8,6 +8,7 @@ export class Wallet {
     type!: WalletType
     user!: User
     show!: boolean
+    name: string = 'No Name'
 }
 
 export class WalletInfo {
@@ -21,6 +22,7 @@ export enum WalletTag {
     MESSAGE    = 'MESSAGE'
 }
 
-export class WalletType {
-    NKN = 'NKN'
+export enum WalletType {
+    NKN = 'NKN',
+    BSV = 'BSV'
 }

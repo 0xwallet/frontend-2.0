@@ -5,18 +5,19 @@
     "issuer": "发行人",
     "management": "管理",
     "wallet": "钱包",
-    "contact": "合同",
+    "contact": "通讯录",
+    "all_contact": "全部通讯录",
     "organizations": "组织",
     "clients": "客户",
-    "general": "常规",
+    "general": "通用",
     "history": "历史",
     "payments": "支付",
     "settlement": "结算",
-    "activity": "活动",
+    "activity": "日志",
     "settings": "设置",
     "account": "账户",
     "security": "安全",
-    "blockchain": "区块链",
+    "blockchain": "网盘",
     "account_type": "账户类型",
     "basic": "用户"
   },
@@ -61,5 +62,36 @@
       "apps": "我的设备",
       "create_new_app": "创建新的设备"
     }
+  },
+  "security": {
+    "authority": {
+      "authority": "权限配置"
+    },
+    "device": {
+      "device": "安全设备",
+      "add_new_device": "添加新的安全设备",
+      "Input Your PublicKey": "请输入您的公钥",
+      "Input Your Email Code": "请输入您的邮箱验证码",
+      "Send": "发送",
+      "Device Detail": "设备详情",
+      "detail": {
+        "ID": "ID",
+        "Public Key": "公钥",
+        "Type": "类型",
+        "Tags": "标签",
+        "Bind Login Code": "绑定为登录验证设备"
+      }
+    },
+    "data": {
+      "data": "备用资料"
+    }
+  },
+  "validate": {
+    "Input is valid.": "输入正确.",
+    "MinLength": "最小长度"
+  },
+  "common": {
+    "Copy Successfully": "复制成功",
+    "The browser does not support automatic copying": "浏览器不支持自动复制，请手动复制"
   }
 }

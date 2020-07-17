@@ -2,8 +2,8 @@ import gql from 'graphql-tag'
 
 
 export const bindNknAddressMutation = gql`
-    mutation bindNknAddress($nknAddress:String!){
-        bindNknAddress(nknAddress:$nknAddress){
+    mutation bindNknAddress($nknAddress:String!,$code: String,$tag : WalletTag = LOGIN_CODE){
+        bindNknAddress(nknAddress:$nknAddress,code: $code,tag : $tag){
             id
         }
     }

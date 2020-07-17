@@ -82,7 +82,7 @@ export const nav = ($i18n: VueI18n): ContentToRender => {
             },
             {
                 _name    : 'CSidebarNavTitle',
-                _children: [$i18n.t('nav.settings') + '']
+                _children: [$i18n.t('nav.general') + '']
             },
             {
                 _name: 'CSidebarNavItem',
@@ -96,11 +96,21 @@ export const nav = ($i18n: VueI18n): ContentToRender => {
                 to   : '/security',
                 icon : 'cil-shield-alt'
             },
+            // {
+            //     _name: 'CSidebarNavDropdown',
+            //     name : $i18n.t('nav.settings'),
+            //     icon : 'cil-settings',
+            //     items: [
+            //
+            //     ]
+            // },
+
+
             {
                 _name: 'CSidebarNavItem',
                 name : $i18n.t('nav.blockchain'),
-                // to: '/item',
-                icon : 'cil-vector'
+                to   : '/dashboard',
+                icon : 'cil-speedometer'
             },
             {
                 _name    : 'CSidebarNavTitle',

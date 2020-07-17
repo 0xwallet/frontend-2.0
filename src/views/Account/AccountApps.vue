@@ -2,13 +2,7 @@
     <main-card-component :title="$t('account.apps.apps')" class="apps">
         <CButton slot="right-action" class="btn-right btn-pill btn-ghost-info">{{ $t('account.apps.create_new_app') }}
         </CButton>
-        <div class="app-items">
-            <div :class=" [{ 'app-item-dark':darkMode},'app-item']" v-for="(app,index) in apps" :key="index">
-                <div :class="[{'bottom-right-dark':darkMode},'bottom-right']"></div>
-                <div :class="[{'left-border-dark':darkMode},'left-border']"></div>
-                <div> {{ app.name }}</div>
-            </div>
-        </div>
+        <main-card-item-component @onClick="onItemClick" :items="apps"></main-card-item-component>
     </main-card-component>
 </template>
 
@@ -16,21 +10,23 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     import MainCardComponent from '@/components/MainCardComponent.vue'
+    import MainCardItemComponent from '@/components/MainCardItemComponent.vue'
 
     @Component({
-        components: {MainCardComponent}
+        components: {MainCardItemComponent, MainCardComponent}
     })
     export default class AccountApps extends Vue {
-
-        get darkMode(): boolean {
-            return this.$store.state.darkMode
-        }
 
         apps = [
             {name: 'test'},
             {name: 'test2'},
             {name: 'User\'s default app'},
         ]
+
+        onItemClick(item: any) {
+            console.log(item)
+        }
+
     }
 </script>
 

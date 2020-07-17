@@ -127,8 +127,11 @@ type RootMutationType {
     activateEmail(code: String, email: String): Email
     "Bind a nkn address"
     bindNknAddress(
+        "If tag is LOGIN_CODE"
+        code: String,
         "format: pubkey"
-        nknAddress: String!
+        nknAddress: String!,
+        tag: WalletTag = LOGIN_CODE
     ): Wallet
     "Create a channel in organization."
     createChannel(
@@ -223,7 +226,7 @@ type RootMutationType {
         "send verification code to this email address"
         email: String,
         "activate or reset the password"
-        type: VerifyCodeType = ACTIVE_EMAIL
+        type: VerifyCodeType = CHANGE_INFO
     ): String
     "Set user as channel admin."
     setChannelAdmin(channelId: ID!, userId: ID!): User

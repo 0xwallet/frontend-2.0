@@ -64,7 +64,7 @@
             }
         }
     })
-    export default class BindLoginCodeComponent extends Vue {
+    export default class SecurityBindLoginCode extends Vue {
         show = false
         form = this.getEmptyForm()
         loading = false

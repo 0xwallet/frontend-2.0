@@ -5,11 +5,13 @@ import {
     deleteWalletMutation,
     sendLoginCodeMutation
 } from '@/graphql/nknGraphql'
-import {WalletTag} from '@/store/model/Wallet'
+import {Wallet, WalletTag} from '@/store/model/Wallet'
 
 
 export const bindNknAddressService = (params: {
-    nknAddress: string
+    nknAddress: string,
+    code?: string,
+    tag?: WalletTag
 }) => Client.getInstance().mutate({
     mutation : bindNknAddressMutation,
     variables: params

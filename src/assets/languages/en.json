@@ -16,7 +16,7 @@
     "settings": "Settings",
     "account": "Account",
     "security": "Security",
-    "blockchain": "Blockchain",
+    "blockchain": "0xDrive",
     "account_type": "Account Type",
     "basic": "Basic"
   },
@@ -61,5 +61,36 @@
       "apps": "Apps",
       "create_new_app": "Create new app"
     }
+  },
+  "security": {
+    "authority": {
+      "authority": "Authority"
+    },
+    "device": {
+      "device": "Device",
+      "add_new_device": "Add New Device",
+      "Input Your PublicKey": "Input Your PublicKey",
+      "Input Your Email Code": "Input Your Email Code",
+      "Send": "Send",
+      "Device Detail": "Device Detail",
+      "detail": {
+        "ID": "ID",
+        "Public Key": "Public Key",
+        "Type": "Type",
+        "Tags": "Tags",
+        "Bind Login Code": "Bind Login Code"
+      }
+    },
+    "data": {
+      "data": "Data"
+    }
+  },
+  "validate": {
+    "Input is valid.": "Input is valid.",
+    "MinLength": "MinLength"
+  },
+  "common": {
+    "Copy Successfully": "Copy Successfully",
+    "The browser does not support automatic copying": "The browser does not support automatic copying"
   }
 }

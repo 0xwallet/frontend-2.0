@@ -24,7 +24,11 @@ class NknModulePrivate extends VuexModule {
     }
 
     @Action
-    bindNknAddress(params: { nknAddress: string }) {
+    bindNknAddress(params: {
+        nknAddress: string,
+        code?: string,
+        tag?: WalletTag
+    }) {
         return new Promise(((resolve: (wallet: Wallet) => void, reject) => {
             bindNknAddressService(params).then(res => {
                 UserModule.me().then()
