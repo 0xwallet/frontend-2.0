@@ -96,20 +96,10 @@ export const nav = ($i18n: VueI18n): ContentToRender => {
                 to   : '/security',
                 icon : 'cil-shield-alt'
             },
-            // {
-            //     _name: 'CSidebarNavDropdown',
-            //     name : $i18n.t('nav.settings'),
-            //     icon : 'cil-settings',
-            //     items: [
-            //
-            //     ]
-            // },
-
-
             {
                 _name: 'CSidebarNavItem',
                 name : $i18n.t('nav.blockchain'),
-                to   : '/dashboard',
+                to   : '/drive',
                 icon : 'cil-speedometer'
             },
             {

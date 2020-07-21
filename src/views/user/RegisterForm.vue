@@ -174,7 +174,7 @@
         sendCode() {
             if (this.time == 0 && this.form.email != '') {
                 this.time = 60
-                UserModule.sendVerifyCode({email: this.form.email})
+                UserModule.sendVerifyCode({email: this.form.email, type: 'ACTIVE_EMAIL'})
             }
         }
 

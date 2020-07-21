@@ -42,6 +42,7 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "gsap": "^3.4.0",
+    "moment": "^2.27.0",
     "nkn-client": "^0.7.3",
     "spinkit": "^2.0.1",
     "vue": "~2.6.11",

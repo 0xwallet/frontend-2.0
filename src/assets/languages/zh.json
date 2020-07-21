@@ -30,6 +30,7 @@
   "Account": "账户",
   "Security": "安全",
   "Dashboard": "仪表板",
+  "Drive": "网盘",
   "account": {
     "profile": {
       "profile": "个人信息",
@@ -93,5 +94,17 @@
   "common": {
     "Copy Successfully": "复制成功",
     "The browser does not support automatic copying": "浏览器不支持自动复制，请手动复制"
+  },
+  "drive": {
+    "files": {
+      "title": "文件列表",
+      "clock": "变更为私有",
+      "info": "详情",
+      "edit": "重命名",
+      "copy": "复制路径",
+      "download": "下载到本地",
+      "upload": "上传到链",
+      "delete": "删除"
+    }
   }
 }

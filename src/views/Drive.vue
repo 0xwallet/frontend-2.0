@@ -2,11 +2,9 @@
     <div>
         <CRow v-if="!pageLoading">
             <CCol xl="6" class="left">
-                <SecurityAuthority></SecurityAuthority>
+                <drive-files></drive-files>
             </CCol>
             <CCol xl="6">
-                <SecurityDevice></SecurityDevice>
-                <SecurityData></SecurityData>
             </CCol>
         </CRow>
     </div>
@@ -16,14 +14,12 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     import {CommonModule} from '@/store/CommonModule'
-    import SecurityAuthority from '@/views/security/SecurityAuthority.vue'
-    import SecurityDevice from '@/views/security/SecurityDevice.vue'
-    import SecurityData from '@/views/security/SecurityData.vue'
+    import DriveFiles from '@/views/drive/DriveFiles.vue'
 
     @Component({
-        components: {SecurityData, SecurityDevice, SecurityAuthority}
+        components: {DriveFiles}
     })
-    export default class Security extends Vue {
+    export default class Drive extends Vue {
 
         mounted() {
             setTimeout(() => {

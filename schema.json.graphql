@@ -266,8 +266,10 @@ type RootMutationType {
 type RootQueryType {
     "Get channel by id, if channel is public or current user in this channel"
     channel(id: ID!): Channel
-    "Confirm successful upload"
+    "Confirm public successful upload"
     confirmPublicUpload(uuid: String!): String
+    "Get user's eyeblue login cookie"
+    eyeblueUserCookie: String
     "Get offline messages"
     imOfflineMessages(
         """

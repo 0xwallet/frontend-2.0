@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CCard class="main-card">
+        <CCard :class="[{'main-card-dark':darkMode},'main-card']">
             <CCardHeader class="header">
                 {{ title }}
                 <slot name="right-action">
@@ -42,9 +42,13 @@
 
             if (!this.edit) {
                 this.$emit('onClose')
-            }else{
+            } else {
                 this.$emit('onOpen')
             }
+        }
+
+        get darkMode(): boolean {
+            return this.$store.state.darkMode
         }
     }
 </script>
@@ -54,6 +58,9 @@
         border-left 8px solid rgb(79, 116, 238) !important
         box-shadow 2px 2px 5px #BBBBBB !important
         border-radius 10px
+
+        &-dark
+            box-shadow none !important
 
         .bottom-right
             height 23px
