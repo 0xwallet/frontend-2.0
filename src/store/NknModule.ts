@@ -44,6 +44,8 @@ class NknModulePrivate extends VuexModule {
         tag: WalletTag,
         walletId: string | number,
     }) {
+        console.log('setDefault')
+        console.log(params)
         return new Promise(((resolve: (wallet: Wallet) => void, reject) => {
             setDefaultNknAddressService(params).then(res => {
                 UserModule.me().then()
@@ -61,7 +63,8 @@ class NknModulePrivate extends VuexModule {
         return new Promise(((resolve, reject) => {
             this.getNknClient().then((res: any) => {
                 this.bindNknAddress({
-                    nknAddress: res.addr
+                    nknAddress: res.addr,
+                    tag       : WalletTag.MESSAGE,
                 }).then((res) => {
                     this.setDefaultNknAddress({
                         password: params.password,

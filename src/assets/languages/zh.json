@@ -104,7 +104,11 @@
       "copy": "复制路径",
       "download": "下载到本地",
       "upload": "上传到链",
-      "delete": "删除"
+      "delete": "删除",
+      "uploadFile": {
+        "title": "上传文件",
+        "upload": "上传"
+      }
     }
   }
 }
