@@ -15,6 +15,7 @@
     import Component from 'vue-class-component'
     import {CommonModule} from '@/store/CommonModule'
     import DriveFiles from '@/views/drive/DriveFiles.vue'
+    import {DriveModule} from '@/store/DriveModule'
 
     @Component({
         components: {DriveFiles}
@@ -22,9 +23,10 @@
     export default class Drive extends Vue {
 
         mounted() {
-            setTimeout(() => {
+            DriveModule.getEyeblueUserInfo().then(() => {
                 CommonModule.hidePageLoading()
-            }, 1000)
+            })
+            // CommonModule.hidePageLoading()
         }
 
         get pageLoading() {

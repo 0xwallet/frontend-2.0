@@ -29,6 +29,14 @@ export class Matter extends Base {
     }
 }
 
+export class EyeblueUserInfo {
+    cookie !: string
+    sizeLimit !: number
+    totalSize !: number
+    totalSizeLimit !: number
+    uuid !: number
+}
+
 function formatBytes(bytes: number): string {
     if (bytes < 1024) return bytes + ' Bytes'
     else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB'

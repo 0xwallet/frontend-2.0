@@ -75,7 +75,7 @@
     export default class DriveFiles extends Vue {
 
         $refs !: {
-            uploadFile: DriveUploadFile
+            uploadFile : any
         }
 
         files: Array<Matter> = []

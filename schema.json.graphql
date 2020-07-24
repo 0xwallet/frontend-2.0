@@ -35,6 +35,17 @@ type Email {
     user: User
 }
 
+type EyeblueUserInfo {
+    cookie: String
+    "该用户允许上传的单文件最大大小"
+    sizeLimit: Int
+    "该用户已上传的文件总量大小"
+    totalSize: Int
+    "该用户允许上传的文件总量最大大小"
+    totalSizeLimit: Int
+    uuid: String
+}
+
 type ImMessage {
     body: Json
     fromContact: ImContact
@@ -269,7 +280,7 @@ type RootQueryType {
     "Confirm public successful upload"
     confirmPublicUpload(uuid: String!): String
     "Get user's eyeblue login cookie"
-    eyeblueUserCookie: String
+    eyeblueUserInfo: EyeblueUserInfo
     "Get offline messages"
     imOfflineMessages(
         """

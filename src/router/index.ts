@@ -63,6 +63,11 @@ const router = new Router({
                 },
             ]
         },
+        {
+            path     : '/test',
+            name     : 'Test',
+            component: () => import('@/views/TestPDF.vue')
+        }
 
     ]
 })
