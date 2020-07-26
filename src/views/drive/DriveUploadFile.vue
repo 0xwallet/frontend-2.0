@@ -42,7 +42,6 @@
                         userUuid: ''
                     },
                     headers: {
-                        test: '2323',
                         cookie: '2323'
                     },
                     cookie: true,
