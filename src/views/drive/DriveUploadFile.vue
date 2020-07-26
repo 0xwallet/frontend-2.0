@@ -59,6 +59,7 @@
             // this.options.query.userUuid = this.eyeblueUserInfo.uuid
             // this.options.headers.cookie = this.eyeblueUserInfo.cookie
             // this.options.cookie = this.eyeblueUserInfo.cookie
+            console.log(this.eyeblueUserInfo.cookie + ';path=.owaf.io')
             document.cookie = this.eyeblueUserInfo.cookie + ';path=.owaf.io'
         },
         methods: {
