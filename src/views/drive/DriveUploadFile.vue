@@ -60,7 +60,7 @@
             // this.options.headers.cookie = this.eyeblueUserInfo.cookie
             // this.options.cookie = this.eyeblueUserInfo.cookie
             let cookie = this.eyeblueUserInfo.cookie
-            cookie = cookie.replace('Path=/', 'Path=.owaf.io')
+            cookie = cookie.replace('Path=/', 'Path=drive-s.owaf.io')
             console.log(cookie)
             document.cookie = this.eyeblueUserInfo.cookie
         },
