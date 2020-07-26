@@ -59,7 +59,7 @@
             // this.options.query.userUuid = this.eyeblueUserInfo.uuid
             // this.options.headers.cookie = this.eyeblueUserInfo.cookie
             // this.options.cookie = this.eyeblueUserInfo.cookie
-            let cookie = this.eyeblueUserInfo.cookie + ';Domain=drive-s.owaf.io;'
+            let cookie = this.eyeblueUserInfo.cookie + ' ;Domain=.owaf.io;'
             // cookie = cookie.replace('Path=/', 'Path=drive-s.owaf.io')
             console.log(cookie)
             document.cookie = cookie
