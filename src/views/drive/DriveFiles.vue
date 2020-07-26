@@ -4,9 +4,11 @@
             <div slot="right-action" class="float-right files-action">
                 <CButton class="btn" @click="checkAllFiles">{{ checkFiles.length === files.length ? '全不选' : '全选' }}
                 </CButton>
-                <CButton class="btn btn-info" @click="$refs.uploadFile.showModal()">上传</CButton>
+                <CButton class="btn btn-info" @click="$refs.uploadFile.showModal()">高级上传</CButton>
+                <CButton class="btn btn-info" @click="choiceFile">上传</CButton>
                 <CButton class="btn btn-success">新建</CButton>
                 <CButton class="btn btn-light">刷新</CButton>
+                <input type="file" ref="choiceFile" hidden @change="fileChange($event)">
             </div>
             <div>
                 <div v-for="(file,index) in files" :key="index" class="files" @mouseenter="mouseOver(file)"
@@ -68,6 +70,7 @@
     import moment from 'moment'
     import {NknModule} from '@/store/NknModule'
     import DriveUploadFile from '@/views/drive/DriveUploadFile.vue'
+    import {DriveModule} from '@/store/DriveModule'
 
     @Component({
         components: {DriveUploadFile, MainCardComponent}
@@ -75,7 +78,8 @@
     export default class DriveFiles extends Vue {
 
         $refs !: {
-            uploadFile : any
+            uploadFile: any,
+            choiceFile: HTMLInputElement
         }
 
         files: Array<Matter> = []
@@ -124,6 +128,28 @@
             } else {
                 this.checkFiles = []
             }
+        }
+
+        choiceFile() {
+            this.$refs.choiceFile.dispatchEvent(new MouseEvent('click'))
+        }
+
+        fileChange(file: any) {
+            // let uuid = DriveModule.eyeblueUserInfo.uuid
+            // console.log(uuid)
+            // console.log(file.target.files[0])
+            this.axios.defaults.withCredentials = true
+            let param = new FormData()
+            param.append('userUuid', '467f81c2-ce8f-4ec4-7b12-14e403fa94a7')
+            param.append('puuid', 'root')
+            param.append('file', file.target.files[0])
+            this.axios.post('https://drive-s.owaf.io/api/matter/upload', param, {
+                headers         : {'Content-Type': 'multipart/form-data'},
+                onUploadProgress: e => {
+                    const completeProgress = ((e.loaded / e.total * 100) | 0) + '%'
+                    console.log(completeProgress)
+                }
+            })
         }
 
     }

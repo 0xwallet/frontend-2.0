@@ -14,6 +14,8 @@ Vue.use(CoreuiVue)
 Vue.use(VueI18n)
 Vue.use(VueAxios, axios)
 
+axios.defaults.withCredentials = true
+
 const i18n = new VueI18n({
     locale  : localStorage.getItem('locale') || 'en',
     messages: {
@@ -21,7 +23,6 @@ const i18n = new VueI18n({
         'en': require('@/assets/languages/en.json'),
     }
 })
-
 
 
 Vue.config.productionTip = false

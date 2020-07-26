@@ -40,6 +40,7 @@
     export default class App extends Vue {
 
         mounted() {
+
             UserModule.setToken(String(localStorage.getItem('auth-token')))
 
             // 获取界面设置
