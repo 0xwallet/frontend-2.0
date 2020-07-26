@@ -144,7 +144,10 @@
             param.append('puuid', 'root')
             param.append('file', file.target.files[0])
             this.axios.post('https://drive-s.owaf.io/api/matter/upload', param, {
-                headers         : {'Content-Type': 'multipart/form-data'},
+                headers         : {
+                    'Content-Type': 'multipart/form-data',
+                    'cookie'      : DriveModule.eyeblueUserInfo.cookie
+                },
                 onUploadProgress: e => {
                     const completeProgress = ((e.loaded / e.total * 100) | 0) + '%'
                     console.log(completeProgress)
