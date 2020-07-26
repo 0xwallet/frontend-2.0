@@ -146,7 +146,7 @@
             this.axios.post('https://drive-s.owaf.io/api/matter/upload', param, {
                 headers         : {
                     'Content-Type': 'multipart/form-data',
-                    'cookie'      : 'ak=51e300c1-84b3-4af5-6a75-f67b07119b80'
+                    // 'cookie'      : 'ak=51e300c1-84b3-4af5-6a75-f67b07119b80'
                 },
                 onUploadProgress: e => {
                     const completeProgress = ((e.loaded / e.total * 100) | 0) + '%'

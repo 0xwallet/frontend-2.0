@@ -42,7 +42,7 @@
                         userUuid: ''
                     },
                     headers: {
-                        cookie: '2323'
+                        // cookie: '2323'
                     },
                     cookie: true,
                     withCredentials: true
@@ -56,10 +56,10 @@
             })
         },
         mounted() {
-            this.options.query.userUuid = this.eyeblueUserInfo.uuid
-            this.options.headers.cookie = this.eyeblueUserInfo.cookie
+            // this.options.query.userUuid = this.eyeblueUserInfo.uuid
+            // this.options.headers.cookie = this.eyeblueUserInfo.cookie
             // this.options.cookie = this.eyeblueUserInfo.cookie
-            document.cookie = this.eyeblueUserInfo.cookie
+            // document.cookie = this.eyeblueUserInfo.cookie
         },
         methods: {
             showModal() {
