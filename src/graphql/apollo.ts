@@ -8,7 +8,7 @@ import {CommonModule} from '@/store/CommonModule'
 import {ToastColor} from '@/store/model/Toast'
 
 const apiLink = new HttpLink({
-    uri: '/api/graphiql'
+    uri: process.env.VUE_APP_BASE_URL
 })
 
 
