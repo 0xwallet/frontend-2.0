@@ -62,7 +62,7 @@
             let cookie = this.eyeblueUserInfo.cookie + ';Domain=drive-s.owaf.io;'
             // cookie = cookie.replace('Path=/', 'Path=drive-s.owaf.io')
             console.log(cookie)
-            document.cookie = this.eyeblueUserInfo.cookie
+            document.cookie = cookie
         },
         methods: {
             showModal() {
