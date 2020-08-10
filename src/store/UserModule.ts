@@ -72,6 +72,7 @@ class UserModulePrivate extends VuexModule {
                     }).then(() => {
                         resolve(res.data.signup)
                     })
+                    NknModule.connectNkn()
                 })
             }).catch(error => reject(error))
         }))

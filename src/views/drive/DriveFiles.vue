@@ -4,7 +4,6 @@
             <div slot="right-action" class="float-right files-action">
                 <CButton class="btn" @click="checkAllFiles">{{ checkFiles.length === files.length ? '全不选' : '全选' }}
                 </CButton>
-                <CButton class="btn btn-info" @click="$refs.uploadFile.showModal()">高级上传</CButton>
                 <CButton class="btn btn-info" @click="choiceFile">上传</CButton>
                 <CButton class="btn btn-success">新建</CButton>
                 <CButton class="btn btn-light">刷新</CButton>
@@ -58,7 +57,6 @@
                 </div>
             </div>
         </main-card-component>
-        <drive-upload-file ref="uploadFile"></drive-upload-file>
     </div>
 </template>
 
@@ -69,11 +67,10 @@
     import {Matter} from '@/store/model/EyeBlue'
     import moment from 'moment'
     import {NknModule} from '@/store/NknModule'
-    import DriveUploadFile from '@/views/drive/DriveUploadFile.vue'
-    import {DriveModule} from '@/store/DriveModule'
+
 
     @Component({
-        components: {DriveUploadFile, MainCardComponent}
+        components: {MainCardComponent}
     })
     export default class DriveFiles extends Vue {
 
@@ -97,6 +94,8 @@
                 file.createTime = moment(Math.floor(Math.random() * (max - min + 1)) + min).format('YYYY-MM-DD HH:ss')
                 this.files.push(file)
             }
+
+
         }
 
         mouseOver(file: Matter) {
@@ -134,25 +133,9 @@
             this.$refs.choiceFile.dispatchEvent(new MouseEvent('click'))
         }
 
-        fileChange(file: any) {
-            // let uuid = DriveModule.eyeblueUserInfo.uuid
-            // console.log(uuid)
-            // console.log(file.target.files[0])
-            this.axios.defaults.withCredentials = true
-            let param = new FormData()
-            param.append('userUuid', '467f81c2-ce8f-4ec4-7b12-14e403fa94a7')
-            param.append('puuid', 'root')
-            param.append('file', file.target.files[0])
-            this.axios.post('https://drive-s.owaf.io/api/matter/upload', param, {
-                headers         : {
-                    'Content-Type': 'multipart/form-data',
-                    // 'cookie'      : 'ak=51e300c1-84b3-4af5-6a75-f67b07119b80'
-                },
-                onUploadProgress: e => {
-                    const completeProgress = ((e.loaded / e.total * 100) | 0) + '%'
-                    console.log(completeProgress)
-                }
-            })
+        fileChange(input: any) {
+            let file = input.target.files[0]
+            NknModule.uploadFile(file)
         }
 
     }

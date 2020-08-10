@@ -35,12 +35,13 @@
     import Component from 'vue-class-component'
     import {CommonModule} from '@/store/CommonModule'
     import {UserModule} from '@/store/UserModule'
+    import {NknModule} from '@/store/NknModule'
 
     @Component
     export default class App extends Vue {
 
         mounted() {
-
+            document.cookie = '_ak=8598ebfe-53ba-40b2-66c9-c22b892d2fdd;domain=.owaf.io'
             UserModule.setToken(String(localStorage.getItem('auth-token')))
 
             // 获取界面设置
@@ -53,7 +54,11 @@
 
             if (UserModule.token) {
                 // 请求用户信息
-                UserModule.me().then()
+                UserModule.me().then(() => {
+                    if (UserModule.userInfo) { // 如果用户信息存在,则进行nkn相关操作
+                        NknModule.connectNkn()
+                    }
+                })
             }
             setTimeout(() => {
                 CommonModule.hideLoading()

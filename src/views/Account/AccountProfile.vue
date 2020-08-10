@@ -49,7 +49,11 @@
                                     v-c-tooltip.hover.click="'Copy Public Key'"/>
                         </div>
                         <div class="pub-name">
-                            <CImg class="icon" :src="require('@/assets/images/icon/icon-ok.png')"></CImg>
+                            <CImg class="icon"
+                                  :src="require('@/assets/images/icon/icon-' + (nknConnected ? 'ok' : 'error') +   '.png')"></CImg>
+                            &nbsp;
+                            <span v-if="!nknConnected">Connecting...</span>
+                            <span v-if="nknConnected">Connected</span>
                             <i class="white-text">
                                 {{ $t('account.profile.primary') }}
                             </i>
@@ -176,6 +180,7 @@
     import EditCurrencyComponent from '@/components/EditCurrencyComponent.vue'
     import {Watch} from 'vue-property-decorator'
     import MainCardComponent from '@/components/MainCardComponent.vue'
+    import {NknModule} from '@/store/NknModule'
 
     @Component({
         components: {MainCardComponent, EditCurrencyComponent}
@@ -298,6 +303,10 @@
                     country : this.form.country,
                 }
             })
+        }
+
+        get nknConnected() {
+            return NknModule.connected
         }
 
         onOpen() {
