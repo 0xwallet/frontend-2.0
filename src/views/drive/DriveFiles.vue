@@ -9,7 +9,15 @@
                 <CButton class="btn btn-light">刷新</CButton>
                 <input type="file" ref="choiceFile" hidden @change="fileChange($event)">
             </div>
-            <div>
+
+            <CProgress color="success"
+                       show-value
+                       :value="32"
+                       animated
+                       size="sm"></CProgress>
+
+
+            <div style="margin-top: 10px">
                 <div v-for="(file,index) in files" :key="index" class="files" @mouseenter="mouseOver(file)"
                      @mouseleave="mouseOut(file)">
                     <div class="checkbox">
@@ -94,8 +102,6 @@
                 file.createTime = moment(Math.floor(Math.random() * (max - min + 1)) + min).format('YYYY-MM-DD HH:ss')
                 this.files.push(file)
             }
-
-
         }
 
         mouseOver(file: Matter) {

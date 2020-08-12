@@ -8,6 +8,7 @@ import {
 } from '@/service/NknService'
 import {Wallet, WalletTag} from '@/store/model/Wallet'
 import {UserModule} from '@/store/UserModule'
+import {CommonModule} from '@/store/CommonModule'
 
 const nkn = require('nkn-sdk/dist/nkn.js')
 
@@ -21,8 +22,24 @@ class NknModulePrivate extends VuexModule {
 
     connected: boolean = false
     nknClient: any = null
-    session: any = null
+    isUploading: boolean = false
+    uploadProgress: number = 0
+    uploadSpeed: string = '0KB/s'
 
+    @Mutation
+    setUploadSpeed(speed: string) {
+        this.uploadSpeed = speed
+    }
+
+    @Mutation
+    setUploadProgress(number: number) {
+        this.uploadProgress = number
+    }
+
+    @Mutation
+    setUploading(status: boolean) {
+        this.isUploading = status
+    }
 
     @Mutation
     setNknClient(client: any) {
@@ -32,11 +49,6 @@ class NknModulePrivate extends VuexModule {
     @Mutation
     setNknConnectStatus(status: boolean) {
         this.connected = status
-    }
-
-    @Mutation
-    setSession(session: any) {
-        this.session = session
     }
 
     @Action
@@ -74,9 +86,6 @@ class NknModulePrivate extends VuexModule {
                         resolve()
                         this.setNknClient(cli)
                         this.setNknConnectStatus(true)
-                        let session = await cli.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
-                        console.log(session)
-                        this.setSession(session)
                     })
                 }))
             })
@@ -93,6 +102,8 @@ class NknModulePrivate extends VuexModule {
         let _this = this
         let fileName = file.name
 
+
+        _this.setUploading(true)
 
         if (file) {
             fileSize = file.size
@@ -115,12 +126,14 @@ class NknModulePrivate extends VuexModule {
             // let bufT = new Buffer(4)
             // console.log(contents)
             let array = new Uint8Array(contents)
-            console.log(array)
+            let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
+
+            console.log(session)
 
             let buffer = new ArrayBuffer(4)
             let dv = new DataView(buffer)
             dv.setUint32(0, fileSize, true)
-            await _this.session.write(new Uint8Array(buffer))
+            await session.write(new Uint8Array(buffer))
 
             buffer = Buffer.from(fileName)
             buffer = new Uint8Array(buffer)
@@ -128,9 +141,9 @@ class NknModulePrivate extends VuexModule {
             let tmpBuf = new ArrayBuffer(4)
             dv = new DataView(tmpBuf)
             dv.setUint32(0, bufferLength, true)
-            await _this.session.write(new Uint8Array(tmpBuf))
+            await session.write(new Uint8Array(tmpBuf))
 
-            await _this.session.write(buffer)
+            await session.write(buffer)
 
             let buf!: Uint8Array
             for (let n = 0; n < fileSize; n += buf.length) {
@@ -140,12 +153,26 @@ class NknModulePrivate extends VuexModule {
                     buf[i] = array[i + n]
                 }
 
-                await _this.session.write(buf)
+                await session.write(buf)
+
                 if (Math.floor((n + buf.length) * 10 / fileSize) !== Math.floor(n * 10 / fileSize)) {
-                    console.log(_this.session.localAddr, 'sent', n + buf.length, 'bytes',
+                    console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
                         (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000, 'MB/s')
+
+                    let current = n + buf.length
+                    _this.setUploadProgress(current / fileSize)
+
+                    let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
+                    if (speed > 0.9) {
+                        speed = speed + 'MB/s'
+                    } else {
+                        speed = speed / 1000 + 'KB/s'
+                    }
+                    _this.setUploadSpeed(speed)
                 }
             }
+            _this.setUploading(false)
+            CommonModule.toast({content: '上传成功'})
         }
 
         function byteAt(n: number) {
