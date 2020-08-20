@@ -3,6 +3,9 @@
         <CCard :class="[{'main-card-dark':darkMode},'main-card']">
             <CCardHeader class="header">
                 {{ title }}
+                <slot name="left">
+
+                </slot>
                 <slot name="right-action">
                     <CSwitch
                             class="float-right"

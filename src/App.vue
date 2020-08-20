@@ -55,6 +55,7 @@
             if (UserModule.token) {
                 // 请求用户信息
                 UserModule.me().then(() => {
+                    console.log(UserModule.userInfo)
                     if (UserModule.userInfo) { // 如果用户信息存在,则进行nkn相关操作
                         NknModule.connectNkn()
                     }

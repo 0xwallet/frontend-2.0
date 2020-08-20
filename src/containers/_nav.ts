@@ -99,7 +99,7 @@ export const nav = ($i18n: VueI18n): ContentToRender => {
             {
                 _name: 'CSidebarNavItem',
                 name : $i18n.t('nav.blockchain'),
-                to   : '/drive',
+                to   : '/drive/metanet/be8f08d7f519eb863a68cf292ca51dbab7c9b49f50a96d1232db32e432db3634',
                 icon : 'cil-speedometer'
             },
             {

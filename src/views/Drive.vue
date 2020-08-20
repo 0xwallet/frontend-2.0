@@ -1,10 +1,8 @@
 <template>
     <div>
         <CRow v-if="!pageLoading">
-            <CCol xl="6" class="left">
+            <CCol xl="12">
                 <drive-files></drive-files>
-            </CCol>
-            <CCol xl="6">
             </CCol>
         </CRow>
     </div>

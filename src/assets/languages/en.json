@@ -95,14 +95,14 @@
   },
   "drive": {
     "files": {
-      "title": "文件列表",
-      "clock": "变更为私有",
-      "info": "详情",
-      "edit": "重命名",
-      "copy": "复制路径",
-      "download": "下载到本地",
-      "upload": "上传到链",
-      "delete": "删除"
+      "title": "file list",
+      "clock": "set private",
+      "info": "info",
+      "edit": "rename",
+      "copy": "link",
+      "download": "download",
+      "upload": "up",
+      "delete": "delete"
     }
   }
 }

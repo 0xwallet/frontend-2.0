@@ -9,6 +9,8 @@ import {
 import {Wallet, WalletTag} from '@/store/model/Wallet'
 import {UserModule} from '@/store/UserModule'
 import {CommonModule} from '@/store/CommonModule'
+import {encode} from '@msgpack/msgpack'
+
 
 const nkn = require('nkn-sdk/dist/nkn.js')
 
@@ -122,45 +124,49 @@ class NknModulePrivate extends VuexModule {
 
 
         async function write(contents: any) {
-            // let buffer = new Uint8Array(contents)
-            // let bufT = new Buffer(4)
-            // console.log(contents)
-            let array = new Uint8Array(contents)
-            let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
 
+            let array = new Uint8Array(contents)
+            console.log(array)
+            let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
             console.log(session)
+
+
+            // await session.write(new Uint8Array(buffer))
+
+            const object = {
+                File    : array,
+                FileName: fileName,
+                FileSize: fileSize,
+                UserId  : UserModule.userInfo.id
+            }
+
+            console.log(object)
+            const encoded: Uint8Array = encode(object)
+            console.log(encoded)
 
             let buffer = new ArrayBuffer(4)
             let dv = new DataView(buffer)
-            dv.setUint32(0, fileSize, true)
+            dv.setUint32(0, encoded.length, true)
+
             await session.write(new Uint8Array(buffer))
 
-            buffer = Buffer.from(fileName)
-            buffer = new Uint8Array(buffer)
-            let bufferLength = buffer.byteLength
-            let tmpBuf = new ArrayBuffer(4)
-            dv = new DataView(tmpBuf)
-            dv.setUint32(0, bufferLength, true)
-            await session.write(new Uint8Array(tmpBuf))
-
-            await session.write(buffer)
+            // await session.write(encoded)
 
             let buf!: Uint8Array
-            for (let n = 0; n < fileSize; n += buf.length) {
-                buf = new Uint8Array(Math.min(fileSize - n, writeChunkSize))
-                // console.log(buf)
+            for (let n = 0; n < encoded.length; n += buf.length) {
+                buf = new Uint8Array(Math.min(encoded.length - n, writeChunkSize))
                 for (let i = 0; i < buf.length; i++) {
-                    buf[i] = array[i + n]
+                    buf[i] = encoded[i + n]
                 }
 
                 await session.write(buf)
 
-                if (Math.floor((n + buf.length) * 10 / fileSize) !== Math.floor(n * 10 / fileSize)) {
+                if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
                     console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
                         (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000, 'MB/s')
 
                     let current = n + buf.length
-                    _this.setUploadProgress(current / fileSize)
+                    _this.setUploadProgress(current / encoded.length)
 
                     let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
                     if (speed > 0.9) {

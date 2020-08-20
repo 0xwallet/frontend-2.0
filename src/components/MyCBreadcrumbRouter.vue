@@ -22,13 +22,31 @@
                 const routes = this.$route.matched.filter(route => {
                     return route.name || (route.meta && route.meta.label)
                 })
-                return routes.map(route => {
+                const items = []
+                let isDrive = false
+                routes.map(route => {
                     const meta = route.meta || {}
-                    return {
+                    if (route.path === '/drive/metanet/:txId') {
+                        isDrive = true
+                    }
+                    items.push({
                         to: route,
                         text: this.$t(meta.label || route.name)
-                    }
+                    })
                 })
+                if (isDrive) {
+                    let paramString  = this.$route.params.txId
+                    let params = paramString.split(".")
+                    params.map((item,index) => {
+                        if (index !== 0) {
+                            items.push({
+                                text: item
+                            })
+                        }
+                    })
+
+                }
+                return items
             },
             props() {
                 return {

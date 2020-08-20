@@ -1,6 +1,7 @@
 import {Wallet} from '@/store/model/Wallet'
 
 export class User {
+    id !: string
     avatar?: string
     bio?: string
     email!: string

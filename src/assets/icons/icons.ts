@@ -75,6 +75,7 @@ import {
     cilTrash,
     cilCloudUpload,
     cilLink,
+    cilShareAlt,
 } from '@coreui/icons'
 
 import {logo} from './logo'
@@ -157,4 +158,5 @@ export const iconsSet: { [key: string]: string[] } = Object.assign({}, {
     cilTrash,
     cilCloudUpload,
     cilLink,
+    cilShareAlt,
 })
