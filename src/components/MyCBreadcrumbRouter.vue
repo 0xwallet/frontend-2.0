@@ -26,7 +26,7 @@
                 let isDrive = false
                 routes.map(route => {
                     const meta = route.meta || {}
-                    if (route.path === '/drive/metanet/:txId') {
+                    if (route.path === '/drive/:drive?') {
                         isDrive = true
                     }
                     items.push({
@@ -35,16 +35,17 @@
                     })
                 })
                 if (isDrive) {
-                    let paramString  = this.$route.params.txId
-                    let params = paramString.split(".")
-                    params.map((item,index) => {
-                        if (index !== 0) {
-                            items.push({
-                                text: item
-                            })
-                        }
-                    })
-
+                    let paramString = this.$route.params.drive
+                    if(paramString){
+                        let params = paramString.split(".")
+                        params.map((item, index) => {
+                            if (index !== 0) {
+                                items.push({
+                                    text: item
+                                })
+                            }
+                        })
+                    }
                 }
                 return items
             },

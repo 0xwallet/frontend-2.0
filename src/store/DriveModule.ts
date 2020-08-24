@@ -8,6 +8,7 @@ import {store} from '@/store/index'
 })
 class DriveModulePrivate extends VuexModule {
 
+
 }
 
 export const DriveModule = getModule(DriveModulePrivate)
