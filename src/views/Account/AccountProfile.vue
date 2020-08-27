@@ -256,27 +256,6 @@
 
         }
 
-        // public handleUploadHead(){
-        //     let file:any = this.file;
-        //     let picData:any = new FormData();
-        //     picData.append('file',file,file.name);
-        //     //接口请求，根据自身项目做调整，这里只是简单介绍
-        //     axios.post({
-        //         url:"接口url",
-        //         method:'post',
-        //         data:picData,
-        //     }).then(res=>{
-        //         if(res.data.success == true){
-        //             //这里是借用elelment UI的消息提示
-        //             this.$notify.success({title: 'success',message: '头像图片上传成功'});
-        //             return;
-        //         }
-        //         this.$notify.error({title: '错误',message: res.data.msg});
-        //     }).catch(err=>{
-        //         console.log(err);
-        //     })
-        // }
-
         copy() {
             let clipboard = new Clipboard('.copy')
             clipboard.on('success', () => {

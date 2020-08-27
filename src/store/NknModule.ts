@@ -10,9 +10,11 @@ import {Wallet, WalletTag} from '@/store/model/Wallet'
 import {UserModule} from '@/store/UserModule'
 import {CommonModule} from '@/store/CommonModule'
 import {encode} from '@msgpack/msgpack'
-
+import {DriveModule} from '@/store/DriveModule'
+import {DriveSpace} from '@/store/model/File'
 
 const nkn = require('nkn-sdk/dist/nkn.js')
+const CryptoJS = require('crypto-js/crypto-js.js')
 
 
 @Module({
@@ -26,7 +28,7 @@ class NknModulePrivate extends VuexModule {
     nknClient: any = null
     isUploading: boolean = false
     uploadProgress: number = 0
-    uploadSpeed: string = '0KB/s'
+    uploadSpeed: string = '0 KB/s'
 
     @Mutation
     setUploadSpeed(speed: string) {
@@ -76,21 +78,31 @@ class NknModulePrivate extends VuexModule {
 
     @Action
     connectNkn() {
-        let seed = localStorage.getItem('nkn-seed')
-        if (seed) {
-            this.getNknClient({
-                seed: seed
-            }).then(async (cli: any) => {
-                console.log(UserModule.userInfo)
-                console.log('当前使用NKN:', cli)
-                await new Promise((resolve => {
-                    cli.onConnect(async () => {
-                        resolve()
-                        this.setNknClient(cli)
+        console.log('nknClient', this.nknClient)
+        if (!this.nknClient) {
+            let seed = localStorage.getItem('nkn-seed')
+            if (seed) {
+                this.getNknClient({
+                    seed: seed
+                }).then(async (cli: any) => {
+                    console.log(UserModule.userInfo)
+                    console.log('当前使用NKN:', cli)
+
+                    if (!(cli instanceof Array)) {
+                        await new Promise((resolve => {
+                            cli.onConnect(async () => {
+                                resolve()
+                                this.setNknClient(cli)
+                                this.setNknConnectStatus(true)
+                            })
+                        }))
+                    }else{
+                        this.setNknClient(cli[0])
                         this.setNknConnectStatus(true)
-                    })
-                }))
-            })
+                    }
+                    console.log('nknClient', this.nknClient)
+                })
+            }
         }
     }
 
@@ -127,62 +139,75 @@ class NknModulePrivate extends VuexModule {
 
             let array = new Uint8Array(contents)
             console.log(array)
-            let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
-            console.log(session)
 
 
-            // await session.write(new Uint8Array(buffer))
+            let wordArray = CryptoJS.lib.WordArray.create(array)
+            let hash = CryptoJS.SHA256(wordArray).toString()
+            // console.log('hash', hash)
 
-            const object = {
-                File    : array,
-                FileName: fileName,
-                FileSize: fileSize,
-                UserId  : UserModule.userInfo.id
-            }
+            let fullName = []
+            fullName.push(fileName)
+            DriveModule.driveUploadByHash({
+                fullName: fullName,
+                hash    : hash,
+                space   : DriveSpace.PUBLIC,
+            }).then(() => CommonModule.toast({content: '上传成功'})
+            ).catch(async () => {
+                let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
+                console.log(session)
 
-            console.log(object)
-            const encoded: Uint8Array = encode(object)
-            console.log(encoded)
-
-            let buffer = new ArrayBuffer(4)
-            let dv = new DataView(buffer)
-            dv.setUint32(0, encoded.length, true)
-
-            await session.write(new Uint8Array(buffer))
-
-            // await session.write(encoded)
-
-            let buf!: Uint8Array
-            for (let n = 0; n < encoded.length; n += buf.length) {
-                buf = new Uint8Array(Math.min(encoded.length - n, writeChunkSize))
-                for (let i = 0; i < buf.length; i++) {
-                    buf[i] = encoded[i + n]
+                const object = {
+                    File    : array,
+                    FileName: fileName,
+                    FileSize: fileSize,
+                    UserId  : UserModule.userInfo.id
                 }
 
-                await session.write(buf)
+                console.log(object)
+                const encoded: Uint8Array = encode(object)
+                console.log(encoded)
 
-                if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
-                    console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
-                        (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000, 'MB/s')
+                let buffer = new ArrayBuffer(4)
+                let dv = new DataView(buffer)
+                dv.setUint32(0, encoded.length, true)
 
-                    let current = n + buf.length
-                    _this.setUploadProgress(current / encoded.length)
+                await session.write(new Uint8Array(buffer))
 
-                    let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
-                    if (speed > 0.9) {
-                        speed = speed + 'MB/s'
-                    } else {
-                        speed = speed / 1000 + 'KB/s'
+                // await session.write(encoded)
+
+                let buf!: Uint8Array
+                for (let n = 0; n < encoded.length; n += buf.length) {
+                    buf = new Uint8Array(Math.min(encoded.length - n, writeChunkSize))
+                    for (let i = 0; i < buf.length; i++) {
+                        buf[i] = encoded[i + n]
                     }
-                    _this.setUploadSpeed(speed)
-                }
-            }
-            _this.setUploading(false)
-            CommonModule.toast({content: '上传成功'})
-        }
 
-        function byteAt(n: number) {
-            return n % 256
+                    await session.write(buf)
+
+                    if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
+                        console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
+                            (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000000000, 'B/s')
+
+                        let current = n + buf.length
+                        _this.setUploadProgress(current / encoded.length * 100)
+
+                        let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
+
+                        if (speed > 0.9) {
+                            speed = speed + ' MB/s'
+                        } else if (speed * 1000 > 0.9) {
+                            speed = speed * 1000 + 'KB/s'
+                        } else {
+                            speed = speed * 1000 * 1000 + 'B/s'
+                        }
+                        _this.setUploadSpeed(speed)
+                    }
+                }
+                _this.setUploading(false)
+                _this.setUploadSpeed('0 KB/s')
+                CommonModule.toast({content: '上传成功'})
+            })
+
         }
     }
 

@@ -47,6 +47,11 @@ export const meQuery = gql`
             setting{
                 currency
             }
+            driveSetting{
+                availableSpace
+                totalSpace
+                usedSpace
+            }
         }
     }
 `

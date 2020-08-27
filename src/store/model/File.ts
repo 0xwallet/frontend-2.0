@@ -1,15 +1,15 @@
 export class File {
+    id!: string
     name !: string
-    size !: number
-    txId !: string
     hash !: string
-    parentId !: string | null
     type !: FileType
     active: boolean = false
+    info !: DriveUserFileInfo
     time !: string
 
+
     getSize() {
-        return formatBytes(this.size)
+        return formatBytes(this.info.size)
     }
 
     getImg() {
@@ -31,6 +31,29 @@ export class File {
                 return require('@/assets/images/icon/drive/person.png')
         }
     }
+
+    getType(name: string): FileType {
+        let nameValue = name.split('.')
+        switch (nameValue[nameValue.length - 1]) {
+            case 'jpeg':
+            case 'jpg':
+            case 'png':
+                return FileType.IMG
+            case 'pdf':
+                return FileType.PDF
+            default:
+                return FileType.DIR
+        }
+    }
+}
+
+export enum DriveSpace {
+    PRIVATE = 'PRIVATE',
+    PUBLIC  = 'PUBLIC'
+}
+
+export class DriveUserFileInfo {
+    size !: number
 }
 
 export enum FileType {

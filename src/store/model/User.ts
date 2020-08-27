@@ -14,6 +14,13 @@ export class User {
     wallets?: Wallet[]
     personalInfo ?: PersonalInfo
     setting ?: Setting
+    driveSetting ?: DriveUserSetting
+}
+
+export class DriveUserSetting {
+    availableSpace !: string
+    totalSpace !: string
+    usedSpace !: string
 }
 
 export class Setting {

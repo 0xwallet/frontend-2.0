@@ -28,22 +28,33 @@ type CreditCard {
     year: String
 }
 
+type DriveUserFile {
+    fullName: [String]
+    hash: String
+    id: ID!
+    info: DriveUserFileInfo
+    insertedAt: NaiveDateTime
+    isDir: Boolean
+    space: DriveSpace
+    updatedAt: NaiveDateTime
+    user: User
+}
+
+type DriveUserFileInfo {
+    size: String
+}
+
+type DriveUserSetting {
+    availableSpace: String
+    totalSpace: String
+    usedSpace: String
+}
+
 type Email {
     address: String
     status: EmailStatus
     tag: EmailTag
     user: User
-}
-
-type EyeblueUserInfo {
-    cookie: String
-    "该用户允许上传的单文件最大大小"
-    sizeLimit: Int
-    "该用户已上传的文件总量大小"
-    totalSize: Int
-    "该用户允许上传的文件总量最大大小"
-    totalSizeLimit: Int
-    uuid: String
 }
 
 type ImMessage {
@@ -159,12 +170,6 @@ type RootMutationType {
     createKanbanTask(body: String!, columnId: ID!, organizationId: ID!, title: String!): KanbanItem
     "Create a organization for current user."
     createOrganization(info: OrganizationInfoInput, name: String!): Organization
-    "Get public file upload token"
-    createPublicUploadToken(
-        filename: String!,
-        "byte size"
-        size: Int!
-    ): String
     "Delete a channel."
     deleteChannel(channelId: ID!): Channel
     "Delete Kanban column"
@@ -173,6 +178,8 @@ type RootMutationType {
     deleteOrganization(organizationId: ID!): Organization
     "Delete a wallet"
     deleteWallet(id: ID!): Wallet
+    "upload file by exist hash"
+    driveUploadByHash(fullName: [String]!, hash: String!, space: DriveSpace = PRIVATE): DriveUserFile
     "Edit current user"
     editCurrentUser(
         avatar: String,
@@ -277,10 +284,11 @@ type RootMutationType {
 type RootQueryType {
     "Get channel by id, if channel is public or current user in this channel"
     channel(id: ID!): Channel
-    "Confirm public successful upload"
-    confirmPublicUpload(uuid: String!): String
-    "Get user's eyeblue login cookie"
-    eyeblueUserInfo: EyeblueUserInfo
+    driveListFiles(
+        "null represent the root directory"
+        parentId: ID,
+        space: DriveSpace = PRIVATE
+    ): [DriveUserFile]
     "Get offline messages"
     imOfflineMessages(
         """
@@ -349,6 +357,7 @@ type User {
     avatar: String
     bio: String
     channels: [Channel]
+    driveSetting: DriveUserSetting
     email: String!
     emails: [Email]
     id: ID!
@@ -385,6 +394,11 @@ type WalletInfo {
 enum Currency {
     CNY
     USD
+}
+
+enum DriveSpace {
+    PRIVATE
+    PUBLIC
 }
 
 enum EmailStatus {

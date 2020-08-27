@@ -37,6 +37,9 @@ const errorLink = onError(({
     }
     if (errorMsg) {
         // 全局异常消息
+        if(errorMsg == 'file hash not found'){
+            return
+        }
         CommonModule.toast({
             content: errorMsg,
             color  : ToastColor.DANGER

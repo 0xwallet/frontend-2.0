@@ -8,9 +8,9 @@
             <div class="c-body">
                 <main class="c-main">
                     <CContainer fluid>
-                        <transition name="fade">
-                            <router-view></router-view>
-                        </transition>
+                        <!--                        <transition name="fade">-->
+                        <router-view :key="$route.fullPath"></router-view>
+                        <!--                        </transition>-->
                     </CContainer>
                 </main>
                 <CElementCover v-if="pageLoading"/>
