@@ -12,7 +12,7 @@ export class Wallet {
 }
 
 export class WalletInfo {
-    address?: string
+    encryptedWallet?: string
     identifier?: string
     publicKey?: string
 }

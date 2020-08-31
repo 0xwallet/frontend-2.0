@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const driveListFilesQuery = gql`
-    query driveListFiles($parentId : ID, $space: DriveSpace){
-        driveListFiles(parentId: $parentId, space: $space){
+    query driveListFiles($dirFullName : [String], $dirId : String, $space: DriveSpace){
+        driveListFiles(dirFullName: $dirFullName,dirId: $dirId, space: $space){
             id
             fullName
             hash
@@ -12,6 +12,7 @@ export const driveListFilesQuery = gql`
                 size
             }
             updatedAt
+            insertedAt
         }
     }
 `
@@ -21,5 +22,17 @@ export const driveUploadByHashMutation = gql`
         driveUploadByHash(fullName:$fullName,hash:$hash,space:$space){
             id
         }
+    }
+`
+
+export const driveDeleteFileMutation = gql`
+    mutation driveDeleteFile($id : String!,$space : DriveSpace!){
+        driveDeleteFile(id: $id, space: $space)
+    }
+`
+
+export const driveDeleteFilesMutation = gql`
+    mutation driveDeleteFiles($ids : [String]!,$space : DriveSpace!){
+        driveDeleteFiles(ids: $ids, space: $space)
     }
 `

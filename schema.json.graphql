@@ -151,6 +151,8 @@ type RootMutationType {
     bindNknAddress(
         "If tag is LOGIN_CODE"
         code: String,
+        "base64 encrypted wallet file"
+        encryptedWallet: String,
         "format: pubkey"
         nknAddress: String!,
         tag: WalletTag = LOGIN_CODE
@@ -178,6 +180,10 @@ type RootMutationType {
     deleteOrganization(organizationId: ID!): Organization
     "Delete a wallet"
     deleteWallet(id: ID!): Wallet
+    "delete file by id, return the actual number of deleted files."
+    driveDeleteFile(id: String!, space: DriveSpace!): Int
+    "delete file by ids, return the actual number of deleted files."
+    driveDeleteFiles(ids: [String]!, space: DriveSpace!): Int
     "upload file by exist hash"
     driveUploadByHash(fullName: [String]!, hash: String!, space: DriveSpace = PRIVATE): DriveUserFile
     "Edit current user"
@@ -285,27 +291,19 @@ type RootQueryType {
     "Get channel by id, if channel is public or current user in this channel"
     channel(id: ID!): Channel
     driveListFiles(
-        "null represent the root directory"
-        parentId: ID,
+        "[] represent the root directory"
+        dirFullName: [String],
+        "'root' represent the root directory"
+        dirId: String,
         space: DriveSpace = PRIVATE
     ): [DriveUserFile]
     "Get offline messages"
     imOfflineMessages(
-        """
-
-        The maximum number of messages to be returned; must be positive and can't be
-        greater than 100. If the offset is negative, the limit must be greater or
-        equal to -offset. Fewer messages may be returned than specified by the
-        limit, even if the end of the message history has not been reached.
-        """
+        "The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is negative, the limit must be greater or equal to -offset. Fewer messages may be returned than specified by the limit, even if the end of the message history has not been reached."
         limit: Int!,
         "Identifier of the message starting from which history must be fetched; use 0 to get results from the last message."
         messageId: Snowflake!,
-        """
-
-        Specify 0 to get results from exactly the from_message_id or a negative
-        offset up to 99 to get additionally some newer messages.
-        """
+        "Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get additionally some newer messages."
         offset: Int!,
         "user session db id"
         userSessionId: ID!
@@ -385,7 +383,7 @@ type Wallet {
 }
 
 type WalletInfo {
-    address: String
+    encryptedWallet: String
     identifier: String
     publicKey: String
 }

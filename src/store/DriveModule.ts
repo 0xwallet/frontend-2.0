@@ -1,8 +1,15 @@
 import {Action, getModule, Module, VuexModule} from 'vuex-module-decorators'
 import {store} from '@/store/index'
 import {DriveSpace, File, FileType} from '@/store/model/File'
-import {driveListFilesService, driveUploadByHashService} from '@/service/DriveService'
+import {
+    driveDeleteFileService,
+    driveDeleteFilesService,
+    driveListFilesService,
+    driveUploadByHashService
+} from '@/service/DriveService'
 import {formatDate} from '@/common/DateUtil'
+import {CommonModule} from '@/store/CommonModule'
+import {ToastColor} from '@/store/model/Toast'
 
 @Module({
     dynamic: true,
@@ -12,22 +19,38 @@ import {formatDate} from '@/common/DateUtil'
 class DriveModulePrivate extends VuexModule {
 
     @Action
-    getDriveListFiles(params: { parentId: string | null, space: DriveSpace }) {
+    getDriveListFiles(params: { dirFullName?: string[], dirId?: string, space: DriveSpace }) {
         return new Promise(((resolve: (fileList: File[]) => void, reject) => {
             driveListFilesService(params).then(res => {
                 let fileList = Array<File>()
-                res.data.driveListFiles.forEach((item: any) => {
-                    let fileName = item.fullName[item.fullName.length - 1]
-                    let file = new File()
-                    file.type = file.getType(fileName)
-                    file.id = item.id
-                    file.name = fileName
-                    file.hash = item.hash
-                    file.info = item.info
-                    file.time = formatDate(item.updatedAt)
-                    fileList.push(file)
+                res.data.driveListFiles.forEach((item: any, index: number) => {
+                    if (index == 0) {
+                        let fileName = '..'
+                        let file = new File()
+                        file.type = FileType.UP
+                        file.id = item.id
+                        file.name = fileName
+                        file.hash = item.hash
+                        file.info = item.info
+                        file.time = ''
+                        fileList.push(file)
+                    } else if (index == 1) {
+                        // console.log(index)
+                    } else {
+                        let fileName = item.fullName[item.fullName.length - 1]
+                        let file = new File()
+                        file.type = item.isDir ? FileType.DIR : file.getType(fileName)
+                        file.id = item.id
+                        file.name = fileName
+                        file.hash = item.hash
+                        file.info = item.info
+                        file.isDir = item.isDir
+                        file.fullName = item.fullName
+                        file.insertedAt = item.insertedAt
+                        file.time = formatDate(item.updatedAt)
+                        fileList.push(file)
+                    }
                 })
-                console.log("getDriveListFiles",fileList)
                 resolve(fileList)
             }).catch(error => reject(error))
         }))
@@ -42,6 +65,34 @@ class DriveModulePrivate extends VuexModule {
         return new Promise(((resolve, reject) => {
             driveUploadByHashService(param).then(res => {
                 console.log(res)
+                resolve()
+            }).catch(error => reject(error))
+        }))
+    }
+
+
+    @Action
+    driveDeleteFile(param: {
+        id: string,
+        space: DriveSpace,
+    }) {
+        return new Promise(((resolve, reject) => {
+            driveDeleteFileService(param).then(_ => {
+                CommonModule.toast({content: 'delete successful', color: ToastColor.SUCCESS})
+                resolve()
+            }).catch(error => reject(error))
+        }))
+    }
+
+    @Action
+    driveDeleteFiles(param: {
+        ids: string[],
+        space: DriveSpace,
+    }) {
+        return new Promise(((resolve, reject) => {
+            driveDeleteFilesService(param).then(_ => {
+                CommonModule.toast({content: 'delete successful', color: ToastColor.SUCCESS})
+                resolve()
             }).catch(error => reject(error))
         }))
     }

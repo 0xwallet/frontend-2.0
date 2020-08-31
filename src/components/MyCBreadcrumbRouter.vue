@@ -23,30 +23,25 @@
                     return route.name || (route.meta && route.meta.label)
                 })
                 const items = []
-                let isDrive = false
+                const path = this.$route.path
+                const paths = path.split("/")
+                paths.shift()
+                paths.shift()
                 routes.map(route => {
                     const meta = route.meta || {}
-                    if (route.path === '/drive/:drive?') {
-                        isDrive = true
-                    }
                     items.push({
                         to: route,
                         text: this.$t(meta.label || route.name)
                     })
                 })
-                if (isDrive) {
-                    let paramString = this.$route.params.drive
-                    if(paramString){
-                        let params = paramString.split(".")
-                        params.map((item, index) => {
-                            if (index !== 0) {
-                                items.push({
-                                    text: item
-                                })
-                            }
+                paths.map(route => {
+                    if (route !== '') {
+                        items.push({
+                            to: route,
+                            text: route
                         })
                     }
-                }
+                })
                 return items
             },
             props() {

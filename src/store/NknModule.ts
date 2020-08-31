@@ -96,31 +96,36 @@ class NknModulePrivate extends VuexModule {
                                 this.setNknConnectStatus(true)
                             })
                         }))
-                    }else{
+                    } else {
                         this.setNknClient(cli[0])
                         this.setNknConnectStatus(true)
                     }
                     console.log('nknClient', this.nknClient)
                 })
+            } else {
+                // 如果不存在SEED, 就重新创建一个
+
             }
         }
     }
 
     @Action
-    uploadFile(file: any) {
+    uploadFile(params: {
+        file: any, paths: string[], space: string
+    }) {
         let timeStart = Date.now()
 
         let fileSize = 0
         const writeChunkSize = 1024
         let client = this.nknClient
         let _this = this
-        let fileName = file.name
+        let fileName = params.file.name
 
 
         _this.setUploading(true)
 
-        if (file) {
-            fileSize = file.size
+        if (params.file) {
+            fileSize = params.file.size
             reading()
         }
 
@@ -131,7 +136,7 @@ class NknModulePrivate extends VuexModule {
                 result = this.result
                 await write(result)
             }
-            reader.readAsArrayBuffer(file)
+            reader.readAsArrayBuffer(params.file)
         }
 
 
@@ -145,8 +150,9 @@ class NknModulePrivate extends VuexModule {
             let hash = CryptoJS.SHA256(wordArray).toString()
             // console.log('hash', hash)
 
-            let fullName = []
+            let fullName = params.paths
             fullName.push(fileName)
+
             DriveModule.driveUploadByHash({
                 fullName: fullName,
                 hash    : hash,
@@ -154,13 +160,13 @@ class NknModulePrivate extends VuexModule {
             }).then(() => CommonModule.toast({content: '上传成功'})
             ).catch(async () => {
                 let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
-                console.log(session)
 
                 const object = {
                     File    : array,
-                    FileName: fileName,
+                    FullName: fullName,
                     FileSize: fileSize,
-                    UserId  : UserModule.userInfo.id
+                    UserId  : UserModule.userInfo.id,
+                    Space   : params.space
                 }
 
                 console.log(object)
@@ -182,14 +188,14 @@ class NknModulePrivate extends VuexModule {
                         buf[i] = encoded[i + n]
                     }
 
+                    _this.setUploadProgress(n / encoded.length * 100)
+
                     await session.write(buf)
 
                     if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
                         console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
                             (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000000000, 'B/s')
 
-                        let current = n + buf.length
-                        _this.setUploadProgress(current / encoded.length * 100)
 
                         let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
 

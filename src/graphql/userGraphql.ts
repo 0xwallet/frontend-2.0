@@ -37,7 +37,7 @@ export const meQuery = gql`
                 id
                 description
                 info{
-                    address
+                    encryptedWallet
                     identifier
                     publicKey
                 }
@@ -45,7 +45,7 @@ export const meQuery = gql`
                 type
             }
             setting{
-                currency
+                currency\
             }
             driveSetting{
                 availableSpace

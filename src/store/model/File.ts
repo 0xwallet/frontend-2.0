@@ -5,8 +5,10 @@ export class File {
     type !: FileType
     active: boolean = false
     info !: DriveUserFileInfo
-    time !: string
-
+    fullName ?: string[]
+    time ?: string
+    insertedAt ?: string
+    isDir: boolean = false
 
     getSize() {
         return formatBytes(this.info.size)
@@ -38,6 +40,7 @@ export class File {
             case 'jpeg':
             case 'jpg':
             case 'png':
+            case 'gif':
                 return FileType.IMG
             case 'pdf':
                 return FileType.PDF
@@ -65,6 +68,7 @@ export enum FileType {
     MD,
     LOCK,
     PERSON,
+    LOADING,
 }
 
 function formatBytes(bytes: number): string {

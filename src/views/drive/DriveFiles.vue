@@ -2,10 +2,10 @@
     <div>
         <main-card-component :title="''">
             <div slot="left" style="float: left;font-size: 16px;margin-right: 20px;margin-top: 5px"
-                 @mouseenter="txIDOver" @mouseleave="txIDOut">
-                <div style="display: flex;">
+            >
+                <div style="display: flex;" @mouseleave="txIDOut">
                     <div style="margin: 0 5px">{{ currentFolder }} |</div>
-                    <div v-if="!showTxID" style="margin-top: 2px;">
+                    <div v-if="!showTxID" style="margin-top: 2px;" @mouseenter="txIDOver">
                         <hash-component
                                 :hash="'be8f08d7f519eb863a68cf292ca51dbab7c9b49f50a96d1232db32e432db3634'"></hash-component>
                     </div>
@@ -13,18 +13,20 @@
                         be8f08d7f519eb863a68cf292ca51dbab7c9b49f50a96d1232db32e432db3634
                     </div>
                     <div style="margin-left: 10px;margin-top: -1px">
-                        <CIcon name="cil-copy"></CIcon>
+                        <CIcon name="cil-copy" v-c-tooltip.hover="'Copy txID'"></CIcon>
                     </div>
                 </div>
             </div>
             <div slot="right-action" class="float-right files-action">
-                <CButton class="btn" @click="checkAllFiles">{{ checkFiles.length === files.length ? 'Inverse' : `Check
+                <CButton class="btn" v-if="currentFolder !== 'Drive'" @click="checkAllFiles">{{ checkFiles.length ===
+                    files.length ? 'Inverse' : `Check
                     All` }}
                 </CButton>
-                <CButton class="btn btn-info" @click="choiceFile">Upload</CButton>
-                <CButton class="btn btn-success">New</CButton>
-                <CButton class="btn btn-light">Refresh</CButton>
-                <input type="file" ref="choiceFile" hidden @change="fileChange($event)">
+                <CButton v-if="currentFolder !== 'Drive'" class="btn btn-info"
+                         @click="$refs.uploadFileComponent.showModal()">Upload
+                </CButton>
+                <CButton v-if="currentFolder !== 'Drive'" class="btn btn-success">New</CButton>
+                <CButton class="btn">Refresh</CButton>
             </div>
 
             <CProgress v-if="isUploading" color="success"
@@ -32,19 +34,18 @@
                        :value="uploadProgress"
                        animated
                        size="sm">
-                <div class="upload-speed">
-                    {{ uploadSpeed }}
-                </div>
+
             </CProgress>
-
-
+            <div class="upload-speed" v-if="isUploading">
+                {{ uploadSpeed }}
+            </div>
             <div>
                 <table class="file-table">
                     <tr>
                         <th class="file-checkbox">
                             <div class="checkbox" @click="checkAllFiles">
                                 <label>
-                                    <input type="checkbox">
+                                    <input :disabled="currentFolder === 'Drive'" type="checkbox">
                                 </label>
                             </div>
                         </th>
@@ -57,15 +58,16 @@
                     <tr :class="[darkMode?'files-item-dark':'files-item']" v-for="(file,index) in files" :key="index"
                         @mouseenter="mouseOver(file)"
                         @mouseleave="mouseOut(file)" @click="clickFile(file)">
-                        <td class="file-checkbox">
+                        <td class="file-checkbox" v-if="file.type !== 8">
                             <div v-if="file.type === 4" style="height: 40px"></div>
                             <div class="checkbox" v-if="file.type !== 4">
                                 <label>
-                                    <input type="checkbox" name="checkFile" v-model="checkFiles" :value="file.id">
+                                    <input type="checkbox" :disabled="currentFolder === 'Drive'" name="checkFile"
+                                           v-model="checkFiles" :value="file.id">
                                 </label>
                             </div>
                         </td>
-                        <td class="file-name">
+                        <td class="file-name" v-if="file.type !== 8">
                             <div v-if="file">
                                 <div class="image-box">
                                     <CImg class="image"
@@ -74,7 +76,7 @@
                             </div>
                             <div class="text">{{ file.name }}</div>
                         </td>
-                        <td class="file-option">
+                        <td class="file-option" v-if="file.type !== 8">
                             <div class="options" v-if="file.type !== 4 && file.active">
                                 <div>
                                     <CIcon v-c-tooltip.hover="'share'" name="cil-share-alt"></CIcon>
@@ -97,13 +99,13 @@
                                 <div>
                                     <CIcon v-c-tooltip.hover="$t('drive.files.upload')" name="cil-cloud-upload"></CIcon>
                                 </div>
-                                <div>
+                                <div @click="deleteFile(file)">
                                     <CIcon v-c-tooltip.hover="$t('drive.files.delete')" class="delete"
                                            name="cil-trash"></CIcon>
                                 </div>
                             </div>
                         </td>
-                        <td class="file-hash">
+                        <td class="file-hash" v-if="file.type !== 8">
                             <div class="hash" v-if="file.type !== 4 && file.hash">
                                 <hash-component :hash="file.hash" :active="false"></hash-component>
                                 <div class="copy">
@@ -111,20 +113,24 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="file-size">
-                            <div class="size" style="margin-top: 10px">{{ file.getSize() }}</div>
+                        <td class="file-size" v-if="file.type !== 8">
+                            <div v-if="file.type !== 4" class="size" style="margin-top: 10px">{{ file.getSize() }}</div>
                         </td>
-                        <td class="file-time">
+                        <td class="file-time" v-if="file.type !== 8">
                             <div class="time">
                                 <code>
                                     {{ file.time }}
                                 </code>
                             </div>
                         </td>
+                        <td colspan="6" v-if="file.type === 8" class="file-loading">
+                            <CSpinner grow/>
+                        </td>
                     </tr>
                 </table>
             </div>
         </main-card-component>
+        <upload-file-component ref="uploadFileComponent" :path="currentPath" :public="space === 'PUBLIC'"></upload-file-component>
     </div>
 </template>
 
@@ -137,26 +143,34 @@
     import HashComponent from '@/components/HashComponent.vue'
     import {DriveModule} from '@/store/DriveModule'
     import {UserModule} from '@/store/UserModule'
+    import UploadFileComponent from '@/views/drive/UploadFileComponent.vue'
 
 
     @Component({
-        components: {HashComponent, MainCardComponent}
+        components: {UploadFileComponent, HashComponent, MainCardComponent}
     })
     export default class DriveFiles extends Vue {
 
-        $refs !: {
-            uploadFile: any,
-            choiceFile: HTMLInputElement
-        }
 
         showTxID = false
         files: Array<File> = []
         checkFiles: Array<string> = []
+        space : DriveSpace = DriveSpace.PUBLIC
 
         mounted() {
+            this.loadFiles()
+        }
 
-            let drivePath = this.$route.params.drive
-            if (!drivePath) {
+        loadFiles() {
+            this.files = []
+
+            const path = this.$route.path
+            const paths = path.split('/')
+            paths.shift()
+            paths.shift()
+            console.log(paths)
+
+            if (paths.length < 1 || paths[0] == '') {
                 let file = new File()
                 file.id = '1'
                 file.type = FileType.LOCK
@@ -173,10 +187,6 @@
                 file.info.size = 0
                 this.files.push(file)
             } else {
-                console.log(drivePath)
-                let paths = drivePath.split('.')
-                console.log(paths)
-
                 let space: DriveSpace
 
                 if (paths[0] == 'MetaNet') {
@@ -184,24 +194,23 @@
                 } else {
                     space = DriveSpace.PRIVATE
                 }
+                this.space = space
 
-                this.files = []
-                console.log('files', this.files)
+                let file = new File()
+                file.id = '-100'
+                file.type = FileType.LOADING
+                file.info = new DriveUserFileInfo()
+                file.name = '..'
+                file.info.size = 0
+                this.files.push(file)
 
                 setTimeout(() => {
-
-                    DriveModule.getDriveListFiles({parentId: null, space: space}).then((fileList) => {
-                        console.log(fileList)
-                        let file = new File()
-                        file.id = '0'
-                        file.type = FileType.DIR
-                        file.info = new DriveUserFileInfo()
-                        file.name = '..'
-                        file.info.size = 0
-                        this.files.push(file)
-
+                    this.files.pop()
+                    let fullName = paths
+                    fullName.shift()
+                    console.log('fullName', fullName)
+                    DriveModule.getDriveListFiles({dirFullName: fullName, space: space}).then((fileList) => {
                         fileList.forEach(fileItem => {
-                            console.log('fileItem', fileItem)
                             this.files.push(fileItem)
                         })
                     })
@@ -209,12 +218,21 @@
             }
         }
 
+        get currentPath(): string[] | null {
+            let drivePath = this.$route.path
+            let paths = drivePath.split('/')
+            paths.shift()
+            paths.shift()
+            paths.shift()
+            return paths
+        }
+
         get currentFolder(): string {
-            let drivePath = this.$route.params.drive
+            let drivePath = this.$route.path
 
-            let paths = drivePath ? drivePath.split('.') : []
+            let paths = drivePath ? drivePath.split('/') : []
 
-            if (paths.length == 0) {
+            if (paths.length == 2) {
                 return 'Drive'
             } else {
                 return paths[paths.length - 1]
@@ -225,24 +243,56 @@
             location.href = 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/public/' + file.id + '/' + file.name
         }
 
+        deleteFile(file: File) {
+            console.log(file)
+
+            DriveModule.driveDeleteFile({
+                id   : file.id,
+                space: this.space
+            }).then(_ => {
+                this.loadFiles()
+            }).catch(_ => {
+                this.loadFiles()
+            })
+        }
+
+        deleteFiles() {
+
+            DriveModule.driveDeleteFiles({
+                ids  : [],
+                space: DriveSpace.PUBLIC
+            }).then(_ => {
+                this.loadFiles()
+            }).catch(_ => {
+                this.loadFiles()
+            })
+        }
+
         clickFile(file: File) {
             console.log(file)
-            let drivePath = this.$route.params.drive
 
-            let paths = drivePath ? drivePath.split('.') : []
+            let drivePath = this.$route.path
+            let paths = drivePath ? drivePath.split('/') : []
+            paths.shift()
+            paths.shift()
 
             if (file.id == '1' || file.id == '2') {
+
                 this.$router.push('/drive/' + file.name)
                 return
             }
-            if (file.id == '0') {
+            if (file.type == FileType.UP) {
                 // 回到上一级
                 if (paths.length == 1) {
                     this.$router.push('/drive')
                 } else {
                     paths.pop()
-                    this.$router.push('/drive/' + paths.join('.'))
+                    this.$router.push('/drive/' + paths.join('/'))
                 }
+            }
+            if (file.type == FileType.DIR) {
+                paths.push(file.name)
+                this.$router.push({path: '/drive/' + paths.join('/')})
             }
         }
 
@@ -281,14 +331,6 @@
             }
         }
 
-        choiceFile() {
-            this.$refs.choiceFile.dispatchEvent(new MouseEvent('click'))
-        }
-
-        fileChange(input: any) {
-            let file = input.target.files[0]
-            NknModule.uploadFile(file)
-        }
 
         get isUploading(): boolean {
             return NknModule.isUploading
@@ -324,7 +366,7 @@
 
         .files-item
             &:hover
-                background linear-gradient(to right, rgba(250, 250, 250, 1), rgba(244, 244, 244, 1), white)
+                background linear-gradient(to right, white, rgba(244, 244, 244, 1), white)
 
         .files-item-dark
             &:hover
@@ -400,9 +442,12 @@
                 margin-top 3px
 
     .upload-speed
-        position absolute
+        /*position absolute*/
         margin-top 8px
         width 100%
+        text-align center
+
+    .file-loading
         text-align center
 
 </style>

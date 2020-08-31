@@ -1,13 +1,20 @@
 import Client from '@/graphql/apollo'
 import {DriveSpace} from '@/store/model/File'
-import {driveListFilesQuery, driveUploadByHashMutation} from '@/graphql/driveGraphql'
+import {
+    driveDeleteFileMutation,
+    driveDeleteFilesMutation,
+    driveListFilesQuery,
+    driveUploadByHashMutation
+} from '@/graphql/driveGraphql'
 
 export const driveListFilesService = (param: {
-    parentID?: string,
+    dirFullName?: string[],
+    dirId?: string,
     space: DriveSpace,
 }) => Client.getInstance().query({
-    query    : driveListFilesQuery,
-    variables: param
+    query      : driveListFilesQuery,
+    variables  : param,
+    fetchPolicy: 'network-only'
 })
 
 
@@ -18,4 +25,21 @@ export const driveUploadByHashService = (param: {
 }) => Client.getInstance().mutate({
     mutation : driveUploadByHashMutation,
     variables: param
+})
+
+export const driveDeleteFileService = (params: {
+    id: string,
+    space: DriveSpace,
+}) => Client.getInstance().mutate({
+    mutation : driveDeleteFileMutation,
+    variables: params,
+})
+
+
+export const driveDeleteFilesService = (params: {
+    ids: string[],
+    space: DriveSpace,
+}) => Client.getInstance().mutate({
+    mutation : driveDeleteFilesMutation,
+    variables: params,
 })

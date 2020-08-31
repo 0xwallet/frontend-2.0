@@ -39,7 +39,7 @@ const router = new Router({
                     component: () => import('@/views/Organization.vue')
                 },
                 {
-                    path     : 'drive/:drive?',
+                    path     : 'drive*',
                     name     : 'Drive',
                     component: () => import('@/views/Drive.vue')
                 }
