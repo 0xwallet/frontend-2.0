@@ -9,6 +9,7 @@ import {Wallet, WalletTag} from '@/store/model/Wallet'
 
 
 export const bindNknAddressService = (params: {
+    encryptedWallet?: string,
     nknAddress: string,
     code?: string,
     tag?: WalletTag

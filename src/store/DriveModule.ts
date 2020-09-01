@@ -77,7 +77,7 @@ class DriveModulePrivate extends VuexModule {
         space: DriveSpace,
     }) {
         return new Promise(((resolve, reject) => {
-            driveDeleteFileService(param).then(_ => {
+            driveDeleteFileService(param).then(() => {
                 CommonModule.toast({content: 'delete successful', color: ToastColor.SUCCESS})
                 resolve()
             }).catch(error => reject(error))
@@ -90,7 +90,7 @@ class DriveModulePrivate extends VuexModule {
         space: DriveSpace,
     }) {
         return new Promise(((resolve, reject) => {
-            driveDeleteFilesService(param).then(_ => {
+            driveDeleteFilesService(param).then(() => {
                 CommonModule.toast({content: 'delete successful', color: ToastColor.SUCCESS})
                 resolve()
             }).catch(error => reject(error))

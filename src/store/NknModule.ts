@@ -12,6 +12,8 @@ import {CommonModule} from '@/store/CommonModule'
 import {encode} from '@msgpack/msgpack'
 import {DriveModule} from '@/store/DriveModule'
 import {DriveSpace} from '@/store/model/File'
+import has = Reflect.has
+import {PasswordModule} from '@/store/PasswordModule'
 
 const nkn = require('nkn-sdk/dist/nkn.js')
 const CryptoJS = require('crypto-js/crypto-js.js')
@@ -57,14 +59,19 @@ class NknModulePrivate extends VuexModule {
 
     @Action
     getNknClient(params: {
-        seed?: string
+        seed?: string,
+        password?: string
     }) {
-        return new nkn.MultiClient({numSubClients: 4, seed: params.seed})
+        return params.password ? new nkn.Wallet({
+            seed    : params.seed,
+            password: params.password,
+        }) : new nkn.MultiClient({numSubClients: 4, seed: params.seed})
     }
 
     @Action
     bindNknAddress(params: {
         nknAddress: string,
+        encryptedWallet?: string,
         code?: string,
         tag?: WalletTag
     }) {
@@ -78,35 +85,84 @@ class NknModulePrivate extends VuexModule {
 
     @Action
     connectNkn() {
-        console.log('nknClient', this.nknClient)
+        console.log('正在连接nkn服务器')
         if (!this.nknClient) {
             let seed = localStorage.getItem('nkn-seed')
             if (seed) {
-                this.getNknClient({
-                    seed: seed
-                }).then(async (cli: any) => {
-                    console.log(UserModule.userInfo)
-                    console.log('当前使用NKN:', cli)
-
-                    if (!(cli instanceof Array)) {
-                        await new Promise((resolve => {
-                            cli.onConnect(async () => {
-                                resolve()
-                                this.setNknClient(cli)
-                                this.setNknConnectStatus(true)
-                            })
-                        }))
-                    } else {
-                        this.setNknClient(cli[0])
-                        this.setNknConnectStatus(true)
-                    }
-                    console.log('nknClient', this.nknClient)
-                })
+                console.log('当前存在SEED，使用SEED创建连接')
+                this.getAndSetNknClient(seed)
             } else {
-                // 如果不存在SEED, 就重新创建一个
-
+                console.log('当前不存在SEED')
+                let hasMsgWallet: boolean = false
+                let msgWallet: Wallet = new Wallet()
+                UserModule.userInfo.wallets?.forEach((wallet: Wallet) => {
+                    hasMsgWallet = wallet.tags!!.some(tag => {
+                        return tag == WalletTag.MESSAGE
+                    })
+                    if (hasMsgWallet) {
+                        msgWallet = wallet
+                    }
+                })
+                if (hasMsgWallet) {
+                    // 当前存在MessageWallet
+                    if (!msgWallet.info.encryptedWallet || msgWallet.info.encryptedWallet.length < 10) {
+                        // 服务器上的钱包数据异常，需要重写创建一个钱包，需要提示用户输入密码
+                        console.log('当前服务器的MessageWallet无法正常使用，将重新创建，需要提示用户输入密码')
+                        PasswordModule.setPasswordComponent({
+                            show    : true,
+                            title   : 'Please enter your password',
+                            content : 'Since it was detected that you have changed the device or cleared the cache, please re-enter the password',
+                            callback: (password: string) => {
+                                console.log(password)
+                                this.bindAndSetDefault({
+                                    password: password,
+                                }).then(() => {
+                                    console.log('重新创建MessageWallet成功')
+                                })
+                            }
+                        })
+                    }
+                } else {
+                    console.log('当前服务器存在MessageWallet，将使用密码解密，需要提示用户输入密码')
+                    PasswordModule.setPasswordComponent({
+                        show    : true,
+                        title   : 'Please enter your password',
+                        content : 'Since it was detected that you have changed the device or cleared the cache, please re-enter the password',
+                        callback: (password: string) => {
+                            let wallet = nkn.Wallet.fromJSON(msgWallet.info.encryptedWallet, {password: password})
+                            console.log('解密后的Wallet', wallet)
+                            let seed = wallet.account.key.seed
+                            localStorage.setItem('nkn-seed', seed)
+                            this.getAndSetNknClient(seed)
+                        }
+                    })
+                }
             }
         }
+    }
+
+    @Action
+    getAndSetNknClient(seed: string) {
+        this.getNknClient({
+            seed: seed
+        }).then(async (cli: any) => {
+            console.log(UserModule.userInfo)
+            console.log('当前使用NKN:', cli)
+
+            if (!(cli instanceof Array)) {
+                await new Promise((resolve => {
+                    cli.onConnect(async () => {
+                        resolve()
+                        this.setNknClient(cli)
+                        this.setNknConnectStatus(true)
+                    })
+                }))
+            } else {
+                this.setNknClient(cli[0])
+                this.setNknConnectStatus(true)
+            }
+            console.log('NKN服务器连接成功：', this.nknClient)
+        })
     }
 
     @Action
@@ -224,8 +280,6 @@ class NknModulePrivate extends VuexModule {
         tag: WalletTag,
         walletId: string | number,
     }) {
-        console.log('setDefault')
-        console.log(params)
         return new Promise(((resolve: (wallet: Wallet) => void, reject) => {
             setDefaultNknAddressService(params).then(res => {
                 UserModule.me().then()
@@ -241,10 +295,18 @@ class NknModulePrivate extends VuexModule {
         loginCode?: string,
     }) {
         return new Promise(((resolve, reject) => {
-            this.getNknClient({}).then((cli: any) => {
+            this.getNknClient({password: params.password}).then((cli: any) => {
+                console.log('成功创建NknClient', cli)
+                // 这里获取到了加密后的NknClient
+                let walletJson = JSON.stringify(cli.toJSON())
+                console.log('加密后的walletJson为：', walletJson)
+                let seed = cli.account.key.seed
+                let address = cli.account.address
+
                 this.bindNknAddress({
-                    nknAddress: cli.addr,
-                    tag       : WalletTag.MESSAGE,
+                    encryptedWallet: walletJson,
+                    nknAddress     : address,
+                    tag            : WalletTag.MESSAGE,
                 }).then((res) => {
                     this.setDefaultNknAddress({
                         password: params.password,
@@ -252,13 +314,14 @@ class NknModulePrivate extends VuexModule {
                         walletId: res.id
                     }).then(() => {
                         // 存起来
-                        localStorage.setItem('nkn-seed', cli.key.seed)
+                        localStorage.setItem('nkn-seed', seed)
                         resolve()
                     }).catch(error => reject(error))
                 }).catch(error => reject(error))
             })
         }))
     }
+
 
     @Action
     deleteWallet(param: {

@@ -15,6 +15,7 @@
                 </main>
                 <CElementCover v-if="pageLoading"/>
                 <TheFooter/>
+                <input-password-component></input-password-component>
             </div>
         </CWrapper>
     </div>
@@ -29,9 +30,11 @@
     import {CommonModule} from '@/store/CommonModule'
     import TheAside from '@/containers/TheAside.vue'
     import MessageComponent from '@/components/MessageComponent.vue'
+    import InputPasswordComponent from '@/components/InputPasswordComponent.vue'
 
     @Component({
         components: {
+            InputPasswordComponent,
             MessageComponent,
             TheAside,
             TheSidebar,

@@ -14,6 +14,7 @@ class CommonModulePrivate extends VuexModule {
     globalLoading = true
     pageLoading = true
 
+
     /**
      * 显示全局加载
      */

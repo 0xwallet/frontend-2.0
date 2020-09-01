@@ -130,7 +130,8 @@
                 </table>
             </div>
         </main-card-component>
-        <upload-file-component ref="uploadFileComponent" :path="currentPath" :public="space === 'PUBLIC'"></upload-file-component>
+        <upload-file-component ref="uploadFileComponent" :path="currentPath"
+                               :public="space === 'PUBLIC'"></upload-file-component>
     </div>
 </template>
 
@@ -155,7 +156,7 @@
         showTxID = false
         files: Array<File> = []
         checkFiles: Array<string> = []
-        space : DriveSpace = DriveSpace.PUBLIC
+        space: DriveSpace = DriveSpace.PUBLIC
 
         mounted() {
             this.loadFiles()
@@ -249,9 +250,9 @@
             DriveModule.driveDeleteFile({
                 id   : file.id,
                 space: this.space
-            }).then(_ => {
+            }).then(() => {
                 this.loadFiles()
-            }).catch(_ => {
+            }).catch(() => {
                 this.loadFiles()
             })
         }
@@ -261,9 +262,9 @@
             DriveModule.driveDeleteFiles({
                 ids  : [],
                 space: DriveSpace.PUBLIC
-            }).then(_ => {
+            }).then(() => {
                 this.loadFiles()
-            }).catch(_ => {
+            }).catch(() => {
                 this.loadFiles()
             })
         }

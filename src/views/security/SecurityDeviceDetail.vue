@@ -43,11 +43,12 @@
 <script lang="ts">
     import Vue from 'vue'
     import Component from 'vue-class-component'
-    import {Wallet} from '@/store/model/Wallet'
     import Clipboard from 'clipboard'
     import {CommonModule} from '@/store/CommonModule'
     import {ToastColor} from '@/store/model/Toast'
     import SecurityBindLoginCode from '@/views/security/SecurityBindLoginCode.vue'
+    // eslint-disable-next-line no-unused-vars
+    import {Wallet} from '@/store/model/Wallet'
 
     @Component({
         components: {SecurityBindLoginCode}
