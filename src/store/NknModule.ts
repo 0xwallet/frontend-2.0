@@ -96,16 +96,18 @@ class NknModulePrivate extends VuexModule {
                 let hasMsgWallet: boolean = false
                 let msgWallet: Wallet = new Wallet()
                 UserModule.userInfo.wallets?.forEach((wallet: Wallet) => {
-                    hasMsgWallet = wallet.tags!!.some(tag => {
+                    wallet.tags!!.some(tag => {
                         if (tag == WalletTag.MESSAGE) {
                             msgWallet = wallet
+                            hasMsgWallet = true
                             return true
                         }
+                        return false
                     })
                 })
                 if (hasMsgWallet) {
                     // 当前存在MessageWallet
-                    if (!msgWallet.info.encryptedWallet || msgWallet.info.encryptedWallet.length < 10) {
+                    if (!msgWallet.info?.encryptedWallet || msgWallet.info.encryptedWallet.length < 10) {
                         // 服务器上的钱包数据异常，需要重写创建一个钱包，需要提示用户输入密码
                         console.log('当前服务器的MessageWallet无法正常使用，将重新创建，需要提示用户输入密码')
                         PasswordModule.setPasswordComponent({
@@ -121,19 +123,34 @@ class NknModulePrivate extends VuexModule {
                                 })
                             }
                         })
+                    } else {
+                        console.log('当前服务器的MessageWallet能正常使用，将直接解密，需要提示用户输入密码')
+                        PasswordModule.setPasswordComponent({
+                            show    : true,
+                            title   : 'Please enter your password',
+                            content : 'Since it was detected that you have changed the device or cleared the cache, please re-enter the password',
+                            callback: (password: string) => {
+                                let wallet = nkn.Wallet.fromJSON(msgWallet.info.encryptedWallet, {password: password})
+                                console.log('解密后的Wallet', wallet)
+                                let seed = wallet.account.key.seed
+                                localStorage.setItem('nkn-seed', seed)
+                                this.getAndSetNknClient(seed)
+                            }
+                        })
                     }
                 } else {
-                    console.log('当前服务器存在MessageWallet，将使用密码解密，需要提示用户输入密码', msgWallet)
+                    console.log('当前服务器不存在MessageWallet，将使用密码创建，需要提示用户输入密码', msgWallet)
                     PasswordModule.setPasswordComponent({
                         show    : true,
                         title   : 'Please enter your password',
                         content : 'Since it was detected that you have changed the device or cleared the cache, please re-enter the password',
                         callback: (password: string) => {
-                            let wallet = nkn.Wallet.fromJSON(msgWallet.info.encryptedWallet, {password: password})
-                            console.log('解密后的Wallet', wallet)
-                            let seed = wallet.account.key.seed
-                            localStorage.setItem('nkn-seed', seed)
-                            this.getAndSetNknClient(seed)
+                            console.log(password)
+                            this.bindAndSetDefault({
+                                password: password,
+                            }).then(() => {
+                                console.log('重新创建MessageWallet成功')
+                            })
                         }
                     })
                 }
