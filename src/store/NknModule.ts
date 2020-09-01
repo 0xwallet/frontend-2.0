@@ -331,6 +331,7 @@ class NknModulePrivate extends VuexModule {
                         walletId: res.id
                     }).then(() => {
                         // 存起来
+                        this.getAndSetNknClient(seed)
                         localStorage.setItem('nkn-seed', seed)
                         resolve()
                     }).catch(error => reject(error))
