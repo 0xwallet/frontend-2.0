@@ -123,7 +123,7 @@ class NknModulePrivate extends VuexModule {
                         })
                     }
                 } else {
-                    console.log('当前服务器存在MessageWallet，将使用密码解密，需要提示用户输入密码')
+                    console.log('当前服务器存在MessageWallet，将使用密码解密，需要提示用户输入密码', msgWallet)
                     PasswordModule.setPasswordComponent({
                         show    : true,
                         title   : 'Please enter your password',
