@@ -97,11 +97,11 @@ class NknModulePrivate extends VuexModule {
                 let msgWallet: Wallet = new Wallet()
                 UserModule.userInfo.wallets?.forEach((wallet: Wallet) => {
                     hasMsgWallet = wallet.tags!!.some(tag => {
-                        return tag == WalletTag.MESSAGE
+                        if (tag == WalletTag.MESSAGE) {
+                            msgWallet = wallet
+                            return true
+                        }
                     })
-                    if (hasMsgWallet) {
-                        msgWallet = wallet
-                    }
                 })
                 if (hasMsgWallet) {
                     // 当前存在MessageWallet
