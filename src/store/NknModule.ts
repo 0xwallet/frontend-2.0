@@ -65,7 +65,9 @@ class NknModulePrivate extends VuexModule {
         return params.password ? new nkn.Wallet({
             seed    : params.seed,
             password: params.password,
-        }) : new nkn.MultiClient({numSubClients: 4, seed: params.seed})
+        }) : new nkn.MultiClient({
+            numSubClients: 4, seed: params.seed,
+        })
     }
 
     @Action
@@ -165,6 +167,7 @@ class NknModulePrivate extends VuexModule {
         }).then(async (cli: any) => {
             console.log(UserModule.userInfo)
             console.log('当前使用NKN:', cli)
+            cli.shouldReconnect = true
 
             if (!(cli instanceof Array)) {
                 await new Promise((resolve => {
