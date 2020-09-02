@@ -167,6 +167,7 @@ class NknModulePrivate extends VuexModule {
         }).then(async (cli: any) => {
             console.log(UserModule.userInfo)
             console.log('当前使用NKN:', cli)
+            console.log('当前使用NKN pubkey:', cli.getPublicKey())
             cli.shouldReconnect = true
 
             if (!(cli instanceof Array)) {
@@ -321,7 +322,7 @@ class NknModulePrivate extends VuexModule {
                 let walletJson = JSON.stringify(cli.toJSON())
                 console.log('加密后的walletJson为：', walletJson)
                 let seed = cli.account.key.seed
-                let address = cli.account.address
+                let address = cli.getPublicKey()
 
                 this.bindNknAddress({
                     encryptedWallet: walletJson,
