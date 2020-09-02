@@ -72,16 +72,16 @@ const router = new Router({
     ]
 })
 
-// router.beforeEach((to, from, next) => {
-//     if (to.path != '/user/login' && to.path != '/user/register') {
-//         let token = UserModule.token || localStorage.getItem('auth-token')
-//         if (token == '' || token == 'null' || token == null) {
-//             CommonModule.showLoading()
-//             next('/user/login')
-//         }
-//     }
-//     CommonModule.showPageLoading()
-//     next()
-// })
+router.beforeEach((to, from, next) => {
+    if (to.path != '/user/login' && to.path != '/user/register') {
+        let token = UserModule.token || localStorage.getItem('auth-token')
+        if (token == '' || token == 'null' || token == null) {
+            CommonModule.showLoading()
+            next('/user/login')
+        }
+    }
+    CommonModule.showPageLoading()
+    next()
+})
 
 export default router

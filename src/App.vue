@@ -41,7 +41,6 @@
     export default class App extends Vue {
 
         mounted() {
-            document.cookie = '_ak=8598ebfe-53ba-40b2-66c9-c22b892d2fdd;domain=.owaf.io'
             UserModule.setToken(String(localStorage.getItem('auth-token')))
 
             // 获取界面设置
