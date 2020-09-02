@@ -233,7 +233,7 @@ class NknModulePrivate extends VuexModule {
             DriveModule.driveUploadByHash({
                 fullName: fullName,
                 hash    : hash,
-                space   : DriveSpace.PUBLIC,
+                space   : params.space == '1' ? DriveSpace.PUBLIC : DriveSpace.PRIVATE,
             }).then(() => CommonModule.toast({content: '上传成功'})
             ).catch(async () => {
                 let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
