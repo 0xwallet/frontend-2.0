@@ -131,7 +131,7 @@
             </div>
         </main-card-component>
         <upload-file-component ref="uploadFileComponent" :path="currentPath"
-                               :public="space === 'PUBLIC'"></upload-file-component>
+                               :public="space"></upload-file-component>
     </div>
 </template>
 

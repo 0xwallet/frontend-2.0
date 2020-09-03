@@ -28,6 +28,8 @@
     import {Prop} from 'vue-property-decorator'
     import {NknModule} from '@/store/NknModule'
     import {CommonModule} from '@/store/CommonModule'
+    // eslint-disable-next-line no-unused-vars
+    import {DriveSpace} from '@/store/model/File'
 
     @Component
     export default class UploadFileComponent extends Vue {
@@ -46,10 +48,11 @@
         path !: string[] | null
 
         @Prop()
-        public !: boolean
+        public !: DriveSpace
 
         showModal() {
             this.show = true
+            console.log('当前空间为：', this.public)
             if (this.path) {
                 this.pathString = '/' + (this.path ? this.path.join('/') : 'root') + (this.path.length > 0 ? '/' : '')
             }
@@ -74,7 +77,7 @@
             })
             console.log(paths)
             NknModule.uploadFile({
-                file: this.file, paths: paths, space: this.public ? '1' : '0'
+                file: this.file, paths: paths, space: this.public
             })
             this.show = false
         }

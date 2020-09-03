@@ -187,22 +187,22 @@ class NknModulePrivate extends VuexModule {
     }
 
     @Action
-    uploadFile(params: {
-        file: any, paths: string[], space: string
-    }) {
+    uploadFile({file, paths, space}:{
+        file: any, paths: string[], space: DriveSpace
+    } ) {
         let timeStart = Date.now()
 
         let fileSize = 0
         const writeChunkSize = 1024
         let client = this.nknClient
         let _this = this
-        let fileName = params.file.name
+        let fileName = file.name
 
 
         _this.setUploading(true)
 
-        if (params.file) {
-            fileSize = params.file.size
+        if (file) {
+            fileSize = file.size
             reading()
         }
 
@@ -213,7 +213,7 @@ class NknModulePrivate extends VuexModule {
                 result = this.result
                 await write(result)
             }
-            reader.readAsArrayBuffer(params.file)
+            reader.readAsArrayBuffer(file)
         }
 
 
@@ -227,13 +227,13 @@ class NknModulePrivate extends VuexModule {
             let hash = CryptoJS.SHA256(wordArray).toString()
             // console.log('hash', hash)
 
-            let fullName = params.paths
+            let fullName = paths
             fullName.push(fileName)
 
             DriveModule.driveUploadByHash({
                 fullName: fullName,
                 hash    : hash,
-                space   : params.space == '1' ? DriveSpace.PUBLIC : DriveSpace.PRIVATE,
+                space   : space,
             }).then(() => CommonModule.toast({content: '上传成功'})
             ).catch(async () => {
                 let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
@@ -243,7 +243,7 @@ class NknModulePrivate extends VuexModule {
                     FullName: fullName,
                     FileSize: fileSize,
                     UserId  : UserModule.userInfo.id,
-                    Space   : params.space
+                    Space   : space
                 }
 
                 console.log(object)
