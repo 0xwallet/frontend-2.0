@@ -25,6 +25,7 @@
                         :value.sync="$v.form.publicKey.$model"
                         :isValid="checkIfValid('publicKey')"
                 />
+                <video v-if="videoShow" ref="qr_video" id="video" class="qr_video"></video>
             </CForm>
             <div slot="footer">
                 <button type="button" class="btn btn-light" @click="commit()">
@@ -46,6 +47,9 @@
     import {ToastColor} from '@/store/model/Toast'
     import {UserModule} from '@/store/UserModule'
     import {WalletTag} from '@/store/model/Wallet'
+    import {Watch} from 'vue-property-decorator'
+    import {BrowserQRCodeReader} from '@zxing/library'
+
 
     @Component({
         mixins     : [validationMixin],
@@ -68,9 +72,41 @@
         form = this.getEmptyForm()
         time = 0
         loading = false
+        codeReader = new BrowserQRCodeReader()
+        videoShow = true
+
+        @Watch('show')
+        onShowChange(value: boolean) {
+
+            if (value) {
+                this.codeReader
+                    .listVideoInputDevices()
+                    .then(videoInputDevices => {
+                        const firstDeviceId = videoInputDevices[0].deviceId
+                        this.codeReader
+                            .decodeOnceFromVideoDevice(firstDeviceId, 'video')
+                            .then(result => {
+                                this.form.publicKey = result.getText()
+                                CommonModule.toast({
+                                    color  : ToastColor.SUCCESS,
+                                    content: '扫描成功'
+                                })
+                                this.videoShow = false
+                                this.codeReader.stopAsyncDecode()
+                                this.codeReader.stopContinuousDecode()
+                            })
+                            .catch(err => console.error('扫描错误:', err))
+                    })
+                    .catch(err => console.error(err))
+            } else {
+                this.codeReader.stopAsyncDecode()
+                this.codeReader.stopContinuousDecode()
+            }
+        }
 
         showModal() {
             this.show = true
+            this.videoShow = true
         }
 
         sendCode() {
@@ -138,6 +174,9 @@
     }
 </script>
 
-<style scoped>
-
+<style lang="stylus" scoped>
+    .qr_video {
+        width 100%
+        height auto
+    }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <CModal
+        <CModal v-if="device"
                 :title="$t('security.device.Device Detail')"
                 :show.sync="show"
         >
@@ -50,6 +50,7 @@
     // eslint-disable-next-line no-unused-vars
     import {Wallet} from '@/store/model/Wallet'
 
+
     @Component({
         components: {SecurityBindLoginCode}
     })
@@ -60,7 +61,7 @@
         }
 
         show = false
-        device ?: Wallet
+        device : Wallet | null = null
 
         showModal(device: Wallet) {
             this.device = device

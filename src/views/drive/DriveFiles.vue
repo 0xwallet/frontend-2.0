@@ -57,7 +57,7 @@
                     </tr>
                     <tr :class="[darkMode?'files-item-dark':'files-item']" v-for="(file,index) in files" :key="index"
                         @mouseenter="mouseOver(file)"
-                        @mouseleave="mouseOut(file)" @click="clickFile(file)">
+                        @mouseleave="mouseOut(file)">
                         <td class="file-checkbox" v-if="file.type !== 8">
                             <div v-if="file.type === 4" style="height: 40px"></div>
                             <div class="checkbox" v-if="file.type !== 4">
@@ -67,7 +67,7 @@
                                 </label>
                             </div>
                         </td>
-                        <td class="file-name" v-if="file.type !== 8">
+                        <td class="file-name" v-if="file.type !== 8" @click="clickFile(file)">
                             <div v-if="file">
                                 <div class="image-box">
                                     <CImg class="image"
@@ -196,6 +196,7 @@
                     space = DriveSpace.PRIVATE
                 }
                 this.space = space
+                console.log('当前网盘空间域为： ', this.space)
 
                 let file = new File()
                 file.id = '-100'
@@ -241,7 +242,7 @@
         }
 
         download(file: File) {
-            location.href = 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/public/' + file.id + '/' + file.name
+            location.href = 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/' + this.space.toLowerCase() + '/' + file.id + '/' + file.name
         }
 
         deleteFile(file: File) {

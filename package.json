@@ -30,6 +30,7 @@
     "@types/country-list": "^2.1.0",
     "@types/gsap": "^1.20.2",
     "@types/vuelidate": "^0.7.13",
+    "@zxing/library": "^0.17.1",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
     "apollo-link": "^1.2.14",

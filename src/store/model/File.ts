@@ -31,11 +31,16 @@ export class File {
                 return require('@/assets/images/icon/drive/lock.png')
             case FileType.PERSON:
                 return require('@/assets/images/icon/drive/person.png')
+            default:
+                return require('@/assets/images/icon/drive/unknow.png')
         }
     }
 
     getType(name: string): FileType {
         let nameValue = name.split('.')
+        if (nameValue.length < 2) {
+            return FileType.UNKNOW
+        }
         switch (nameValue[nameValue.length - 1]) {
             case 'jpeg':
             case 'jpg':
@@ -45,7 +50,7 @@ export class File {
             case 'pdf':
                 return FileType.PDF
             default:
-                return FileType.DIR
+                return FileType.UNKNOW
         }
     }
 }
@@ -69,6 +74,7 @@ export enum FileType {
     LOCK,
     PERSON,
     LOADING,
+    UNKNOW
 }
 
 function formatBytes(bytes: number): string {

@@ -12,8 +12,8 @@ import {CommonModule} from '@/store/CommonModule'
 import {encode} from '@msgpack/msgpack'
 import {DriveModule} from '@/store/DriveModule'
 import {DriveSpace} from '@/store/model/File'
-import has = Reflect.has
 import {PasswordModule} from '@/store/PasswordModule'
+import {ToastColor} from '@/store/model/Toast'
 
 const nkn = require('nkn-sdk/dist/nkn.js')
 const CryptoJS = require('crypto-js/crypto-js.js')
@@ -187,14 +187,13 @@ class NknModulePrivate extends VuexModule {
     }
 
     @Action
-    uploadFile({file, paths, space}:{
+    uploadFile({file, paths, space}: {
         file: any, paths: string[], space: DriveSpace
-    } ) {
+    }) {
         let timeStart = Date.now()
 
         let fileSize = 0
         const writeChunkSize = 1024
-        let client = this.nknClient
         let _this = this
         let fileName = file.name
 
@@ -234,73 +233,93 @@ class NknModulePrivate extends VuexModule {
                 fullName: fullName,
                 hash    : hash,
                 space   : space,
-            }).then(() => CommonModule.toast({content: '上传成功'})
-            ).catch(async () => {
-                let session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
-
-                const object = {
-                    File    : array,
-                    FullName: fullName,
-                    FileSize: fileSize,
-                    UserId  : UserModule.userInfo.id,
-                    Space   : space
-                }
-
-                console.log(object)
-                const encoded: Uint8Array = encode(object)
-                console.log(encoded)
-
-                let buffer = new ArrayBuffer(4)
-                let dv = new DataView(buffer)
-                dv.setUint32(0, encoded.length, true)
-
-                await session.write(new Uint8Array(buffer))
-
-                // await session.write(encoded)
-
-                let buf!: Uint8Array
-                for (let n = 0; n < encoded.length; n += buf.length) {
-                    buf = new Uint8Array(Math.min(encoded.length - n, writeChunkSize))
-                    for (let i = 0; i < buf.length; i++) {
-                        buf[i] = encoded[i + n]
-                    }
-
-                    _this.setUploadProgress(n / encoded.length * 100)
-
-                    await session.write(buf)
-
-                    if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
-                        console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
-                            (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000000000, 'B/s')
-
-
-                        let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
-
-                        if (speed > 0.9) {
-                            speed = speed + ' MB/s'
-                        } else if (speed * 1000 > 0.9) {
-                            speed = speed * 1000 + 'KB/s'
-                        } else {
-                            speed = speed * 1000 * 1000 + 'B/s'
-                        }
-                        _this.setUploadSpeed(speed)
-                    }
-                }
-                _this.setUploading(false)
-                _this.setUploadSpeed('0 KB/s')
+            }).then(() => {
                 CommonModule.toast({content: '上传成功'})
-            })
+                console.log('直接秒传成功了，应该要刷新')
+            }).catch(async () => {
+                    let session = null
+                    try {
+                        session = await _this.nknClient.dial('file.33ed3f20f423dfa816ebd8c33f05523170b7ba86a78d5b39365bfb57db443f6c')
+                    } catch (e) {
+                        CommonModule.toast({content: 'nkn client not ready', color: ToastColor.DANGER})
+                    }
+
+                    if (!session) {
+                        return
+                    }
+                    const object = {
+                        File    : array,
+                        FullName: fullName,
+                        FileSize: fileSize,
+                        UserId  : UserModule.userInfo.id,
+                        Space   : space
+                    }
+
+                    console.log(object)
+                    const encoded: Uint8Array = encode(object)
+                    console.log(encoded)
+
+                    let buffer = new ArrayBuffer(4)
+                    let dv = new DataView(buffer)
+                    dv.setUint32(0, encoded.length, true)
+
+                    await session.write(new Uint8Array(buffer))
+
+                    // await session.write(encoded)
+
+                    let buf!: Uint8Array
+                    for (let n = 0; n < encoded.length; n += buf.length) {
+                        buf = new Uint8Array(Math.min(encoded.length - n, writeChunkSize))
+                        for (let i = 0; i < buf.length; i++) {
+                            buf[i] = encoded[i + n]
+                        }
+
+                        _this.setUploadProgress(n / encoded.length * 100)
+
+                        await session.write(buf)
+
+                        if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
+                            console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
+                                (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000000000, 'B/s')
+
+
+                            let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
+
+                            if (speed > 0.9) {
+                                speed = speed + ' MB/s'
+                            } else if (speed * 1000 > 0.9) {
+                                speed = speed * 1000 + 'KB/s'
+                            } else {
+                                speed = speed * 1000 * 1000 + 'B/s'
+                            }
+                            _this.setUploadSpeed(speed)
+                        }
+                    }
+                    _this.setUploading(false)
+                    _this.setUploadSpeed('0 KB/s')
+                    CommonModule.toast({content: '上传成功'})
+                }
+            )
 
         }
     }
 
     @Action
-    setDefaultNknAddress(params: {
-        loginCode?: string,
-        password: string,
-        tag: WalletTag,
-        walletId: string | number,
-    }) {
+    setDefaultNknAddress(params
+                             :
+                             {
+                                 loginCode?: string,
+                                 password
+                                     :
+                                     string,
+                                 tag
+                                     :
+                                     WalletTag,
+                                 walletId
+                                     :
+                                     string | number,
+                             }
+    ) {
         return new Promise(((resolve: (wallet: Wallet) => void, reject) => {
             setDefaultNknAddressService(params).then(res => {
                 UserModule.me().then()
@@ -311,10 +330,13 @@ class NknModulePrivate extends VuexModule {
 
 
     @Action
-    bindAndSetDefault(params: {
-        password: string,
-        loginCode?: string,
-    }) {
+    bindAndSetDefault(params
+                          :
+                          {
+                              password: string,
+                              loginCode?: string,
+                          }
+    ) {
         return new Promise(((resolve, reject) => {
             this.getNknClient({password: params.password}).then((cli: any) => {
                 console.log('成功创建NknClient', cli)
@@ -346,9 +368,12 @@ class NknModulePrivate extends VuexModule {
 
 
     @Action
-    deleteWallet(param: {
-        id: string
-    }) {
+    deleteWallet(param
+                     :
+                     {
+                         id: string
+                     }
+    ) {
         return new Promise(((resolve, reject) => {
             deleteWalletService(param).then(() => {
                 UserModule.me().then()
@@ -358,10 +383,13 @@ class NknModulePrivate extends VuexModule {
     }
 
     @Action
-    sendLoginCode(params: {
-        email: string
-        walletId?: string
-    }) {
+    sendLoginCode(params
+                      :
+                      {
+                          email: string
+                          walletId?: string
+                      }
+    ) {
         return new Promise((resolve => {
             sendLoginCodeService(params).then(() => {
                 resolve()

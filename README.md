@@ -15,7 +15,7 @@
 
 ```
 # clone the repo
-git clone https://github.com/0xwallet/frontend frontend
+git clone https://github.com/0xwallet/frontend-2.0 frontend
 
 # go into app's directory
 cd frontend
