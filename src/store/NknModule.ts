@@ -235,6 +235,8 @@ class NknModulePrivate extends VuexModule {
                 space   : space,
             }).then(() => {
                 CommonModule.toast({content: '上传成功'})
+                _this.setUploading(false)
+                _this.setUploadSpeed('0 KB/s')
                 console.log('直接秒传成功了，应该要刷新')
             }).catch(async () => {
                     let session = null

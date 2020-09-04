@@ -158,9 +158,13 @@
         checkFiles: Array<string> = []
         space: DriveSpace = DriveSpace.PUBLIC
 
+
         mounted() {
             this.loadFiles()
+
+            console.log(this.$apollo)
         }
+
 
         loadFiles() {
             this.files = []

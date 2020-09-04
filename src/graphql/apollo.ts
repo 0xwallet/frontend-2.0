@@ -1,16 +1,26 @@
 import {HttpLink} from 'apollo-link-http'
-import {ApolloLink, NextLink, Operation} from 'apollo-link'
+import {ApolloLink, NextLink, Operation, split} from 'apollo-link'
 import {onError} from 'apollo-link-error'
 import {InMemoryCache, IntrospectionFragmentMatcher, NormalizedCacheObject} from 'apollo-cache-inmemory'
 import {ApolloClient} from 'apollo-client'
 import {UserModule} from '@/store/UserModule'
 import {CommonModule} from '@/store/CommonModule'
 import {ToastColor} from '@/store/model/Toast'
+import {WebSocketLink} from 'apollo-link-ws'
+import {getMainDefinition} from 'apollo-utilities'
+import Vue from 'vue'
+import VueApollo from 'vue-apollo'
 
 const apiLink = new HttpLink({
     uri: process.env.VUE_APP_BASE_URL
 })
 
+const wsLink = new WebSocketLink({
+    uri    : 'wss://owaf.io/socket',
+    options: {
+        reconnect: true,
+    },
+})
 
 const middlewareLink = new ApolloLink((operation: Operation, forward: NextLink) => {
     if (forward === undefined) {
@@ -37,7 +47,7 @@ const errorLink = onError(({
     }
     if (errorMsg) {
         // 全局异常消息
-        if(errorMsg == 'file hash not found'){
+        if (errorMsg == 'file hash not found') {
             return
         }
         CommonModule.toast({
@@ -55,11 +65,23 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
     }
 })
 
-const apolloClient = new ApolloClient({
-    link : errorLink.concat(middlewareLink).concat(apiLink),
-    cache: new InMemoryCache({fragmentMatcher})
+const link = split(
+    ({query}) => {
+        const definition = getMainDefinition(query)
+        return definition.kind === 'OperationDefinition' &&
+            definition.operation === 'subscription'
+    },
+    wsLink,
+    errorLink.concat(middlewareLink).concat(apiLink)
+)
 
+const apolloClient = new ApolloClient({
+    link             : link,
+    cache            : new InMemoryCache({fragmentMatcher}),
+    connectToDevTools: true,
 })
+
+Vue.use(VueApollo)
 
 export default class Client {
     private static instance: ApolloClient<NormalizedCacheObject> = apolloClient
