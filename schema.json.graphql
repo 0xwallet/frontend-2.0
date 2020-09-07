@@ -3,6 +3,7 @@
 schema {
     query: RootQueryType
     mutation: RootMutationType
+    subscription: RootSubscriptionType
 }
 
 "user or channel"
@@ -153,8 +154,10 @@ type RootMutationType {
         code: String,
         "base64 encrypted wallet file"
         encryptedWallet: String,
+        "DEPRECATE! Use nkn_public_key field replacement"
+        nknAddress: String,
         "format: pubkey"
-        nknAddress: String!,
+        nknPublicKey: String,
         tag: WalletTag = LOGIN_CODE
     ): Wallet
     "Create a channel in organization."
@@ -184,6 +187,12 @@ type RootMutationType {
     driveDeleteFile(id: String!, space: DriveSpace!): Int
     "delete file by ids, return the actual number of deleted files."
     driveDeleteFiles(ids: [String]!, space: DriveSpace!): Int
+    "move file(s) by id, return the actual number of moved files."
+    driveMoveFile(
+        fromId: String!,
+        "private_root/public_root represent the root directory"
+        toId: String!
+    ): Int
     "upload file by exist hash"
     driveUploadByHash(fullName: [String]!, hash: String!, space: DriveSpace = PRIVATE): DriveUserFile
     "Edit current user"
@@ -318,6 +327,11 @@ type RootQueryType {
     organization(id: ID!): Organization
     "List organizations"
     organizations(pageNumber: Int = 1, pageSize: Int = 20, userId: ID!): [OrganizationPages]
+}
+
+type RootSubscriptionType {
+    "User successfully uploaded."
+    driveFileUploaded(userId: ID!): DriveUserFile
 }
 
 type Session {
@@ -482,18 +496,18 @@ input PersonalInfoInput {
 
 
 """
-The `Naive DateTime` scalar type represents a naive date and time without
-timezone. The DateTime appears in a JSON response as an ISO8601 formatted
-string.
-"""
-scalar NaiveDateTime
-
-"""
 `Snowflake` type represents a 64 bit number, appears in JSON responses as a
 UTF-8 String due to Javascript's lack of support for numbers > 53-bits.
 Its parsed again to an integer after received.
 """
 scalar Snowflake
+
+"""
+The `Naive DateTime` scalar type represents a naive date and time without
+timezone. The DateTime appears in a JSON response as an ISO8601 formatted
+string.
+"""
+scalar NaiveDateTime
 
 """
 The `Json` scalar type represents arbitrary json string data, represented as UTF-8

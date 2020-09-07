@@ -145,6 +145,9 @@
     import {DriveModule} from '@/store/DriveModule'
     import {UserModule} from '@/store/UserModule'
     import UploadFileComponent from '@/views/drive/UploadFileComponent.vue'
+    import gql from 'graphql-tag'
+    import Client from '@/graphql/apollo'
+    import {CommonModule} from '@/store/CommonModule'
 
 
     @Component({
@@ -162,7 +165,31 @@
         mounted() {
             this.loadFiles()
 
-            console.log(this.$apollo)
+            const driveFileUploaded = gql`
+                subscription driveFileUploaded($userId : ID!){
+                    driveFileUploaded(userId: $userId){
+                        id
+                    }
+                }
+            `
+            const observer = Client.getInstance().subscribe({
+                query    : driveFileUploaded,
+                variables: {
+                    userId: 1,
+                },
+            })
+
+            let _this = this
+            observer.subscribe({
+                next(value) {
+                    console.log('driveFileUpload:onNext:', value)
+                    _this.loadFiles()
+                    CommonModule.toast({content: '上传成功'})
+                },
+                error(errorValue: any) {
+                    console.log('driveFileUpload:onError:', errorValue)
+                }
+            })
         }
 
 

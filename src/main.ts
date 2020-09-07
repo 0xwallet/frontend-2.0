@@ -8,9 +8,6 @@ import 'babel-polyfill'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueI18n from 'vue-i18n'
-// require('@/common/nkn-upload.js')
-
-
 
 Vue.use(CoreuiVue)
 Vue.use(VueI18n)

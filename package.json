@@ -18,6 +18,7 @@
     "release": "npm-run-all clearCache lint build test:unit test:e2e"
   },
   "dependencies": {
+    "@absinthe/socket-apollo-link": "^0.2.1",
     "@babel/compat-data": "^7.11.0",
     "@babel/preset-env": "^7.11.5",
     "@coreui/coreui-pro": "^3.2.0",
@@ -26,9 +27,12 @@
     "@coreui/vue": "^3.0.10",
     "@coreui/vue-chartjs": "^1.0.5",
     "@msgpack/msgpack": "^1.12.2",
+    "@types/absinthe__socket": "^0.2.0",
+    "@types/absinthe__socket-apollo-link": "^0.2.0",
     "@types/cheerio": "^0.22.18",
     "@types/country-list": "^2.1.0",
     "@types/gsap": "^1.20.2",
+    "@types/phoenix": "^1.5.0",
     "@types/vuelidate": "^0.7.13",
     "@types/ws": "^7.2.6",
     "@zxing/library": "^0.17.1",
@@ -54,6 +58,7 @@
     "moment": "^2.27.0",
     "nkn-sdk": "^1.1.7",
     "npm": "^6.14.8",
+    "phoenix": "^1.5.4",
     "spinkit": "^2.0.1",
     "subscriptions-transport-ws": "^0.9.18",
     "vue": "~2.6.11",
