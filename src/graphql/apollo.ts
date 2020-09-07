@@ -17,7 +17,15 @@ const apiLink = new HttpLink({
 })
 
 const wsLink = createAbsintheSocketLink(AbsintheSocket.create(
-    new PhoenixSocket('wss://owaf.io/socket?' + 'Authorization=' + (localStorage.getItem('auth-token') ? 'Bearer%20' + String(localStorage.getItem('auth-token')) : ''))
+    new PhoenixSocket('wss://owaf.io/socket', {
+        params: () => {
+            if (localStorage.getItem('auth-token')) {
+                return {Authorization: localStorage.getItem('auth-token')}
+            } else {
+                return {}
+            }
+        }
+    })
 ))
 
 const middlewareLink = new ApolloLink((operation: Operation, forward: NextLink) => {
@@ -70,7 +78,7 @@ const link = split(
             definition.operation === 'subscription'
     },
     // @ts-ignore
-    wsLink,
+    middlewareLink.concat(wsLink),
     errorLink.concat(middlewareLink).concat(apiLink)
 )
 
