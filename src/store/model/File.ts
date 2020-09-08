@@ -9,6 +9,7 @@ export class File {
     time ?: string
     insertedAt ?: string
     isDir: boolean = false
+    imgIndex = -1
 
     getSize() {
         return formatBytes(this.info.size)

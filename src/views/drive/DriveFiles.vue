@@ -132,6 +132,11 @@
         </main-card-component>
         <upload-file-component ref="uploadFileComponent" :path="currentPath"
                                :public="space"></upload-file-component>
+        <viewer style="display: none" :images="images" ref="viewer" @inited="inited" v-if="showImagePreview" rebuild>
+            <template scope="scope">
+                <img v-for="(src,i) in scope.images" :src="src" :key="i" alt="">
+            </template>
+        </viewer>
     </div>
 </template>
 
@@ -148,10 +153,12 @@
     import gql from 'graphql-tag'
     import Client from '@/graphql/apollo'
     import {CommonModule} from '@/store/CommonModule'
+    import 'viewerjs/dist/viewer.css'
+    import Viewer from 'v-viewer/src/component.vue'
 
 
     @Component({
-        components: {UploadFileComponent, HashComponent, MainCardComponent}
+        components: {UploadFileComponent, HashComponent, MainCardComponent, Viewer}
     })
     export default class DriveFiles extends Vue {
 
@@ -160,6 +167,9 @@
         files: Array<File> = []
         checkFiles: Array<string> = []
         space: DriveSpace = DriveSpace.PUBLIC
+        images: Array<string> = []
+        viewer: any
+        showImagePreview = false
 
 
         mounted() {
@@ -242,8 +252,13 @@
                     let fullName = paths
                     fullName.shift()
                     console.log('fullName', fullName)
+                    let imageIndex = 0
                     DriveModule.getDriveListFiles({dirFullName: fullName, space: space}).then((fileList) => {
                         fileList.forEach(fileItem => {
+                            if (fileItem.type === FileType.IMG) {
+                                this.images.push('https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + this.space.toLowerCase() + '/' + fileItem.id + '/' + fileItem.name)
+                                fileItem.imgIndex = imageIndex++
+                            }
                             this.files.push(fileItem)
                         })
                     })
@@ -322,11 +337,23 @@
                     paths.pop()
                     this.$router.push('/drive/' + paths.join('/'))
                 }
+                return
             }
             if (file.type == FileType.DIR) {
                 paths.push(file.name)
                 this.$router.push({path: '/drive/' + paths.join('/')})
+                return
             }
+            if (!this.showImagePreview) {
+                this.showImagePreview = true
+            }
+            setTimeout(() => {
+                this.viewer.view(file.imgIndex)
+            }, 200)
+        }
+
+        inited(viewer: any) {
+            this.viewer = viewer
         }
 
         txIDOver() {
