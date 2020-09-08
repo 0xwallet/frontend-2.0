@@ -17,7 +17,7 @@ const apiLink = new HttpLink({
 })
 
 const wsLink = createAbsintheSocketLink(AbsintheSocket.create(
-    new PhoenixSocket('wss://owaf.io/socket', {
+    new PhoenixSocket('/socket', {
         params: () => {
             if (localStorage.getItem('auth-token')) {
                 return {Authorization: 'Bearer ' + localStorage.getItem('auth-token')}

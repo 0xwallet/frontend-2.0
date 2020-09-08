@@ -304,21 +304,12 @@ class NknModulePrivate extends VuexModule {
     }
 
     @Action
-    setDefaultNknAddress(params
-                             :
-                             {
-                                 loginCode?: string,
-                                 password
-                                     :
-                                     string,
-                                 tag
-                                     :
-                                     WalletTag,
-                                 walletId
-                                     :
-                                     string | number,
-                             }
-    ) {
+    setDefaultNknAddress(params: {
+        loginCode?: string,
+        password: string,
+        tag: WalletTag,
+        walletId: string | number,
+    }) {
         return new Promise(((resolve: (wallet: Wallet) => void, reject) => {
             setDefaultNknAddressService(params).then(res => {
                 UserModule.me().then()
@@ -329,13 +320,10 @@ class NknModulePrivate extends VuexModule {
 
 
     @Action
-    bindAndSetDefault(params
-                          :
-                          {
-                              password: string,
-                              loginCode?: string,
-                          }
-    ) {
+    bindAndSetDefault(params: {
+        password: string,
+        loginCode?: string,
+    }) {
         return new Promise(((resolve, reject) => {
             this.getNknClient({password: params.password}).then((cli: any) => {
                 console.log('成功创建NknClient', cli)
@@ -367,12 +355,9 @@ class NknModulePrivate extends VuexModule {
 
 
     @Action
-    deleteWallet(param
-                     :
-                     {
-                         id: string
-                     }
-    ) {
+    deleteWallet(param: {
+        id: string
+    }) {
         return new Promise(((resolve, reject) => {
             deleteWalletService(param).then(() => {
                 UserModule.me().then()
@@ -382,13 +367,10 @@ class NknModulePrivate extends VuexModule {
     }
 
     @Action
-    sendLoginCode(params
-                      :
-                      {
-                          email: string
-                          walletId?: string
-                      }
-    ) {
+    sendLoginCode(params: {
+        email: string
+        walletId?: string
+    }) {
         return new Promise((resolve => {
             sendLoginCodeService(params).then(() => {
                 resolve()

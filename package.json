@@ -54,6 +54,7 @@
     "graphql": "^14.6.0",
     "graphql-tag": "^2.10.3",
     "gsap": "^3.4.0",
+    "http-proxy-middleware": "^1.0.5",
     "install": "^0.13.0",
     "moment": "^2.27.0",
     "nkn-sdk": "^1.1.7",

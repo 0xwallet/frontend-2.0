@@ -175,7 +175,7 @@
             const observer = Client.getInstance().subscribe({
                 query    : driveFileUploaded,
                 variables: {
-                    userId: 1,
+                    userId: UserModule.userInfo.id,
                 },
             })
 
