@@ -1,4 +1,5 @@
 import {
+    drivePreviewTokenMutation,
     editCurrentUserMutation,
     editCurrentUserSettingMutation,
     meQuery,
@@ -73,4 +74,8 @@ export const editCurrentUserSettingService = (params: {
 }) => Client.getInstance().mutate({
     mutation : editCurrentUserSettingMutation,
     variables: params
+})
+
+export const drivePreviewTokenService = () => Client.getInstance().mutate({
+    mutation: drivePreviewTokenMutation
 })

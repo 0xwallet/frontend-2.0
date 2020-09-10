@@ -1,6 +1,7 @@
 import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators'
 import {store} from './index'
 import {
+    drivePreviewTokenService,
     editCurrentUserService,
     editCurrentUserSettingService,
     meService,
@@ -12,6 +13,7 @@ import {Currency, PersonalInfoInput, User} from '@/store/model/User'
 import {CommonModule} from '@/store/CommonModule'
 import {NknModule} from '@/store/NknModule'
 import {ToastColor} from '@/store/model/Toast'
+import {drivePreviewTokenMutation} from '@/graphql/userGraphql'
 
 @Module({
     dynamic: true,
@@ -23,11 +25,18 @@ class UserModulePrivate extends VuexModule {
     token = ''
 
     userInfo: User = new User()
+    drivePreviewToken: string = ''
 
     @Mutation
     setToken(token: string) {
         this.token = token
         localStorage.setItem('auth-token', token)
+    }
+
+    @Mutation
+    setDrivePreviewToken(token: string) {
+        this.drivePreviewToken = token
+        console.log('drivePreviewToken', this.drivePreviewToken)
     }
 
     @Mutation
@@ -83,6 +92,9 @@ class UserModulePrivate extends VuexModule {
         return new Promise((resolve => {
             meService().then(res => {
                 this.setUserInfo(res.data.me)
+                drivePreviewTokenService().then((res) => {
+                    this.setDrivePreviewToken(res.data.drivePreviewToken)
+                })
                 resolve(res)
             })
         }))

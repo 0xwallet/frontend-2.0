@@ -45,7 +45,7 @@ export const meQuery = gql`
                 type
             }
             setting{
-                currency\
+                currency
             }
             driveSetting{
                 availableSpace
@@ -84,5 +84,11 @@ export const editCurrentUserSettingMutation = gql`
         editCurrentUserSetting(currency: $currency){
             currency
         }
+    }
+`
+
+export const drivePreviewTokenMutation = gql`
+    mutation drivePreviewToken {
+        drivePreviewToken
     }
 `

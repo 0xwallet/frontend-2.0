@@ -17,7 +17,8 @@ const apiLink = new HttpLink({
 })
 
 const wsLink = createAbsintheSocketLink(AbsintheSocket.create(
-    new PhoenixSocket('/socket', {
+// @ts-ignore
+    new PhoenixSocket(process.env.VUE_APP_SOCKET_URL, {
         params: () => {
             if (localStorage.getItem('auth-token')) {
                 return {Authorization: 'Bearer ' + localStorage.getItem('auth-token')}

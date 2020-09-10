@@ -45,7 +45,8 @@
                         <th class="file-checkbox">
                             <div class="checkbox" @click="checkAllFiles">
                                 <label>
-                                    <input :disabled="currentFolder === 'Drive'" type="checkbox">
+                                    <input :disabled="currentFolder === 'Drive'" :checked="checkFiles.length ===
+                    files.length" type="checkbox">
                                 </label>
                             </div>
                         </th>
@@ -67,7 +68,7 @@
                                 </label>
                             </div>
                         </td>
-                        <td class="file-name" v-if="file.type !== 8" @click="clickFile(file)">
+                        <td class="file-name" v-if="file.type !== 8" @click="clickFile(file)" ref="file_item">
                             <div v-if="file">
                                 <div class="image-box">
                                     <CImg class="image"
@@ -126,17 +127,38 @@
                         <td colspan="6" v-if="file.type === 8" class="file-loading">
                             <CSpinner grow/>
                         </td>
+                        <td>
+                            <div v-if="file.type !== 4">
+                                <CDropdown
+                                        toggler-text=""
+                                >
+                                    <div slot="toggler">
+                                        <div style="padding-left: 20px">
+                                            <CIcon name="cil-options"></CIcon>
+                                        </div>
+                                    </div>
+                                    <CDropdownItem>Move</CDropdownItem>
+                                    <CDropdownItem>ReName</CDropdownItem>
+                                    <CDropdownItem style="color: red">Delete</CDropdownItem>
+                                    <CDropdownDivider></CDropdownDivider>
+                                    <CDropdownItem>Share</CDropdownItem>
+                                    <CDropdownItem>Info</CDropdownItem>
+                                </CDropdown>
+                            </div>
+                        </td>
                     </tr>
                 </table>
             </div>
         </main-card-component>
+
         <upload-file-component ref="uploadFileComponent" :path="currentPath"
                                :public="space"></upload-file-component>
         <viewer style="display: none" :images="images" ref="viewer" @inited="inited" v-if="showImagePreview" rebuild>
-            <template scope="scope">
+            <template slot-scope="scope">
                 <img v-for="(src,i) in scope.images" :src="src" :key="i" alt="">
             </template>
         </viewer>
+
     </div>
 </template>
 
@@ -162,6 +184,10 @@
     })
     export default class DriveFiles extends Vue {
 
+        $refs !: {
+            file_item: any
+        }
+
 
         showTxID = false
         files: Array<File> = []
@@ -170,10 +196,14 @@
         images: Array<string> = []
         viewer: any
         showImagePreview = false
+        contextMenuTarget: any = null
 
 
         mounted() {
             this.loadFiles()
+
+            this.contextMenuTarget = this.$refs.file_item
+            console.log('target', this.$refs.file_item)
 
             const driveFileUploaded = gql`
                 subscription driveFileUploaded($userId : ID!){
@@ -189,6 +219,7 @@
                 },
             })
 
+
             let _this = this
             observer.subscribe({
                 next(value) {
@@ -197,9 +228,11 @@
                     CommonModule.toast({content: '上传成功'})
                 },
                 error(errorValue: any) {
-                    console.log('driveFileUpload:onError:', errorValue)
+                    console.log('driveFileUpload:onError:', JSON.stringify(errorValue))
                 }
             })
+
+
         }
 
 
@@ -256,7 +289,7 @@
                     DriveModule.getDriveListFiles({dirFullName: fullName, space: space}).then((fileList) => {
                         fileList.forEach(fileItem => {
                             if (fileItem.type === FileType.IMG) {
-                                this.images.push('https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + this.space.toLowerCase() + '/' + fileItem.id + '/' + fileItem.name)
+                                this.images.push(fileItem.getPreviewUrl(this.space))
                                 fileItem.imgIndex = imageIndex++
                             }
                             this.files.push(fileItem)

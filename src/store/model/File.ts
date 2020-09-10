@@ -1,3 +1,5 @@
+import {UserModule} from '@/store/UserModule'
+
 export class File {
     id!: string
     name !: string
@@ -52,6 +54,14 @@ export class File {
                 return FileType.PDF
             default:
                 return FileType.UNKNOW
+        }
+    }
+
+    getPreviewUrl(space: DriveSpace): string {
+        if (space === DriveSpace.PUBLIC) {
+            return 'https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + space.toLowerCase() + '/' + this.id + '/' + this.name
+        } else {
+            return 'https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + space.toLowerCase() + '/' + this.id + '/' + this.name + '?token=' + UserModule.drivePreviewToken
         }
     }
 }

@@ -138,6 +138,13 @@ type OrganizationPages {
     totalCount: Int
 }
 
+type PaymentIncome {
+    address: String
+    n: String
+    txid: String
+    value: String
+}
+
 type PersonalInfo {
     country: String
     creditCard: CreditCard
@@ -193,6 +200,8 @@ type RootMutationType {
         "private_root/public_root represent the root directory"
         toId: String!
     ): Int
+    "Generate preview token."
+    drivePreviewToken: String
     "upload file by exist hash"
     driveUploadByHash(fullName: [String]!, hash: String!, space: DriveSpace = PRIVATE): DriveUserFile
     "Edit current user"
@@ -327,6 +336,8 @@ type RootQueryType {
     organization(id: ID!): Organization
     "List organizations"
     organizations(pageNumber: Int = 1, pageSize: Int = 20, userId: ID!): [OrganizationPages]
+    "query bsv incomes."
+    paymentIncomes(address: String!, fromHeight: Int!, toHeight: Int!): [PaymentIncome]
 }
 
 type RootSubscriptionType {
@@ -496,13 +507,6 @@ input PersonalInfoInput {
 
 
 """
-`Snowflake` type represents a 64 bit number, appears in JSON responses as a
-UTF-8 String due to Javascript's lack of support for numbers > 53-bits.
-Its parsed again to an integer after received.
-"""
-scalar Snowflake
-
-"""
 The `Naive DateTime` scalar type represents a naive date and time without
 timezone. The DateTime appears in a JSON response as an ISO8601 formatted
 string.
@@ -515,3 +519,10 @@ character sequences. The Json type is most often used to represent a free-form
 human-readable json string.
 """
 scalar Json
+
+"""
+`Snowflake` type represents a 64 bit number, appears in JSON responses as a
+UTF-8 String due to Javascript's lack of support for numbers > 53-bits.
+Its parsed again to an integer after received.
+"""
+scalar Snowflake
