@@ -1,10 +1,10 @@
-import {Action, getModule, Module, VuexModule} from 'vuex-module-decorators'
+import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators'
 import {store} from '@/store/index'
 import {DriveSpace, File, FileType} from '@/store/model/File'
 import {
     driveDeleteFileService,
     driveDeleteFilesService,
-    driveListFilesService,
+    driveListFilesService, driveMoveFileService,
     driveUploadByHashService
 } from '@/service/DriveService'
 import {formatDate} from '@/common/DateUtil'
@@ -17,6 +17,14 @@ import {ToastColor} from '@/store/model/Toast'
     store
 })
 class DriveModulePrivate extends VuexModule {
+
+    currentId = 'root'
+
+    @Mutation
+    setCurrentId(id: string) {
+        this.currentId = id
+        console.log('currentId', this.currentId)
+    }
 
     @Action
     getDriveListFiles(params: { dirFullName?: string[], dirId?: string, space: DriveSpace }) {
@@ -34,8 +42,9 @@ class DriveModulePrivate extends VuexModule {
                         file.info = item.info
                         file.time = ''
                         fileList.push(file)
+                        this.setCurrentId(item.id)
                     } else if (index == 1) {
-                        // console.log(index)
+                        console.log(item)
                     } else {
                         let fileName = item.fullName[item.fullName.length - 1]
                         let file = new File()
@@ -95,6 +104,14 @@ class DriveModulePrivate extends VuexModule {
                 resolve()
             }).catch(error => reject(error))
         }))
+    }
+
+    @Action
+    driveMoveFile(params: {
+        fromId: string,
+        toId: string,
+    }) {
+        return driveMoveFileService(params)
     }
 }
 

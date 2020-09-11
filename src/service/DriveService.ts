@@ -3,7 +3,7 @@ import {DriveSpace} from '@/store/model/File'
 import {
     driveDeleteFileMutation,
     driveDeleteFilesMutation,
-    driveListFilesQuery,
+    driveListFilesQuery, driveMoveFileMutation,
     driveUploadByHashMutation
 } from '@/graphql/driveGraphql'
 
@@ -41,5 +41,14 @@ export const driveDeleteFilesService = (params: {
     space: DriveSpace,
 }) => Client.getInstance().mutate({
     mutation : driveDeleteFilesMutation,
+    variables: params,
+})
+
+
+export const driveMoveFileService = (params: {
+    fromId: string,
+    toId: string
+}) => Client.getInstance().mutate({
+    mutation : driveMoveFileMutation,
     variables: params,
 })

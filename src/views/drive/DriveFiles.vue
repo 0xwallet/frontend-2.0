@@ -22,6 +22,9 @@
                     files.length ? 'Inverse' : `Check
                     All` }}
                 </CButton>
+                <CButton v-if="moveId !== ''" class="btn btn-warning"
+                         @click="paste()">Paste
+                </CButton>
                 <CButton v-if="currentFolder !== 'Drive'" class="btn btn-info"
                          @click="$refs.uploadFileComponent.showModal()">Upload
                 </CButton>
@@ -127,19 +130,20 @@
                         <td colspan="6" v-if="file.type === 8" class="file-loading">
                             <CSpinner grow/>
                         </td>
-                        <td>
-                            <div v-if="file.type !== 4">
+                        <td class="file-options">
+                            <div v-if="file.type !== 4 && file.type !== 8">
                                 <CDropdown
+                                        class="drop-down"
                                         toggler-text=""
                                 >
                                     <div slot="toggler">
-                                        <div style="padding-left: 20px">
+                                        <div>
                                             <CIcon name="cil-options"></CIcon>
                                         </div>
                                     </div>
-                                    <CDropdownItem>Move</CDropdownItem>
+                                    <CDropdownItem @click="move(file.id)">Move</CDropdownItem>
                                     <CDropdownItem>ReName</CDropdownItem>
-                                    <CDropdownItem style="color: red">Delete</CDropdownItem>
+                                    <CDropdownItem @click="deleteFile(file)" style="color: red">Delete</CDropdownItem>
                                     <CDropdownDivider></CDropdownDivider>
                                     <CDropdownItem>Share</CDropdownItem>
                                     <CDropdownItem>Info</CDropdownItem>
@@ -158,7 +162,7 @@
                 <img v-for="(src,i) in scope.images" :src="src" :key="i" alt="">
             </template>
         </viewer>
-
+        <pdf-view v-if="pdfShow" :url="pdfUrl" @onClose="onPdfClose"></pdf-view>
     </div>
 </template>
 
@@ -177,10 +181,11 @@
     import {CommonModule} from '@/store/CommonModule'
     import 'viewerjs/dist/viewer.css'
     import Viewer from 'v-viewer/src/component.vue'
+    import pdfView from './PdfComponent.vue'
 
 
     @Component({
-        components: {UploadFileComponent, HashComponent, MainCardComponent, Viewer}
+        components: {UploadFileComponent, HashComponent, MainCardComponent, Viewer, pdfView}
     })
     export default class DriveFiles extends Vue {
 
@@ -197,9 +202,15 @@
         viewer: any
         showImagePreview = false
         contextMenuTarget: any = null
-
+        moveId: string = ''
+        pdfShow: boolean = false
+        pdfUrl: string = ''
 
         mounted() {
+            if (localStorage.getItem('moveId')) {
+                this.moveId = localStorage.getItem('moveId') || ''
+            }
+
             this.loadFiles()
 
             this.contextMenuTarget = this.$refs.file_item
@@ -231,8 +242,6 @@
                     console.log('driveFileUpload:onError:', JSON.stringify(errorValue))
                 }
             })
-
-
         }
 
 
@@ -243,7 +252,7 @@
             const paths = path.split('/')
             paths.shift()
             paths.shift()
-            console.log(paths)
+            // console.log(paths)
 
             if (paths.length < 1 || paths[0] == '') {
                 let file = new File()
@@ -299,6 +308,22 @@
             }
         }
 
+        move(id: string) {
+            this.moveId = id
+        }
+
+        paste() {
+            if (this.moveId !== '') {
+                DriveModule.driveMoveFile({
+                    fromId: this.moveId,
+                    toId  : DriveModule.currentId
+                })
+                localStorage.removeItem('moveId')
+                this.moveId = ''
+                this.loadFiles()
+            }
+        }
+
         get currentPath(): string[] | null {
             let drivePath = this.$route.path
             let paths = drivePath.split('/')
@@ -351,6 +376,9 @@
 
         clickFile(file: File) {
             console.log(file)
+            if (this.moveId) {
+                localStorage.setItem('moveId', this.moveId)
+            }
 
             let drivePath = this.$route.path
             let paths = drivePath ? drivePath.split('/') : []
@@ -377,12 +405,18 @@
                 this.$router.push({path: '/drive/' + paths.join('/')})
                 return
             }
-            if (!this.showImagePreview) {
-                this.showImagePreview = true
+            if (file.type === FileType.IMG) {
+                if (!this.showImagePreview) {
+                    this.showImagePreview = true
+                }
+                setTimeout(() => {
+                    this.viewer.view(file.imgIndex)
+                }, 200)
             }
-            setTimeout(() => {
-                this.viewer.view(file.imgIndex)
-            }, 200)
+            if (file.type === FileType.PDF) {
+                this.pdfUrl = file.getPreviewUrl(this.space)
+                this.pdfShow = true
+            }
         }
 
         inited(viewer: any) {
@@ -424,6 +458,9 @@
             }
         }
 
+        onPdfClose() {
+            this.pdfShow = false
+        }
 
         get isUploading(): boolean {
             return NknModule.isUploading
@@ -543,4 +580,9 @@
     .file-loading
         text-align center
 
+    .file-options
+        width 30px
+
+        .drop-down
+            width 30px
 </style>

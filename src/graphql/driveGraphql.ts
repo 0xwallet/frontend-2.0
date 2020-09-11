@@ -36,3 +36,9 @@ export const driveDeleteFilesMutation = gql`
         driveDeleteFiles(ids: $ids, space: $space)
     }
 `
+
+export const driveMoveFileMutation = gql`
+    mutation driveMoveFile($fromId : String!, $toId : String!){
+        driveMoveFile(fromId: $fromId,toId: $toId)
+    }
+`
