@@ -64,9 +64,9 @@ const router = new Router({
             ]
         },
         {
-            path     : '/test',
-            name     : 'Test',
-            component: () => import('@/views/TestPDF.vue')
+            path     : '/s*',
+            name     : 'Share',
+            component: () => import('@/views/drive/Share.vue')
         }
 
     ]

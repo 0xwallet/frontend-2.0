@@ -10,13 +10,6 @@
                 class="ml-3 d-md-down-none"
                 @click="$store.commit('toggleSidebarDesktop')"
         />
-        <CHeaderBrand
-                class="mx-auto d-lg-none"
-                src="img/brand/coreui-vue-pro-logo.svg"
-                width="190"
-                height="46"
-                alt="CoreUI Logo"
-        />
         <CHeaderNav class="d-md-down-none mr-auto">
             <CHeaderNavItem class="px-3">
                 <CHeaderNavLink to="/dashboard">

@@ -29,6 +29,7 @@
                          @click="$refs.uploadFileComponent.showModal()">Upload
                 </CButton>
                 <CButton v-if="currentFolder !== 'Drive'" class="btn btn-success">New</CButton>
+                <CButton v-if="checkFiles.length > 0" class="btn btn-danger" @click="deleteFiles">Delete</CButton>
                 <CButton class="btn">Refresh</CButton>
             </div>
 
@@ -82,7 +83,7 @@
                         </td>
                         <td class="file-option" v-if="file.type !== 8">
                             <div class="options" v-if="file.type !== 4 && file.active">
-                                <div>
+                                <div @click="shareFile(file)">
                                     <CIcon v-c-tooltip.hover="'share'" name="cil-share-alt"></CIcon>
                                 </div>
                                 <div>
@@ -163,6 +164,7 @@
             </template>
         </viewer>
         <pdf-view v-if="pdfShow" :url="pdfUrl" @onClose="onPdfClose"></pdf-view>
+        <create-file-share-component ref="create_file_share"></create-file-share-component>
     </div>
 </template>
 
@@ -182,15 +184,17 @@
     import 'viewerjs/dist/viewer.css'
     import Viewer from 'v-viewer/src/component.vue'
     import pdfView from './PdfComponent.vue'
+    import CreateFileShareComponent from '@/views/drive/CreateFileShareComponent.vue'
 
 
     @Component({
-        components: {UploadFileComponent, HashComponent, MainCardComponent, Viewer, pdfView}
+        components: {CreateFileShareComponent, UploadFileComponent, HashComponent, MainCardComponent, Viewer, pdfView}
     })
     export default class DriveFiles extends Vue {
 
         $refs !: {
-            file_item: any
+            file_item: any,
+            create_file_share: CreateFileShareComponent
         }
 
 
@@ -230,7 +234,6 @@
                 },
             })
 
-
             let _this = this
             observer.subscribe({
                 next(value) {
@@ -244,9 +247,9 @@
             })
         }
 
-
         loadFiles() {
             this.files = []
+            this.checkFiles = []
 
             const path = this.$route.path
             const paths = path.split('/')
@@ -304,8 +307,19 @@
                             this.files.push(fileItem)
                         })
                     })
+                    let file = new File()
+                    file.id = 'abckefg'
+                    file.isDir = false
+                    file.name = '测试文件.txt'
+                    file.info = new DriveUserFileInfo()
+                    file.info.size = 12345
+                    this.files.push(file)
                 }, 1000)
             }
+        }
+
+        shareFile(file: File) {
+            this.$refs.create_file_share.showModal(file)
         }
 
         move(id: string) {
@@ -346,7 +360,7 @@
         }
 
         download(file: File) {
-            location.href = 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/' + this.space.toLowerCase() + '/' + file.id + '/' + file.name
+            location.href = file.getDownloadUrl(this.space)
         }
 
         deleteFile(file: File) {
@@ -363,7 +377,6 @@
         }
 
         deleteFiles() {
-
             DriveModule.driveDeleteFiles({
                 ids  : [],
                 space: DriveSpace.PUBLIC

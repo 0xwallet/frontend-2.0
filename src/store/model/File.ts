@@ -64,6 +64,10 @@ export class File {
             return 'https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + space.toLowerCase() + '/' + this.id + '/' + this.name + '?token=' + UserModule.drivePreviewToken
         }
     }
+
+    getDownloadUrl(space: DriveSpace): string {
+        return 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/' + space.toLowerCase() + '/' + this.id + '/' + this.name
+    }
 }
 
 export enum DriveSpace {
