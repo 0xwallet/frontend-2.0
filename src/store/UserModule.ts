@@ -146,6 +146,20 @@ class UserModulePrivate extends VuexModule {
         }))
     }
 
+
+    @Action
+    hasUserInfo() {
+        return new Promise((resolve => {
+            if (UserModule.userInfo.id) {
+                resolve(UserModule.userInfo.id)
+            } else {
+                UserModule.me().then(() => {
+                    resolve(UserModule.userInfo.id)
+                })
+            }
+        }))
+    }
+
 }
 
 export const UserModule = getModule(UserModulePrivate)

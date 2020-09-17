@@ -220,6 +220,14 @@
             this.contextMenuTarget = this.$refs.file_item
             console.log('target', this.$refs.file_item)
 
+
+            this.subscript()
+
+        }
+
+        async subscript() {
+            let user_id = await UserModule.hasUserInfo()
+
             const driveFileUploaded = gql`
                 subscription driveFileUploaded($userId : ID!){
                     driveFileUploaded(userId: $userId){
@@ -230,10 +238,9 @@
             const observer = Client.getInstance().subscribe({
                 query    : driveFileUploaded,
                 variables: {
-                    userId: UserModule.userInfo.id,
+                    userId: user_id,
                 },
             })
-
             let _this = this
             observer.subscribe({
                 next(value) {
@@ -301,19 +308,12 @@
                     DriveModule.getDriveListFiles({dirFullName: fullName, space: space}).then((fileList) => {
                         fileList.forEach(fileItem => {
                             if (fileItem.type === FileType.IMG) {
-                                this.images.push(fileItem.getPreviewUrl(this.space))
+                                this.images.push(fileItem.getPreviewUrl())
                                 fileItem.imgIndex = imageIndex++
                             }
                             this.files.push(fileItem)
                         })
                     })
-                    let file = new File()
-                    file.id = 'abckefg'
-                    file.isDir = false
-                    file.name = '测试文件.txt'
-                    file.info = new DriveUserFileInfo()
-                    file.info.size = 12345
-                    this.files.push(file)
                 }, 1000)
             }
         }
@@ -360,7 +360,7 @@
         }
 
         download(file: File) {
-            location.href = file.getDownloadUrl(this.space)
+            location.href = file.getDownloadUrl()
         }
 
         deleteFile(file: File) {
@@ -427,7 +427,7 @@
                 }, 200)
             }
             if (file.type === FileType.PDF) {
-                this.pdfUrl = file.getPreviewUrl(this.space)
+                this.pdfUrl = file.getPreviewUrl()
                 this.pdfShow = true
             }
         }

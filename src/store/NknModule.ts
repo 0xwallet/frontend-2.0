@@ -275,6 +275,16 @@ class NknModulePrivate extends VuexModule {
                         }
 
                         _this.setUploadProgress(n / encoded.length * 100)
+                        let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
+
+                        if (speed > 0.9) {
+                            speed = (speed).toFixed(2) + ' MB/s'
+                        } else if (speed * 1000 > 0.9) {
+                            speed = (speed * 1000).toFixed(2) + 'KB/s'
+                        } else {
+                            speed = (speed * 1000 * 1000).toFixed(2) + 'B/s'
+                        }
+                        _this.setUploadSpeed(speed)
 
                         await session.write(buf)
 
@@ -283,16 +293,7 @@ class NknModulePrivate extends VuexModule {
                                 (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000000000, 'B/s')
 
 
-                            let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
 
-                            if (speed > 0.9) {
-                                speed = speed + ' MB/s'
-                            } else if (speed * 1000 > 0.9) {
-                                speed = speed * 1000 + 'KB/s'
-                            } else {
-                                speed = speed * 1000 * 1000 + 'B/s'
-                            }
-                            _this.setUploadSpeed(speed)
                         }
                     }
                     _this.setUploading(false)

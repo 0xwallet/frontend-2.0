@@ -42,3 +42,39 @@ export const driveMoveFileMutation = gql`
         driveMoveFile(fromId: $fromId,toId: $toId)
     }
 `
+
+export const driveCreateShareMutation = gql`
+    mutation driveCreateShare($code : String!, $userFileId : String!){
+        driveCreateShare(code: $code, userFileId: $userFileId){
+            id
+            token
+            uri
+        }
+    }
+`
+
+export const driveFindShareQuery = gql`
+    query driveFindShare($code : String, $uri : String!){
+        driveFindShare(code: $code, uri: $uri){
+            id
+            uri
+            token
+            expiredAt
+            user{
+                id
+                avatar
+                username
+                bio
+            }
+            userFile{
+                id
+                hash
+                info{
+                    size
+                }
+                space
+                fullName
+            }
+        }
+    }
+`

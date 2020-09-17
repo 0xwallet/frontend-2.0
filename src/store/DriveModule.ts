@@ -2,8 +2,9 @@ import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decor
 import {store} from '@/store/index'
 import {DriveSpace, File, FileType} from '@/store/model/File'
 import {
+    driveCreateShareService,
     driveDeleteFileService,
-    driveDeleteFilesService,
+    driveDeleteFilesService, driveFindShareService,
     driveListFilesService, driveMoveFileService,
     driveUploadByHashService
 } from '@/service/DriveService'
@@ -56,6 +57,7 @@ class DriveModulePrivate extends VuexModule {
                         file.isDir = item.isDir
                         file.fullName = item.fullName
                         file.insertedAt = item.insertedAt
+                        file.space = item.space
                         file.time = formatDate(item.updatedAt)
                         fileList.push(file)
                     }
@@ -112,6 +114,24 @@ class DriveModulePrivate extends VuexModule {
         toId: string,
     }) {
         return driveMoveFileService(params)
+    }
+
+
+    @Action
+    createShare(params: {
+        code: string,
+        userFileId: string
+    }) {
+        return driveCreateShareService(params)
+    }
+
+
+    @Action
+    findShare(params: {
+        code: string,
+        uri: string
+    }) {
+        return driveFindShareService(params)
     }
 }
 

@@ -29,6 +29,16 @@ type CreditCard {
     year: String
 }
 
+type DriveShare {
+    code: String
+    expiredAt: NaiveDateTime
+    id: ID
+    token: String
+    uri: String
+    user: User
+    userFile: DriveUserFile
+}
+
 type DriveUserFile {
     fullName: [String]
     hash: String
@@ -190,10 +200,14 @@ type RootMutationType {
     deleteOrganization(organizationId: ID!): Organization
     "Delete a wallet"
     deleteWallet(id: ID!): Wallet
+    "share user file"
+    driveCreateShare(code: String, userFileId: String!): DriveShare
     "delete file by id, return the actual number of deleted files."
     driveDeleteFile(id: String!, space: DriveSpace!): Int
     "delete file by ids, return the actual number of deleted files."
     driveDeleteFiles(ids: [String]!, space: DriveSpace!): Int
+    "delete shared file."
+    driveDeleteShare(id: ID!): DriveShare
     "move file(s) by id, return the actual number of moved files."
     driveMoveFile(
         fromId: String!,
@@ -308,6 +322,8 @@ type RootMutationType {
 type RootQueryType {
     "Get channel by id, if channel is public or current user in this channel"
     channel(id: ID!): Channel
+    "find share"
+    driveFindShare(code: String, uri: String!): DriveShare
     driveListFiles(
         "[] represent the root directory"
         dirFullName: [String],
@@ -315,6 +331,8 @@ type RootQueryType {
         dirId: String,
         space: DriveSpace = PRIVATE
     ): [DriveUserFile]
+    "list current user's shared files."
+    driveListShares: [DriveShare]
     "Get offline messages"
     imOfflineMessages(
         "The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is negative, the limit must be greater or equal to -offset. Fewer messages may be returned than specified by the limit, even if the end of the message history has not been reached."

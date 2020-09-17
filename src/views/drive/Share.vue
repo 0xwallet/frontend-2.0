@@ -49,30 +49,51 @@
                 </CHeaderNavItem>
             </CHeaderNav>
         </CHeader>
-        <div class="file">
+        <div class="file" v-if="driveShare">
             <div class="box">
                 <div class="info">
                     <div class="title">
-                        <div class="name">文件名</div>
-                        <CButton class="btn btn-outline-info"
+                        <div class="name">{{ driveShare.userFile.fullName[driveShare.userFile.fullName.length - 1] }}
+                        </div>
+                        <CButton class="btn btn-outline-info" @click="download"
                         >Download
                         </CButton>
                         <CButton class="btn btn-outline-danger"
                         >举报
                         </CButton>
                     </div>
-                    <div class="time">分享时间：2020年4月31日 7天后过期</div>
+                    <div class="time">分享时间：2020年4月31日 7天后过期 {{ driveShare.expiredAt }}</div>
                     <hr/>
-                    <div>
-
+                    <div class="show">
+                        <div class="img">
+                            <img :src="fileImg" width="130"/>
+                        </div>
+                        <div class="preview">
+                            <CButton class="btn btn-outline-warning" @click="preview"
+                            >开通超级奢华土豪金会员既可在线预览
+                            </CButton>
+                        </div>
                     </div>
                 </div>
                 <div class="user">
                     <div class="avatar"></div>
-                    <div class="name">这里是用户名</div>
+                    <div class="name">{{ driveShare.user.username }}</div>
                 </div>
             </div>
         </div>
+        <div class="code" v-if="!driveShare">
+            <div class="box">
+                <div style="flex: 1;margin-right: 20px">
+                    <CInput label="请输入提取码：" :value.sync="code"></CInput>
+                </div>
+                <div style="margin-top: 30px">
+                    <button type="button" class="btn btn-success" @click="getFile">
+                        提取文件
+                    </button>
+                </div>
+            </div>
+        </div>
+        <pdf-view v-if="pdfShow" :url="pdfUrl" @onClose="onPdfClose"></pdf-view>
     </div>
 </template>
 
@@ -81,11 +102,25 @@
     import Component from 'vue-class-component'
     import TheHeaderDropdownAccount from '@/containers/TheHeaderDropdownAccount.vue'
     import {UserModule} from '@/store/UserModule'
+    // eslint-disable-next-line no-unused-vars
+    import {DriveUserShare, File, FileType} from '@/store/model/File'
+    import {DriveModule} from '@/store/DriveModule'
+    import {CommonModule} from '@/store/CommonModule'
+    import PdfComponent from '@/views/drive/PdfComponent.vue'
+    import pdfView from './PdfComponent.vue'
+
 
     @Component({
-        components: {TheHeaderDropdownAccount}
+        components: {PdfComponent, TheHeaderDropdownAccount, pdfView}
     })
     export default class Share extends Vue {
+
+        driveShare: DriveUserShare | null = null
+        uri = ''
+        code = ''
+        pdfShow = false
+        pdfUrl = ''
+
 
         locale = [
             {name: 'en', text: 'English'},
@@ -96,8 +131,42 @@
             let paths = this.$route.fullPath.split('/')
             paths.shift()
             paths.shift()
-            let fileId = paths[0]
-            console.log(fileId)
+            this.uri = paths[0]
+            let code = localStorage.getItem(this.uri)
+            if (code) {
+                this.code = code
+                this.getFile()
+            }
+        }
+
+        download() {
+            location.href = File.getDownloadUrl(this.driveShare!.userFile, this.driveShare?.token)
+        }
+
+        preview() {
+            let type = File.getType(this.driveShare!.userFile.fullName!.join('/'))
+            if (type === FileType.PDF) {
+                this.pdfUrl = File.getPreviewUrl(this.driveShare!.userFile, this.driveShare?.token)
+                this.pdfShow = true
+            }
+        }
+
+        getFile() {
+            DriveModule.findShare({
+                code: this.code,
+                uri : this.uri
+            }).then(res => {
+                let data = res.data.driveFindShare
+                console.log(data)
+                this.driveShare = data
+                localStorage.setItem(this.uri, this.code)
+            }).catch(() => {
+                CommonModule.toast({content: '文件无法提取'})
+            })
+        }
+
+        onPdfClose() {
+            this.pdfShow = false
         }
 
         getCurrentLocale() {
@@ -119,6 +188,9 @@
             this.$router.go(0)
         }
 
+        get fileImg() {
+            return this.driveShare ? File.getImg(File.getType(this.driveShare.userFile.fullName!.join('/'))) : ''
+        }
 
         get minimize(): boolean {
             return this.$store.state.sidebarMinimize
@@ -193,6 +265,16 @@
                     color #999999
                     font-size 13px
 
+                .show
+                    .img
+                        margin 0 auto
+                        width 150px
+                        margin-top 100px
+
+                    .preview
+                        text-align center
+                        margin-top 50px
+
             .user
                 margin 10px
                 background white
@@ -208,7 +290,21 @@
                     border 1px solid #E4E5E6
                     margin 0 auto
                     margin-top 30px
+
                 .name
                     margin-top 10px
                     text-align center
+
+    .code
+        padding-top 200px
+
+        .box
+            background white
+            width 400px
+            margin 0 auto
+            box-shadow 1px 1px 5px #CCCCCC
+            border-radius 5px
+            padding 70px 40px
+            justify-content space-between
+            display flex
 </style>

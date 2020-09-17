@@ -1,8 +1,9 @@
 import Client from '@/graphql/apollo'
 import {DriveSpace} from '@/store/model/File'
 import {
+    driveCreateShareMutation,
     driveDeleteFileMutation,
-    driveDeleteFilesMutation,
+    driveDeleteFilesMutation, driveFindShareQuery,
     driveListFilesQuery, driveMoveFileMutation,
     driveUploadByHashMutation
 } from '@/graphql/driveGraphql'
@@ -51,4 +52,20 @@ export const driveMoveFileService = (params: {
 }) => Client.getInstance().mutate({
     mutation : driveMoveFileMutation,
     variables: params,
+})
+
+export const driveCreateShareService = (params: {
+    code: string,
+    userFileId: string
+}) => Client.getInstance().mutate({
+    mutation : driveCreateShareMutation,
+    variables: params
+})
+
+export const driveFindShareService = (params: {
+    code: string,
+    uri: string
+}) => Client.getInstance().query({
+    query    : driveFindShareQuery,
+    variables: params
 })

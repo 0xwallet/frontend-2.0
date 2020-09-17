@@ -1,4 +1,5 @@
 import {UserModule} from '@/store/UserModule'
+import {User} from '@/store/model/User'
 
 export class File {
     id!: string
@@ -6,6 +7,7 @@ export class File {
     hash !: string
     type !: FileType
     active: boolean = false
+    space ?: DriveSpace
     info !: DriveUserFileInfo
     fullName ?: string[]
     time ?: string
@@ -18,7 +20,11 @@ export class File {
     }
 
     getImg() {
-        switch (this.type) {
+        return File.getImg(this.type)
+    }
+
+    static getImg(type: FileType) {
+        switch (type) {
             case FileType.DIR:
             case FileType.UP:
                 return require('@/assets/images/icon/drive/dir.png')
@@ -40,6 +46,10 @@ export class File {
     }
 
     getType(name: string): FileType {
+        return File.getType(name)
+    }
+
+    static getType(name: string): FileType {
         let nameValue = name.split('.')
         if (nameValue.length < 2) {
             return FileType.UNKNOW
@@ -57,17 +67,29 @@ export class File {
         }
     }
 
-    getPreviewUrl(space: DriveSpace): string {
-        if (space === DriveSpace.PUBLIC) {
-            return 'https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + space.toLowerCase() + '/' + this.id + '/' + this.name
-        } else {
-            return 'https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + space.toLowerCase() + '/' + this.id + '/' + this.name + '?token=' + UserModule.drivePreviewToken
-        }
+    static getName(file: File) {
+        return file.fullName![file.fullName!.length - 1]
     }
 
-    getDownloadUrl(space: DriveSpace): string {
-        return 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/' + space.toLowerCase() + '/' + this.id + '/' + this.name
+    getPreviewUrl(): string {
+        return File.getPreviewUrl(this)
     }
+
+    static getPreviewUrl(file: File, token ?: string): string {
+        console.log(file)
+        return 'https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
+            + (file.space === DriveSpace.PUBLIC ? '?token=' + (token ? token : UserModule.drivePreviewToken) : '')
+    }
+
+    getDownloadUrl(): string {
+        return File.getDownloadUrl(this)
+    }
+
+    static getDownloadUrl(file: File, token ?: string): string {
+        return 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
+            + (file.space === DriveSpace.PUBLIC ? '?token=' + (token ? token : UserModule.drivePreviewToken) : '')
+    }
+
 }
 
 export enum DriveSpace {
@@ -97,4 +119,13 @@ function formatBytes(bytes: number): string {
     else if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB'
     else if (bytes < 1073741824) return (bytes / 1048576).toFixed(2) + ' MB'
     else return (bytes / 1073741824).toFixed(2) + ' GB'
+}
+
+export class DriveUserShare {
+    id !: string
+    uri !: string
+    token !: string
+    expiredAt !: string
+    user !: User
+    userFile !: File
 }

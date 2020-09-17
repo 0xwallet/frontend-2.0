@@ -3,15 +3,31 @@
         <CModal
                 title="Share File"
                 :show.sync="show"
-                size="sm"
         >
-            <div class="fileName">{{ fileName }}</div>
-            <CInput label="input password" :value.sync="$v.form.password.$model"
+            <div class="fileName" v-if="uri === ''">{{ fileName }}</div>
+            <CInput v-if="uri===''" label="input password" :value.sync="$v.form.password.$model"
                     :isValid="checkIfValid('password')"
                     invalidFeedback="This is a required field and length 4"
             ></CInput>
+            <div class="share-res" v-if="uri !== ''">
+                <div class="title">
+                    <div>
+                        <CImg class="icon"
+                              :src="require('@/assets/images/icon/icon-ok.png')"></CImg>
+                    </div>
+                    <div>分享成功</div>
+                </div>
+                <div>链接：{{ shareUri }}</div>
+                <div>提取码：{{ form.password }}</div>
+                <div class="time">
+                    <div>7天内有效</div>
+                    <div class="copy" :data-clipboard-text="shareString" @click="copy">
+                        复制链接及提取码
+                    </div>
+                </div>
+            </div>
             <div slot="footer">
-                <button type="button" class="btn btn-light">
+                <button v-if="uri === ''" type="button" class="btn btn-light" @click="share">
                     Share
                 </button>
             </div>
@@ -27,6 +43,11 @@
     import {randomString} from '@/common/StringUtil'
     import {validationMixin} from 'vuelidate'
     import {maxLength, minLength, required} from 'vuelidate/lib/validators'
+    import {DriveModule} from '@/store/DriveModule'
+    import {CommonModule} from '@/store/CommonModule'
+    import {UserModule} from '@/store/UserModule'
+    import Clipboard from 'clipboard'
+    import {ToastColor} from '@/store/model/Toast'
 
     @Component({
         mixins     : [validationMixin],
@@ -45,16 +66,40 @@
         fileName = 'no name'
         file ?: File
         form = this.getEmptyForm()
+        uri = ''
 
         showModal(file: File) {
             this.show = true
             this.file = file
+            this.fileName = file.name
             // 生成一个密码
             this.form.password = randomString(4)
         }
 
         valid() {
             return !this.$v.form.$invalid
+        }
+
+        copy(){
+            let clipboard = new Clipboard('.copy')
+            clipboard.on('success', () => {
+                CommonModule.toast({content: 'Copy Successfully', color: ToastColor.SUCCESS})
+                clipboard.destroy()
+            })
+            clipboard.on('error', () => {
+                CommonModule.toast({content: 'The browser does not support automatic copying'})
+                clipboard.destroy()
+            })
+
+        }
+
+        get shareUri() {
+            let host = window.location.host
+            return document.location.protocol + '//' + host + '/#/s/' + this.uri
+        }
+
+        get shareString() {
+            return '链接：' + this.shareUri + ' 提取码：' + this.form.password + ' --来自0xDrive网盘' + UserModule.userInfo.username + '的分享'
         }
 
         checkIfValid(fieldName: string) {
@@ -76,7 +121,15 @@
 
         share() {
             if (this.valid()) {
-                //TODO: 调用createShare
+                DriveModule.createShare({
+                    code      : this.form.password,
+                    userFileId: this.file!.id
+                }).then(res => {
+                    this.uri = res.data.driveCreateShare.uri
+                }).catch(() => {
+                    this.show = false
+                    CommonModule.toast({content: '分享错误'})
+                })
             }
         }
     }
@@ -85,4 +138,28 @@
 <style lang="stylus" scoped>
     .fileName
         font-size 26px
+
+    .share-res
+        .title
+            font-weight bold
+            font-size 18px
+            display flex
+            justify-content center
+            margin-bottom 20px
+
+            .icon
+                height 18px
+                margin-right 5px
+                margin-left -10px
+
+        .time
+            font-size 12px
+            color #999999
+            margin-top 20px
+            display flex
+            justify-content space-evenly
+
+            .copy
+                color #321FDB
+                cursor pointer
 </style>
