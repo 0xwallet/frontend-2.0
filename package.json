@@ -20,6 +20,7 @@
   "dependencies": {
     "@absinthe/socket-apollo-link": "^0.2.1",
     "@babel/compat-data": "^7.11.0",
+    "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.11.5",
     "@coreui/coreui-pro": "^3.2.0",
     "@coreui/icons": "^1.0.1",

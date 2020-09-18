@@ -62,7 +62,7 @@
     invariant "^2.2.4"
     semver "^5.5.0"
 
-"@babel/core@^7.1.0", "@babel/core@^7.11.0", "@babel/core@^7.8.4":
+"@babel/core@^7.0.0", "@babel/core@^7.1.0", "@babel/core@^7.11.0", "@babel/core@^7.8.4":
   version "7.11.6"
   resolved "https://registry.npm.taobao.org/@babel/core/download/@babel/core-7.11.6.tgz?cache=0&sync_timestamp=1599147010374&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fcore%2Fdownload%2F%40babel%2Fcore-7.11.6.tgz#3a9455dc7387ff1bac45770650bc13ba04a15651"
   integrity sha1-OpRV3HOH/xusRXcGULwTugShVlE=
@@ -6726,13 +6726,6 @@ in-publish@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/in-publish/download/in-publish-2.0.1.tgz?cache=0&sync_timestamp=1584389322119&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fin-publish%2Fdownload%2Fin-publish-2.0.1.tgz#948b1a535c8030561cea522f73f78f4be357e00c"
   integrity sha1-lIsaU1yAMFYc6lIvc/ePS+NX4Aw=
-
-increase-memory-limit@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.npm.taobao.org/increase-memory-limit/download/increase-memory-limit-1.0.7.tgz#80417e736e45fcfd6a3d515b435e2eaea4e62233"
-  integrity sha1-gEF+c25F/P1qPVFbQ14urqTmIjM=
-  dependencies:
-    glob "^7.1.1"
 
 indent-string@^2.1.0:
   version "2.1.0"
