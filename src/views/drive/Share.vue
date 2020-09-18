@@ -115,6 +115,7 @@
     import pdfView from './PdfComponent.vue'
     import 'viewerjs/dist/viewer.css'
     import Viewer from 'v-viewer/src/component.vue'
+    import {ToastColor} from '@/store/model/Toast'
 
 
     @Component({
@@ -186,11 +187,14 @@
                 uri : this.uri
             }).then(res => {
                 let data = res.data.driveFindShare
-                console.log(data)
+                if (!data) {
+                    CommonModule.toast({content: '密码错误',color: ToastColor.DANGER})
+                    return
+                }
                 this.driveShare = data
                 localStorage.setItem(this.uri, this.code)
             }).catch(() => {
-                CommonModule.toast({content: '文件无法提取'})
+                CommonModule.toast({content: '密码错误',color: ToastColor.DANGER})
             })
         }
 
