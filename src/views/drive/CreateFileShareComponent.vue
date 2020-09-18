@@ -39,7 +39,7 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     // eslint-disable-next-line no-unused-vars
-    import {File} from '@/store/model/file'
+    import {File} from '@/store/model/File'
     import {randomString} from '@/common/StringUtil'
     import {validationMixin} from 'vuelidate'
     import {maxLength, minLength, required} from 'vuelidate/lib/validators'
