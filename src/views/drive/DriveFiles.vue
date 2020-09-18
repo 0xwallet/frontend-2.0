@@ -158,7 +158,7 @@
 
         <upload-file-component ref="uploadFileComponent" :path="currentPath"
                                :public="space"></upload-file-component>
-        <viewer style="display: none" :images="images" ref="viewer" @inited="inited" v-if="showImagePreview" rebuild>
+        <viewer style="display: none;" :images="images" ref="viewer" @inited="inited" v-if="showImagePreview" rebuild>
             <template slot-scope="scope">
                 <img v-for="(src,i) in scope.images" :src="src" :key="i" alt="">
             </template>

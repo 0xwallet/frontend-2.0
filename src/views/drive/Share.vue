@@ -94,6 +94,11 @@
             </div>
         </div>
         <pdf-view v-if="pdfShow" :url="pdfUrl" @onClose="onPdfClose"></pdf-view>
+        <viewer style="display: none" :images="images" ref="viewer" @inited="inited" v-if="showImagePreview">
+            <template slot-scope="scope">
+                <img v-for="(src,i) in scope.images" :src="src" :key="i" alt="">
+            </template>
+        </viewer>
     </div>
 </template>
 
@@ -108,10 +113,12 @@
     import {CommonModule} from '@/store/CommonModule'
     import PdfComponent from '@/views/drive/PdfComponent.vue'
     import pdfView from './PdfComponent.vue'
+    import 'viewerjs/dist/viewer.css'
+    import Viewer from 'v-viewer/src/component.vue'
 
 
     @Component({
-        components: {PdfComponent, TheHeaderDropdownAccount, pdfView}
+        components: {PdfComponent, TheHeaderDropdownAccount, pdfView, Viewer}
     })
     export default class Share extends Vue {
 
@@ -119,7 +126,10 @@
         uri = ''
         code = ''
         pdfShow = false
+        showImagePreview = false
         pdfUrl = ''
+        images: string[] = []
+        viewer: any
 
 
         locale = [
@@ -139,16 +149,35 @@
             }
         }
 
+        inited(viewer: any) {
+            console.log('inited', viewer)
+            this.viewer = viewer
+        }
+
         download() {
-            location.href = File.getDownloadUrl(this.driveShare!.userFile, this.driveShare?.token)
+            location.href = File.getDownloadUrl(this.driveShare!.userFile, this.driveShare?.token, this.driveShare?.user.id)
         }
 
         preview() {
             let type = File.getType(this.driveShare!.userFile.fullName!.join('/'))
-            if (type === FileType.PDF) {
-                this.pdfUrl = File.getPreviewUrl(this.driveShare!.userFile, this.driveShare?.token)
-                this.pdfShow = true
+            let previewUrl = File.getPreviewUrl(this.driveShare!.userFile, this.driveShare?.token, this.driveShare?.user.id)
+            switch (type) {
+                case FileType.PDF:
+                    this.pdfUrl = previewUrl
+                    this.pdfShow = true
+                    break
+                case FileType.IMG:
+                    if (!this.showImagePreview) {
+                        this.images[0] = previewUrl
+                        this.showImagePreview = true
+                        setTimeout(() => {
+                            this.viewer.show()
+                        }, 300)
+                    }
+                    break
+                default:
             }
+
         }
 
         getFile() {

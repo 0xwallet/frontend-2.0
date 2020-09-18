@@ -75,9 +75,8 @@ export class File {
         return File.getPreviewUrl(this)
     }
 
-    static getPreviewUrl(file: File, token ?: string): string {
-        console.log(file)
-        return 'https://drive-s.owaf.io/preview/' + UserModule.userInfo.id + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
+    static getPreviewUrl(file: File, token ?: string, userId ?: string): string {
+        return 'https://drive-s.owaf.io/preview/' + (userId ?? UserModule.userInfo.id) + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
             + (file.space === DriveSpace.PUBLIC ? '?token=' + (token ? token : UserModule.drivePreviewToken) : '')
     }
 
@@ -85,8 +84,8 @@ export class File {
         return File.getDownloadUrl(this)
     }
 
-    static getDownloadUrl(file: File, token ?: string): string {
-        return 'https://drive-s.owaf.io/download/' + UserModule.userInfo.id + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
+    static getDownloadUrl(file: File, token ?: string, userId ?: string): string {
+        return 'https://drive-s.owaf.io/download/' + (userId ?? UserModule.userInfo.id) + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
             + (file.space === DriveSpace.PUBLIC ? '?token=' + (token ? token : UserModule.drivePreviewToken) : '')
     }
 

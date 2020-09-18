@@ -95,7 +95,7 @@
 
         get shareUri() {
             let host = window.location.host
-            return document.location.protocol + '//' + host + '/#/s/' + this.uri
+            return document.location.protocol + '//' + host + '/' + this.$router.resolve({path: '/s/' + this.uri}).href
         }
 
         get shareString() {
