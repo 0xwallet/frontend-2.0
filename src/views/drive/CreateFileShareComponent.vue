@@ -80,7 +80,7 @@
             return !this.$v.form.$invalid
         }
 
-        copy(){
+        copy() {
             let clipboard = new Clipboard('.copy')
             clipboard.on('success', () => {
                 CommonModule.toast({content: 'Copy Successfully', color: ToastColor.SUCCESS})

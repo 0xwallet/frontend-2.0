@@ -6727,6 +6727,13 @@ in-publish@^2.0.0:
   resolved "https://registry.npm.taobao.org/in-publish/download/in-publish-2.0.1.tgz?cache=0&sync_timestamp=1584389322119&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fin-publish%2Fdownload%2Fin-publish-2.0.1.tgz#948b1a535c8030561cea522f73f78f4be357e00c"
   integrity sha1-lIsaU1yAMFYc6lIvc/ePS+NX4Aw=
 
+increase-memory-limit@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npm.taobao.org/increase-memory-limit/download/increase-memory-limit-1.0.7.tgz#80417e736e45fcfd6a3d515b435e2eaea4e62233"
+  integrity sha1-gEF+c25F/P1qPVFbQ14urqTmIjM=
+  dependencies:
+    glob "^7.1.1"
+
 indent-string@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npm.taobao.org/indent-string/download/indent-string-2.1.0.tgz?cache=0&sync_timestamp=1589902573591&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Findent-string%2Fdownload%2Findent-string-2.1.0.tgz#8e2d48348742121b4a8218b7a137e9a52049dc80"
