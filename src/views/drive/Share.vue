@@ -94,7 +94,7 @@
             </div>
         </div>
         <pdf-view v-if="pdfShow" :url="pdfUrl" @onClose="onPdfClose"></pdf-view>
-        <viewer style="display: none" :images="images" ref="viewer" @inited="inited" v-if="showImagePreview">
+        <viewer style="display: none" :images="images" ref="viewer" @inited="inited" v-if="showImagePreview" rebuild>
             <template slot-scope="scope">
                 <img v-for="(src,i) in scope.images" :src="src" :key="i" alt="">
             </template>
@@ -164,6 +164,7 @@
 
             console.log(this.driveShare)
             let previewUrl = File.getPreviewUrl(this.driveShare!.userFile, this.driveShare?.token, this.driveShare?.user.id)
+
             switch (type) {
                 case FileType.PDF:
                     this.pdfUrl = previewUrl
@@ -176,6 +177,8 @@
                         setTimeout(() => {
                             this.viewer.show()
                         }, 300)
+                    }else {
+                        this.viewer.show()
                     }
                     break
                 default:
