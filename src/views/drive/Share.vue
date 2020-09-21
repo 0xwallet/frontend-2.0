@@ -161,6 +161,8 @@
 
         preview() {
             let type = File.getType(this.driveShare!.userFile.fullName!.join('/'))
+
+            console.log(this.driveShare)
             let previewUrl = File.getPreviewUrl(this.driveShare!.userFile, this.driveShare?.token, this.driveShare?.user.id)
             switch (type) {
                 case FileType.PDF:
