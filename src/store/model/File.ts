@@ -77,7 +77,7 @@ export class File {
 
     static getPreviewUrl(file: File, token ?: string, userId ?: string): string {
         return 'https://drive-s.owaf.io/preview/' + (userId ?? UserModule.userInfo.id) + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
-            + (file.space === DriveSpace.PUBLIC ? '?token=' + (token ? token : UserModule.drivePreviewToken) : '')
+            + '?token=' + (token ? token : UserModule.drivePreviewToken)
     }
 
     getDownloadUrl(): string {
@@ -86,7 +86,7 @@ export class File {
 
     static getDownloadUrl(file: File, token ?: string, userId ?: string): string {
         return 'https://drive-s.owaf.io/download/' + (userId ?? UserModule.userInfo.id) + '/' + file.space!.toLowerCase() + '/' + file.id + '/' + File.getName(file)
-            + (file.space === DriveSpace.PUBLIC ? '?token=' + (token ? token : UserModule.drivePreviewToken) : '')
+            + '?token=' + (token ? token : UserModule.drivePreviewToken)
     }
 
 }
