@@ -70,7 +70,7 @@
                         </div>
                         <div class="preview">
                             <CButton class="btn btn-outline-warning" @click="preview"
-                            >开通超级奢华土豪金会员既可在线预览
+                            >在线预览
                             </CButton>
                         </div>
                     </div>
