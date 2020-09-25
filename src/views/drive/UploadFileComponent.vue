@@ -28,7 +28,6 @@
     import {Prop} from 'vue-property-decorator'
     import {NknModule} from '@/store/NknModule'
     import {CommonModule} from '@/store/CommonModule'
-    // eslint-disable-next-line no-unused-vars
     import {DriveSpace} from '@/store/model/File'
 
     @Component
@@ -48,7 +47,7 @@
         path !: string[] | null
 
         @Prop()
-        public !: DriveSpace
+        public !: string
 
         showModal() {
             this.show = true
@@ -64,7 +63,6 @@
 
         fileChange(input: any) {
             this.file = input.target.files[0]
-            console.log(this.file)
         }
 
         uploadFile() {
@@ -73,11 +71,11 @@
                 return
             }
             let paths = this.pathString.split('/').filter((v) => {
-                return v && v.trim() && v !== 'MetaNet' && v !== 'Private'
+                return v && v.trim() && v !== 'MetaNet' && v !== 'Personal'
             })
             console.log(paths)
             NknModule.uploadFile({
-                file: this.file, paths: paths, space: this.public
+                file: this.file, paths: paths, space: this.public === 'MetaNet' ? DriveSpace.PUBLIC : DriveSpace.PRIVATE
             })
             this.show = false
         }

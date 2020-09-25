@@ -164,26 +164,27 @@
                     </div>
                     <hr>
                     <h6>System Utilization</h6>
-                    <div class="text-uppercase mb-1 mt-4">
-                        <small><b>CPU Usage</b></small>
-                    </div>
-                    <CProgress class="progress-xs" color="info" :value="25"/>
-                    <small class="text-muted">348 Processes. 1/4 Cores.</small>
-                    <div class="text-uppercase mb-1 mt-2">
-                        <small><b>Memory Usage</b></small>
-                    </div>
-                    <CProgress class="progress-xs" color="warning" :value="70"/>
-                    <small class="text-muted">11444MB/16384MB</small>
-                    <div class="text-uppercase mb-1 mt-2">
-                        <small><b>SSD 1 Usage</b></small>
-                    </div>
-                    <CProgress class="progress-xs" color="danger" :value="95"/>
-                    <small class="text-muted">243GB/256GB</small>
-                    <div class="text-uppercase mb-1 mt-2">
-                        <small><b>SSD 2 Usage</b></small>
-                    </div>
-                    <CProgress class="progress-xs" color="success" :value="10"/>
-                    <small class="text-muted">25GB/256GB</small>
+                    <system-utilization-component></system-utilization-component>
+<!--                    <div class="text-uppercase mb-1 mt-4">-->
+<!--                        <small><b>CPU Usage</b></small>-->
+<!--                    </div>-->
+<!--                    <CProgress class="progress-xs" color="info" :value="25"/>-->
+<!--                    <small class="text-muted">348 Processes. 1/4 Cores.</small>-->
+<!--                    <div class="text-uppercase mb-1 mt-2">-->
+<!--                        <small><b>Memory Usage</b></small>-->
+<!--                    </div>-->
+<!--                    <CProgress class="progress-xs" color="warning" :value="70"/>-->
+<!--                    <small class="text-muted">11444MB/16384MB</small>-->
+<!--                    <div class="text-uppercase mb-1 mt-2">-->
+<!--                        <small><b>SSD 1 Usage</b></small>-->
+<!--                    </div>-->
+<!--                    <CProgress class="progress-xs" color="danger" :value="95"/>-->
+<!--                    <small class="text-muted">243GB/256GB</small>-->
+<!--                    <div class="text-uppercase mb-1 mt-2">-->
+<!--                        <small><b>SSD 2 Usage</b></small>-->
+<!--                    </div>-->
+<!--                    <CProgress class="progress-xs" color="success" :value="10"/>-->
+<!--                    <small class="text-muted">25GB/256GB</small>-->
                 </div>
             </CTab>
         </CTabs>
@@ -193,8 +194,10 @@
 <script lang="ts">
     import Vue from 'vue'
     import Component from 'vue-class-component'
-
-    @Component
+    import SystemUtilizationComponent from '@/components/SystemUtilizationComponent.vue'
+    @Component({
+        components: {SystemUtilizationComponent}
+    })
     export default class TheAside extends Vue {
         lorem = 'Lorem ipsum doliusmod tempor incididunt ut labore et dolore magna aliqua.'
     }

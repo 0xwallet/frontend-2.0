@@ -18,7 +18,8 @@
     "security": "Security",
     "blockchain": "0xDrive",
     "account_type": "Account Type",
-    "basic": "Basic"
+    "basic": "Basic",
+    "system_utilization" : "System Utilization"
   },
   "header": {
     "dash_board": "Dashboard",

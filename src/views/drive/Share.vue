@@ -107,7 +107,6 @@
     import Component from 'vue-class-component'
     import TheHeaderDropdownAccount from '@/containers/TheHeaderDropdownAccount.vue'
     import {UserModule} from '@/store/UserModule'
-    // eslint-disable-next-line no-unused-vars
     import {DriveUserShare, File, FileType} from '@/store/model/File'
     import {DriveModule} from '@/store/DriveModule'
     import {CommonModule} from '@/store/CommonModule'

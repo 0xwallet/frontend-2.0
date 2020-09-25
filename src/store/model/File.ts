@@ -128,3 +128,5 @@ export class DriveUserShare {
     user !: User
     userFile !: File
 }
+
+export { formatBytes }

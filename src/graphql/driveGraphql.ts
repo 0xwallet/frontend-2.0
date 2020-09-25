@@ -78,3 +78,27 @@ export const driveFindShareQuery = gql`
         }
     }
 `
+
+export const driveListSharesQuery = gql`
+    query driveListShares{
+        driveListShares{
+            id
+            token
+            uri
+            userFile{
+                id
+                fullName
+            }
+            expiredAt
+            code
+        }
+    }
+`
+
+export const driveMakeDirUnderMutation = gql`
+    mutation driveMakeDirUnder($fullName : [String]!, $space : DriveSpace){
+        driveMakeDir(fullName: $fullName,space: $space){
+            id
+        }
+    }
+`

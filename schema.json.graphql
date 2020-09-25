@@ -52,6 +52,7 @@ type DriveUserFile {
 }
 
 type DriveUserFileInfo {
+    description: String
     size: String
 }
 
@@ -208,6 +209,22 @@ type RootMutationType {
     driveDeleteFiles(ids: [String]!, space: DriveSpace!): Int
     "delete shared file."
     driveDeleteShare(id: ID!): DriveShare
+    "edit user file description"
+    driveEditDescription(description: String!, space: DriveSpace = PRIVATE, userFileId: String!): DriveUserFile
+    "make dir by full name"
+    driveMakeDir(
+        "dir full path name"
+        fullName: [String]!,
+        space: DriveSpace = PRIVATE
+    ): DriveUserFile
+    "make dir by parent dir id"
+    driveMakeDirUnder(
+        "dir name"
+        name: String!,
+        "parent dir id, must be dir"
+        parentId: String!,
+        space: DriveSpace = PRIVATE
+    ): DriveUserFile
     "move file(s) by id, return the actual number of moved files."
     driveMoveFile(
         fromId: String!,
@@ -217,7 +234,7 @@ type RootMutationType {
     "Generate preview token."
     drivePreviewToken: String
     "upload file by exist hash"
-    driveUploadByHash(fullName: [String]!, hash: String!, space: DriveSpace = PRIVATE): DriveUserFile
+    driveUploadByHash(description: String = "", fullName: [String]!, hash: String!, space: DriveSpace = PRIVATE): DriveUserFile
     "Edit current user"
     editCurrentUser(
         avatar: String,
@@ -532,15 +549,15 @@ string.
 scalar NaiveDateTime
 
 """
-The `Json` scalar type represents arbitrary json string data, represented as UTF-8
-character sequences. The Json type is most often used to represent a free-form
-human-readable json string.
-"""
-scalar Json
-
-"""
 `Snowflake` type represents a 64 bit number, appears in JSON responses as a
 UTF-8 String due to Javascript's lack of support for numbers > 53-bits.
 Its parsed again to an integer after received.
 """
 scalar Snowflake
+
+"""
+The `Json` scalar type represents arbitrary json string data, represented as UTF-8
+character sequences. The Json type is most often used to represent a free-form
+human-readable json string.
+"""
+scalar Json

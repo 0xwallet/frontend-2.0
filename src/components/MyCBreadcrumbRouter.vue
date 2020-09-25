@@ -27,6 +27,7 @@
                 const paths = path.split("/")
                 paths.shift()
                 paths.shift()
+
                 routes.map(route => {
                     const meta = route.meta || {}
                     items.push({
@@ -34,10 +35,14 @@
                         text: this.$t(meta.label || route.name)
                     })
                 })
+
+                let to = '/drive'
+
                 paths.map(route => {
+                    to += '/' + route
                     if (route !== '') {
                         items.push({
-                            to: route,
+                            to: to,
                             text: route
                         })
                     }

@@ -1,7 +1,7 @@
 <template>
     <div>
         <CCard :class="[{'main-card-dark':darkMode},'main-card']">
-            <CCardHeader class="header">
+            <CCardHeader class="header" v-if="hasTitle">
                 {{ title }}
                 <slot name="left">
 
@@ -39,6 +39,12 @@
 
         @Prop({type: String, default: 'Default Title'})
         title !: string
+
+        @Prop({
+            type   : Boolean,
+            default: true
+        })
+        hasTitle !: boolean
 
         changeEdit(checked: boolean) {
             this.edit = checked

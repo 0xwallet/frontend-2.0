@@ -19,7 +19,8 @@
     "security": "安全",
     "blockchain": "网盘",
     "account_type": "账户类型",
-    "basic": "用户"
+    "basic": "用户",
+    "system_utilization": "资源使用率"
   },
   "header": {
     "dash_board": "仪表盘",

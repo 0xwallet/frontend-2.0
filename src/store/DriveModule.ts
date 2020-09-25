@@ -5,7 +5,7 @@ import {
     driveCreateShareService,
     driveDeleteFileService,
     driveDeleteFilesService, driveFindShareService,
-    driveListFilesService, driveMoveFileService,
+    driveListFilesService, driveListSharesService, driveMakeDirService, driveMoveFileService,
     driveUploadByHashService
 } from '@/service/DriveService'
 import {formatDate} from '@/common/DateUtil'
@@ -34,18 +34,18 @@ class DriveModulePrivate extends VuexModule {
                 let fileList = Array<File>()
                 res.data.driveListFiles.forEach((item: any, index: number) => {
                     if (index == 0) {
-                        let fileName = '..'
-                        let file = new File()
-                        file.type = FileType.UP
-                        file.id = item.id
-                        file.name = fileName
-                        file.hash = item.hash
-                        file.info = item.info
-                        file.time = ''
-                        fileList.push(file)
-                        this.setCurrentId(item.id)
+                        // let fileName = '..'
+                        // let file = new File()
+                        // file.type = FileType.UP
+                        // file.id = item.id
+                        // file.name = fileName
+                        // file.hash = item.hash
+                        // file.info = item.info
+                        // file.time = ''
+                        // fileList.push(file)
+                        // this.setCurrentId(item.id)
                     } else if (index == 1) {
-                        console.log(item)
+                        // console.log(item)
                     } else {
                         let fileName = item.fullName[item.fullName.length - 1]
                         let file = new File()
@@ -132,6 +132,19 @@ class DriveModulePrivate extends VuexModule {
         uri: string
     }) {
         return driveFindShareService(params)
+    }
+
+    @Action
+    driveListShares() {
+        return driveListSharesService()
+    }
+
+    @Action
+    driveMakeDir(params: {
+        fullName: string[],
+        space: DriveSpace
+    }) {
+        return driveMakeDirService(params)
     }
 }
 

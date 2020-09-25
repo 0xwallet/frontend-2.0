@@ -4,7 +4,7 @@ import {
     driveCreateShareMutation,
     driveDeleteFileMutation,
     driveDeleteFilesMutation, driveFindShareQuery,
-    driveListFilesQuery, driveMoveFileMutation,
+    driveListFilesQuery, driveListSharesQuery, driveMakeDirUnderMutation, driveMoveFileMutation,
     driveUploadByHashMutation
 } from '@/graphql/driveGraphql'
 
@@ -67,5 +67,18 @@ export const driveFindShareService = (params: {
     uri: string
 }) => Client.getInstance().query({
     query    : driveFindShareQuery,
+    variables: params
+})
+
+export const driveListSharesService = () => Client.getInstance().query({
+    query      : driveListSharesQuery,
+    fetchPolicy: 'network-only'
+})
+
+export const driveMakeDirService = (params: {
+    fullName: string[],
+    space: DriveSpace,
+}) => Client.getInstance().mutate({
+    mutation : driveMakeDirUnderMutation,
     variables: params
 })
