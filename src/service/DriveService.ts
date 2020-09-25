@@ -23,6 +23,7 @@ export const driveUploadByHashService = (param: {
     fullName: string[],
     hash: string,
     space: DriveSpace,
+    description: string
 }) => Client.getInstance().mutate({
     mutation : driveUploadByHashMutation,
     variables: param

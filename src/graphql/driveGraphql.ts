@@ -10,6 +10,7 @@ export const driveListFilesQuery = gql`
             space
             info{
                 size
+                description
             }
             updatedAt
             insertedAt
@@ -18,8 +19,8 @@ export const driveListFilesQuery = gql`
 `
 
 export const driveUploadByHashMutation = gql`
-    mutation driveUploadByHash($fullName:[String]!,$hash: String!,$space:DriveSpace!){
-        driveUploadByHash(fullName:$fullName,hash:$hash,space:$space){
+    mutation driveUploadByHash($fullName:[String]!,$hash: String!,$space:DriveSpace!,$description : String = ""){
+        driveUploadByHash(fullName:$fullName,hash:$hash,space:$space,description: $description){
             id
         }
     }

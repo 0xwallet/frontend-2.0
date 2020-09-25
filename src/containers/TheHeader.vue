@@ -69,6 +69,12 @@
             </CHeaderNav>
             <CHeaderNav>
                 <CHeaderNavLink>
+                    <div @click="showSearchModal" ref="searchIcon">
+                        <CIcon name="cil-find-in-page"></CIcon>
+                    </div>
+                </CHeaderNavLink>
+
+                <CHeaderNavLink>
                     <div @click="showMessageModal" ref="msgIcon">
                         <CIcon name="cil-speech"></CIcon>
                     </div>
@@ -92,6 +98,7 @@
     import TheHeaderDropdownAccount from '@/containers/TheHeaderDropdownAccount.vue'
     import MyCBreadcrumbRouter from '@/components/MyCBreadcrumbRouter.vue'
     import {MessageModule} from '@/store/MessageModule'
+    import {SearchModule} from '@/store/SearchModule'
 
     @Component({
         components: {TheHeaderDropdownAccount, MyCBreadcrumbRouter}
@@ -108,6 +115,11 @@
             MessageModule.setMsgIcon(msgIcon)
             MessageModule.getMsgIconLeftAndTop()
             MessageModule.showMessageModal(true)
+        }
+
+        showSearchModal() {
+            const {searchIcon} = this.$refs
+            SearchModule.showSearchModal(true)
         }
 
         getCurrentLocale() {

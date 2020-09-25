@@ -187,8 +187,8 @@ class NknModulePrivate extends VuexModule {
     }
 
     @Action
-    uploadFile({file, paths, space}: {
-        file: any, paths: string[], space: DriveSpace
+    uploadFile({file, paths, space, description}: {
+        file: any, paths: string[], space: DriveSpace, description: string
     }) {
         let timeStart = Date.now()
 
@@ -230,9 +230,10 @@ class NknModulePrivate extends VuexModule {
             fullName.push(fileName)
 
             DriveModule.driveUploadByHash({
-                fullName: fullName,
-                hash    : hash,
-                space   : space,
+                fullName   : fullName,
+                hash       : hash,
+                space      : space,
+                description: description
             }).then(() => {
                 _this.setUploading(false)
                 _this.setUploadSpeed('0 KB/s')
@@ -291,7 +292,6 @@ class NknModulePrivate extends VuexModule {
                         if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
                             console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
                                 (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000000000, 'B/s')
-
 
 
                         }

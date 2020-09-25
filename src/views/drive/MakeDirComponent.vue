@@ -36,7 +36,10 @@
         })
         public !: boolean
 
-        showModal(fullName: string[]) {
+        showModal(fullName: string[] | null) {
+            if (!fullName) {
+                return
+            }
             this.show = true
             this.fullName = fullName
         }
@@ -44,8 +47,8 @@
         makeDir() {
             this.fullName.push(this.dirName)
             DriveModule.driveMakeDir({
-                fullName : this.fullName,
-                space: this.public ? DriveSpace.PUBLIC : DriveSpace.PRIVATE
+                fullName: this.fullName,
+                space   : this.public ? DriveSpace.PUBLIC : DriveSpace.PRIVATE
             }).then(() => {
                 this.show = false
                 this.$emit('onCreated')

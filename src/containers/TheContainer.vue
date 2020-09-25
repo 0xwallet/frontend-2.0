@@ -3,6 +3,7 @@
         <TheSidebar/>
         <TheAside></TheAside>
         <MessageComponent></MessageComponent>
+        <SearchComponent></SearchComponent>
         <CWrapper>
             <TheHeader/>
             <div class="c-body">
@@ -31,9 +32,11 @@
     import TheAside from '@/containers/TheAside.vue'
     import MessageComponent from '@/components/MessageComponent.vue'
     import InputPasswordComponent from '@/components/InputPasswordComponent.vue'
+    import SearchComponent from '@/components/SearchComponent.vue'
 
     @Component({
         components: {
+            SearchComponent,
             InputPasswordComponent,
             MessageComponent,
             TheAside,

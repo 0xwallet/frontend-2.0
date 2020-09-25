@@ -7,6 +7,7 @@
         >
             <input type="file" ref="choiceFile" hidden @change="fileChange($event)">
             <CInput label="Upload File Path" :value.sync="pathString"></CInput>
+            <CInput label="Description" :value.sync="description"></CInput>
             <div class="select-file">
                 <div class="file-name">{{ file ? file.name : 'no file' }}</div>
                 <button type="button" class="btn btn-light" @click="choiceFile()">
@@ -40,6 +41,7 @@
 
         show = false
         pathString = ''
+        description = ''
         file: any = null
 
 
@@ -51,7 +53,6 @@
 
         showModal() {
             this.show = true
-            console.log('当前空间为：', this.public)
             if (this.path) {
                 this.pathString = '/' + (this.path ? this.path.join('/') : 'root') + (this.path.length > 0 ? '/' : '')
             }
@@ -75,7 +76,10 @@
             })
             console.log(paths)
             NknModule.uploadFile({
-                file: this.file, paths: paths, space: this.public === 'MetaNet' ? DriveSpace.PUBLIC : DriveSpace.PRIVATE
+                file : this.file,
+                paths: paths,
+                space: this.public === 'MetaNet' ? DriveSpace.PUBLIC : DriveSpace.PRIVATE,
+                description : this.description
             })
             this.show = false
         }

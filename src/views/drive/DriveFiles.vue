@@ -157,7 +157,7 @@
                         <div class="text">{{ file.name }}</div>
                     </td>
                     <td class="file-description" v-if="file.type !== 8" @click="clickFile(file)" ref="file_item">
-                        克里斯丁
+                        {{ file.info.description }}
                     </td>
                     <td class="file-option" v-if="file.type !== 8">
                         <div class="options" v-if="file.type !== 4 && file.active">
@@ -242,7 +242,12 @@
         </viewer>
         <pdf-view v-if="pdfShow" :url="pdfUrl" @onClose="onPdfClose"></pdf-view>
         <create-file-share-component ref="create_file_share"></create-file-share-component>
-        <make-dir-component ref="make_dir" :public="currentSpace === 'MetaNet'" @onCreated="loadFiles"></make-dir-component>
+        <make-dir-component ref="make_dir" :public="currentSpace === 'MetaNet'"
+                            @onCreated="loadFiles"></make-dir-component>
+        <div style="text-align: center;color: #999999;">{{ (files.length > 1 ? files.length : shares.length) + " Items"
+            +
+            " in Total" }}
+        </div>
     </div>
 </template>
 
@@ -494,14 +499,14 @@
         deleteFile(file: File) {
             console.log(file)
 
-            // DriveModule.driveDeleteFile({
-            //     id   : file.id,
-            //     space: this.space
-            // }).then(() => {
-            //     this.loadFiles()
-            // }).catch(() => {
-            //     this.loadFiles()
-            // })
+            DriveModule.driveDeleteFile({
+                id   : file.id,
+                space: this.currentSpace === 'MetaNet' ? DriveSpace.PUBLIC : DriveSpace.PRIVATE
+            }).then(() => {
+                this.loadFiles()
+            }).catch(() => {
+                this.loadFiles()
+            })
         }
 
         makeFolder() {
@@ -688,7 +693,10 @@
                 margin-left 23px
 
         .file-description
-            width 100px
+            width 145px
+            overflow hidden
+            white-space nowrap
+            text-overflow ellipsis
 
         .file-option
             cursor pointer

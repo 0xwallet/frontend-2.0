@@ -72,6 +72,7 @@ class DriveModulePrivate extends VuexModule {
         fullName: string[],
         hash: string,
         space: DriveSpace,
+        description: string
     }) {
         return new Promise(((resolve, reject) => {
             driveUploadByHashService(param).then(res => {

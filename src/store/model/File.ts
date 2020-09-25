@@ -98,6 +98,7 @@ export enum DriveSpace {
 
 export class DriveUserFileInfo {
     size !: number
+    description ?: string
 }
 
 export enum FileType {
