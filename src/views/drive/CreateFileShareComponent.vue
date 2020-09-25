@@ -17,11 +17,11 @@
                     </div>
                     <div>分享成功</div>
                 </div>
-                <div>链接：{{ shareUri }}</div>
+                <div>链接：{{ shareUri() }}</div>
                 <div>提取码：{{ form.password }}</div>
                 <div class="time">
                     <div>7天内有效</div>
-                    <div class="copy" :data-clipboard-text="shareString" @click="copy">
+                    <div class="copy" :data-clipboard-text="shareString()" @click="copy">
                         复制链接及提取码
                     </div>
                 </div>
@@ -47,6 +47,7 @@
     import {UserModule} from '@/store/UserModule'
     import Clipboard from 'clipboard'
     import {ToastColor} from '@/store/model/Toast'
+    import {Watch} from 'vue-property-decorator'
 
     @Component({
         mixins     : [validationMixin],
@@ -66,6 +67,14 @@
         file ?: File
         form = this.getEmptyForm()
         uri = ''
+
+
+        @Watch("show")
+        onShowChange(value : boolean){
+            if (!value) {
+                this.uri = ''
+            }
+        }
 
         showModal(file: File) {
             this.show = true
@@ -92,13 +101,13 @@
 
         }
 
-        get shareUri() {
+        shareUri() {
             let host = window.location.host
             return document.location.protocol + '//' + host + '/' + this.$router.resolve({path: '/s/' + this.uri}).href
         }
 
-        get shareString() {
-            return '链接：' + this.shareUri + ' 提取码：' + this.form.password + ' --来自0xDrive网盘' + UserModule.userInfo.username + '的分享'
+        shareString() {
+            return '链接：' + this.shareUri() + ' 提取码：' + this.form.password + ' --来自0xDrive网盘' + UserModule.userInfo.username + '的分享'
         }
 
         checkIfValid(fieldName: string) {

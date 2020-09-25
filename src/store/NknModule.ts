@@ -31,6 +31,13 @@ class NknModulePrivate extends VuexModule {
     isUploading: boolean = false
     uploadProgress: number = 0
     uploadSpeed: string = '0 KB/s'
+    uploadFileName: string = ''
+
+
+    @Mutation
+    setUploadFileName(name : string){
+        this.uploadFileName = name
+    }
 
     @Mutation
     setUploadSpeed(speed: string) {
@@ -197,6 +204,7 @@ class NknModulePrivate extends VuexModule {
         let _this = this
         let fileName = file.name
 
+        this.setUploadFileName(fileName)
 
         _this.setUploading(true)
 

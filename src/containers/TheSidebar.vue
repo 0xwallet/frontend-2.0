@@ -3,7 +3,7 @@
             :minimize="minimize"
             unfoldable
             :show="show"
-            @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
+            @update:show="(value) => {console.log(value); $store.commit('set', ['sidebarShow', value])}"
     >
         <CSidebarBrand :class="{'c-sidebar-brand-dark' : darkMode}" to="/">
             <c-img :class="[minimize ? 'logo-mini' : 'logo']" :src="logoSrc" alt="logo"/>
@@ -37,7 +37,7 @@
                 }"></CSidebarNavItem>
             <CSidebarNavTitle>{{ $i18n.t('nav.system_utilization') }}</CSidebarNavTitle>
             <CSidebarNavItem>
-                <div class="utilization">
+                <div class="utilization" v-if="!minimize">
                     <system-utilization-component></system-utilization-component>
                 </div>
             </CSidebarNavItem>

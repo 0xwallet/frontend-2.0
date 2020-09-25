@@ -64,6 +64,28 @@
             </CTab>
             <CTab>
                 <template slot="title">
+                    <CIcon name="cil-speedometer"/>
+                </template>
+                <CListGroup class="list-group-accent">
+                    <CListGroupItem v-if="isUploading">
+                        <div style="display: flex">
+                            <div style="flex: 1">
+                                <div>
+                                    {{ uploadFileName }}
+                                </div>
+                                <div style="color: #999999">
+                                    {{ uploadSpeed }}
+                                </div>
+                            </div>
+                            <div style="margin-top: 10px">
+                                {{ uploadProgress }} %
+                            </div>
+                        </div>
+                    </CListGroupItem>
+                </CListGroup>
+            </CTab>
+            <CTab>
+                <template slot="title">
                     <CIcon name="cil-speech"/>
                 </template>
                 <div class="p-3">
@@ -165,26 +187,6 @@
                     <hr>
                     <h6>System Utilization</h6>
                     <system-utilization-component></system-utilization-component>
-<!--                    <div class="text-uppercase mb-1 mt-4">-->
-<!--                        <small><b>CPU Usage</b></small>-->
-<!--                    </div>-->
-<!--                    <CProgress class="progress-xs" color="info" :value="25"/>-->
-<!--                    <small class="text-muted">348 Processes. 1/4 Cores.</small>-->
-<!--                    <div class="text-uppercase mb-1 mt-2">-->
-<!--                        <small><b>Memory Usage</b></small>-->
-<!--                    </div>-->
-<!--                    <CProgress class="progress-xs" color="warning" :value="70"/>-->
-<!--                    <small class="text-muted">11444MB/16384MB</small>-->
-<!--                    <div class="text-uppercase mb-1 mt-2">-->
-<!--                        <small><b>SSD 1 Usage</b></small>-->
-<!--                    </div>-->
-<!--                    <CProgress class="progress-xs" color="danger" :value="95"/>-->
-<!--                    <small class="text-muted">243GB/256GB</small>-->
-<!--                    <div class="text-uppercase mb-1 mt-2">-->
-<!--                        <small><b>SSD 2 Usage</b></small>-->
-<!--                    </div>-->
-<!--                    <CProgress class="progress-xs" color="success" :value="10"/>-->
-<!--                    <small class="text-muted">25GB/256GB</small>-->
                 </div>
             </CTab>
         </CTabs>
@@ -195,10 +197,28 @@
     import Vue from 'vue'
     import Component from 'vue-class-component'
     import SystemUtilizationComponent from '@/components/SystemUtilizationComponent.vue'
+    import {NknModule} from '@/store/NknModule'
+
     @Component({
         components: {SystemUtilizationComponent}
     })
     export default class TheAside extends Vue {
         lorem = 'Lorem ipsum doliusmod tempor incididunt ut labore et dolore magna aliqua.'
+
+        get isUploading(): boolean {
+            return NknModule.isUploading
+        }
+
+        get uploadProgress(): string {
+            return NknModule.uploadProgress.toFixed(0)
+        }
+
+        get uploadSpeed(): string {
+            return NknModule.uploadSpeed
+        }
+
+        get uploadFileName() : string {
+            return NknModule.uploadFileName
+        }
     }
 </script>

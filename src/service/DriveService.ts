@@ -59,8 +59,9 @@ export const driveCreateShareService = (params: {
     code: string,
     userFileId: string
 }) => Client.getInstance().mutate({
-    mutation : driveCreateShareMutation,
-    variables: params
+    mutation   : driveCreateShareMutation,
+    variables  : params,
+    fetchPolicy: 'no-cache'
 })
 
 export const driveFindShareService = (params: {

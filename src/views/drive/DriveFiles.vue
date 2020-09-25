@@ -62,15 +62,16 @@
 
 
             <div class="current-name" @mouseleave="txIDOut">
-                <div style="margin: 0 5px">{{ currentFolder }} |</div>
-                <div v-if="!showTxID" style="margin-top: 2px;" @mouseenter="txIDOver">
+                <div style="margin: 0 5px">{{ currentFolder }}</div>
+                <div v-if="currentSpace === 'MetaNet'"> |</div>
+                <div v-if="!showTxID && currentSpace === 'MetaNet'" style="margin-top: 2px;" @mouseenter="txIDOver">
                     <hash-component
                             :hash="'be8f08d7f519eb863a68cf292ca51dbab7c9b49f50a96d1232db32e432db3634'"></hash-component>
                 </div>
-                <div v-if="showTxID" style="font-size: 14px;margin-top: 2px;">
+                <div v-if="showTxID && currentSpace === 'MetaNet'" style="font-size: 14px;margin-top: 2px;">
                     be8f08d7f519eb863a68cf292ca51dbab7c9b49f50a96d1232db32e432db3634
                 </div>
-                <div style="margin-left: 10px;margin-top: -1px">
+                <div style="margin-left: 10px;margin-top: -1px" v-if="currentSpace === 'MetaNet'">
                     <CIcon name="cil-copy" v-c-tooltip.hover="'Copy txID'"></CIcon>
                 </div>
             </div>
@@ -610,18 +611,6 @@
 
         onPdfClose() {
             this.pdfShow = false
-        }
-
-        get isUploading(): boolean {
-            return NknModule.isUploading
-        }
-
-        get uploadProgress(): number {
-            return NknModule.uploadProgress
-        }
-
-        get uploadSpeed(): string {
-            return NknModule.uploadSpeed
         }
 
         fileImage(file: File) {
