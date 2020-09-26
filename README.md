@@ -18,7 +18,7 @@
 0xWallet is an on-chain tool based on the NKN network, including task release and management, network disk storage, on-chain (MetaNet), etc.
 The project is committed to linking the blockchain with life, using the non-tamperable characteristics of the information on the chain to ensure that the copyright of the file and the information of the task are accurate.
 
-## route map
+## Roadmap
 
 This is our current roadmap, please feel free to request additions/changes.
 
@@ -33,14 +33,16 @@ This is our current roadmap, please feel free to request additions/changes.
 | Network Disk File Sharing                                 |    ✅    |
 | MetaNet network disk files on the chain                   |    🔜    |
 
-## Known issues and function progress (continuous update)
+## Known issues and Feature progress (continuous update)
 
 2020-09-25
 
--~~The network disk space on the left is displayed abnormally~~ -~~The address of the shared file is abnormal~~
--~~ Personal space should not display TxID~~ -~~The upload progress of the network disk is moved to the upper right corner~~
--The search box animation is invalid and stays in the upper left corner of the page
--Multiple Toast prompts appear after uploading files
+-   ~~The network disk space on the left is displayed abnormally~~
+-   ~~The address of the shared file is abnormal~~
+-   ~~Personal space should not display TxID~~
+-   ~~The upload progress of the network disk is moved to the upper right corner~~
+-   The search box animation is invalid and stays in the upper left corner of the page
+-   Multiple Toast prompts appear after uploading files
 
 ## Project setup
 
