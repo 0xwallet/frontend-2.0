@@ -217,7 +217,7 @@
             return NknModule.uploadSpeed
         }
 
-        get uploadFileName() : string {
+        get uploadFileName(): string {
             return NknModule.uploadFileName
         }
     }
