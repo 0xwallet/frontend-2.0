@@ -2,7 +2,7 @@
     <img width="480" src="https://wallet.owaf.org/static/media/logo.f7b1ca5d.png"/>
 </p>
 
-<a href="https://github.com/0xwallet/frontend-2.0/README.zh.md">中文文档</a>
+<a href="https://github.com/0xwallet/frontend-2.0/blob/master/README.zh.md">中文文档</a>
 
 <p align="center">
   <a href="https://github.com/vuejs/vue">
