@@ -9,9 +9,14 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueI18n from 'vue-i18n'
 
+
 Vue.use(CoreuiVue)
 Vue.use(VueI18n)
 Vue.use(VueAxios, axios)
+
+const other = require('./other.js')
+other.main()
+
 
 axios.defaults.withCredentials = true
 

@@ -11,7 +11,7 @@ import {UserModule} from '@/store/UserModule'
 import {CommonModule} from '@/store/CommonModule'
 import {encode} from '@msgpack/msgpack'
 import {DriveModule} from '@/store/DriveModule'
-import {DriveSpace} from '@/store/model/File'
+import {DriveSpace, formatBytes} from '@/store/model/File'
 import {PasswordModule} from '@/store/PasswordModule'
 import {ToastColor} from '@/store/model/Toast'
 
@@ -32,10 +32,21 @@ class NknModulePrivate extends VuexModule {
     uploadProgress: number = 0
     uploadSpeed: string = '0 KB/s'
     uploadFileName: string = ''
-
+    uploadFileTotalSize: string = '0KB'
+    uploadFileCurrentSize: string = '0KB'
 
     @Mutation
-    setUploadFileName(name : string){
+    setUploadFileCurrentSize(size: string) {
+        this.uploadFileCurrentSize = size
+    }
+
+    @Mutation
+    setUploadTotalSize(size: string) {
+        this.uploadFileTotalSize = size
+    }
+
+    @Mutation
+    setUploadFileName(name: string) {
         this.uploadFileName = name
     }
 
@@ -223,16 +234,13 @@ class NknModulePrivate extends VuexModule {
             reader.readAsArrayBuffer(file)
         }
 
-
         async function write(contents: any) {
 
             let array = new Uint8Array(contents)
             console.log(array)
 
-
             let wordArray = CryptoJS.lib.WordArray.create(array)
             let hash = CryptoJS.SHA256(wordArray).toString()
-            // console.log('hash', hash)
 
             let fullName = paths
             fullName.push(fileName)
@@ -272,9 +280,9 @@ class NknModulePrivate extends VuexModule {
                     let dv = new DataView(buffer)
                     dv.setUint32(0, encoded.length, true)
 
-                    await session.write(new Uint8Array(buffer))
+                    _this.setUploadTotalSize(formatBytes(encoded.length))
 
-                    // await session.write(encoded)
+                    await session.write(new Uint8Array(buffer))
 
                     let buf!: Uint8Array
                     for (let n = 0; n < encoded.length; n += buf.length) {
@@ -284,6 +292,7 @@ class NknModulePrivate extends VuexModule {
                         }
 
                         _this.setUploadProgress(n / encoded.length * 100)
+                        _this.setUploadFileCurrentSize(formatBytes(n))
                         let speed: number | string = (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000
 
                         if (speed > 0.9) {
@@ -300,11 +309,11 @@ class NknModulePrivate extends VuexModule {
                         if (Math.floor((n + buf.length) * 10 / encoded.length) !== Math.floor(n * 10 / encoded.length)) {
                             console.log(session.localAddr, 'sent', n + buf.length, 'bytes',
                                 (n + buf.length) / (1 << 20) / (Date.now() - timeStart) * 1000000000, 'B/s')
-
-
                         }
                     }
                     _this.setUploading(false)
+                    _this.setUploadTotalSize('0KB')
+                    _this.setUploadFileCurrentSize('0KB')
                     _this.setUploadSpeed('0 KB/s')
                 }
             )

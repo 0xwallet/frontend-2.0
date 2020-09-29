@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="back-box" v-show="show" @click="show = !show"></div>
         <div class="search-box" ref="searchBody" v-show="show">
             <div style="font-size: 24px;color: #999999;padding: 0 15px;">Spot Light</div>
         </div>
@@ -82,4 +83,11 @@
         z-index 100001
         height 60px
         width 700px
+
+    .back-box
+        z-index 100000
+        position: fixed
+        width 100%
+        height 100%
+        background rgba(0, 0, 0, 0.1)
 </style>

@@ -1,5 +1,7 @@
 <template>
     <div>
+        <div class="back-box" v-show="show" @click="show = !show"></div>
+
         <div class="message-box" ref="messageBody" v-show="show" style="width: 0px;height: 0px">
 
         </div>
@@ -74,5 +76,12 @@
         padding 10px
         box-shadow 0 0 5px #cccccc
         position: absolute
+        z-index 100001
+
+    .back-box
         z-index 100000
+        position: fixed
+        width 100%
+        height 100%
+        background rgba(0, 0, 0, 0.1)
 </style>

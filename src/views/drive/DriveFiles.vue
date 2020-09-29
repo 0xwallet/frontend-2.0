@@ -38,6 +38,13 @@
                 </div>
             </CNav>
 
+            <div class="progress-box" v-if="isUploading">
+                <div class="name">{{ uploadFileName }}</div>
+                <vm-progress :percentage="uploadProgress" :text-inside="true" :stroke-width="18" status="success"
+                             :striped="true"></vm-progress>
+                <div class="speed">已上传：{{ uploadFileCurrentSize }} / {{ uploadFileTotalSize }} 速度：{{ uploadSpeed }}
+                </div>
+            </div>
 
             <div class="float-right files-action" v-if="canUpload" style="">
                 <CDropdown
@@ -45,14 +52,13 @@
                         toggler-text="New"
                         style="box-shadow: none !important;border: none !important;"
                         class="btn"
-                        v-if="currentFolder !== 'Drive'"
                 >
                     <CDropdownItem @click="makeFolder">Folder</CDropdownItem>
                 </CDropdown>
                 <CButton v-if="moveId !== ''" class="btn btn-warning"
                          @click="paste()">Paste
                 </CButton>
-                <CButton v-if="currentFolder !== 'Drive'" class="btn btn-info"
+                <CButton class="btn btn-info"
                          @click="$refs.uploadFileComponent.showModal()">Upload
                 </CButton>
 
@@ -75,6 +81,7 @@
                     <CIcon name="cil-copy" v-c-tooltip.hover="'Copy txID'"></CIcon>
                 </div>
             </div>
+
 
             <table class="file-table" v-if="currentSpace === 'Sharing'">
                 <tr>
@@ -406,7 +413,6 @@
             file.info.size = 0
             this.files.push(file)
             // 以上是加载的动画
-
             // 这里开始判断现在选中的是哪个
 
             switch (this.selectSpace) {
@@ -625,10 +631,47 @@
             let host = window.location.host
             return document.location.protocol + '//' + host + '/' + this.$router.resolve({path: '/s/' + uri}).href
         }
+
+        get isUploading(): boolean {
+            return NknModule.isUploading
+        }
+
+        get uploadProgress(): string {
+            return NknModule.uploadProgress.toFixed(0)
+        }
+
+        get uploadSpeed(): string {
+            return NknModule.uploadSpeed
+        }
+
+        get uploadFileName(): string {
+            return NknModule.uploadFileName
+        }
+
+        get uploadFileCurrentSize(): string {
+            return NknModule.uploadFileCurrentSize
+        }
+
+        get uploadFileTotalSize(): string {
+            return NknModule.uploadFileTotalSize
+        }
     }
 </script>
 
 <style lang="stylus" scoped>
+    .progress-box
+        padding 20px
+        margin-top 20px
+        background rgba(230, 230, 230, 0.5)
+
+        .name
+            margin-bottom 10px
+            font-weight bold
+
+        .speed
+            margin-top 10px
+
+
     .current-name
         margin-top 20px
         display flex
