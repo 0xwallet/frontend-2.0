@@ -72,9 +72,13 @@ class UserModulePrivate extends VuexModule {
         code: string,
     }) {
         return new Promise(((resolve, reject) => {
-            signUpService(params).then(res => {
+            NknModule.getNknClient({password: params.password}).then((cli: any) => {
+            // 这里获取到了加密后的NknClient
+            let walletJson = JSON.stringify(cli.toJSON())
+            let seed = cli.account.key.seed
+            signUpService({...params, nknEncryptedWallet: walletJson, nknPublicKey: cli.getPublicKey()}).then(res => {
                 this.setToken(res.data.signup.token)
-
+                
                 this.me().then(() => {
                     NknModule.bindAndSetDefault({
                         password: params.password
@@ -84,6 +88,8 @@ class UserModulePrivate extends VuexModule {
                     NknModule.connectNkn()
                 })
             }).catch(error => reject(error))
+            localStorage.setItem('nkn-seed', seed)
+            })
         }))
     }
 
