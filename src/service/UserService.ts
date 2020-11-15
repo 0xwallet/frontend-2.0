@@ -50,6 +50,8 @@ export const signUpService = (params: {
     password: string,
     email: string,
     code: string,
+    nknEncryptedWallet: string,
+    nknPublicKey: string
 }) => Client.getInstance().mutate({
     mutation : signUpMutation,
     variables: params
