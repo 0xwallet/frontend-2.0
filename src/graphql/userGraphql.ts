@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 export const signInMutation = gql`
-    mutation signIn($email:String!,$password:String,$code:String){
+    mutation signin($email:String!,$password:String,$code:String){
         signin(email:$email,password:$password,code:$code){
             token
         }
@@ -57,8 +57,15 @@ export const meQuery = gql`
 `
 
 export const signUpMutation = gql`
-    mutation signUp($userName:String!,$password:String!,$email:String!,$code:String!){
-        signup(username:$userName,password:$password,email:$email,code:$code){
+    mutation signup($userName:String!,
+        $password:String!,
+        $email:String!,
+        $code:String!,
+        $nknEncryptedWallet: String!,
+        $nknPublicKey: String!){
+        signup(username:$userName,password:$password,email:$email,code:$code,
+            nknEncryptedWallet: $nknEncryptedWallet,
+            nknPublicKey: $nknPublicKey){
             token
         }
     }
